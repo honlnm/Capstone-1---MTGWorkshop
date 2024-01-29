@@ -3,7 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
 bcrypt = Bcrypt()
-db = SQLAlchemy()
+db = SQLAlchemy(session_options={"expire_on_commit": False})
 
 class User(db.Model):
 
@@ -127,6 +127,8 @@ class DeckTypes(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     deck_types  
+
+############## CONNECT DB ##############
 
 def connect_db(app):
     db.app = app
