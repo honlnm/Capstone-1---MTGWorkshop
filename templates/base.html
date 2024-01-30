@@ -19,7 +19,7 @@
                 </a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                {% if request.endpoint != None %}
+                {% if request.endpoint != None and request.endpoint != "signup" and request.endpoint != "login" %}
                 <li>
                     <form class="navbar-form navbar-right" action="/cards">
                         <input name="q" class="form-control" placeholder="Search MTG Workshop" id="search">

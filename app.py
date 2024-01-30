@@ -5,14 +5,15 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
 
-from models import db, connect_db, User, UserGameData, CardsOwned, CardWishList, UserDecks, Decks, DeckTypes
+from models import db, connect_db, User, CardsOwned, CardWishList, Decks, DeckCards, DeckTypes
+from forms import UserAddForm, UserEditForm, LoginForm
 
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///mtg'))
+    os.environ.get('DATABASE_URL', 'postgresql:///mtg_workshop'))
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
@@ -21,6 +22,9 @@ app.config['SECRET_KEY'] = os.getenv('secret_key')
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
+with app.app_context():
+    db.create_all()
+    db.session.commit()
 
 ############## USER SIGNUP/LOGIN/LOGOUT ##############
 
@@ -63,11 +67,11 @@ def signup():
             db.session.commit()
         except IntegrityError as e:
             flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
+            return render_template('signup.html', form=form)
         do_login(user)
         return redirect("/")
     else:
-        return render_template('users/signup.html', form=form)
+        return render_template('signup.html', form=form)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -81,7 +85,7 @@ def login():
             flash(f"Hello, {user.username}!", "success")
             return redirect("/")
         flash("Invalid credentials.", 'danger')
-    return render_template('users/login.html', form=form)
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():
@@ -92,7 +96,7 @@ def logout():
 
 ############## USER ROUTES ##############
 
-@app.route('user/<int:user_id>')
+@app.route('/user/<int:user_id>')
 def show_user(user_id):
     """Show user profile."""
     if user_id != g.user.id:
@@ -101,7 +105,7 @@ def show_user(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("show_user.html", user=user)
 
-@app.route('user/edit', methods=["GET", "POST"])
+@app.route('/user/edit', methods=["GET", "POST"])
 def edit_user():
     """Edit user."""
     if not g.user:

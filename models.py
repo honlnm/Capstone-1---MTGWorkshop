@@ -17,9 +17,9 @@ class User(db.Model):
 
     password = db.Column(db.Text, nullable=False)
 
-    header_img_url = db.Column(db.Text, default="/static/images/default-header-pic.png")
+    header_image_url = db.Column(db.Text, default="/static/images/default-header-pic.png")
 
-    profile_img_url = db.Column(db.Text, default="/static/images/default-pic.png")
+    profile_image_url = db.Column(db.Text, default="/static/images/default-pic.png")
 
     location = db.Column(db.Text)
 
@@ -34,7 +34,7 @@ class User(db.Model):
     decks = db.relationship('Decks')
 
     @classmethod
-    def signup(cls, username, email, password, profile_img_url):
+    def signup(cls, username, email, password, profile_image_url):
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
@@ -42,7 +42,7 @@ class User(db.Model):
             username=username,
             email=email,
             password=hashed_pwd,
-            profile_img_url=profile_img_url,
+            profile_image_url=profile_image_url,
         )
 
         db.session.add(user)
@@ -110,7 +110,17 @@ class Decks(db.Model):
 
     cards = db.relationship("DeckCards", backref="decks")
 
-    deck_type = db.relationship("DeckTypes", backref="decks")
+    deck_type = db.Column(db.Integer, db.ForeignKey('deck_types.id'))
+
+class DeckCards(db.Model):
+
+    __tablename__ = "deck_cards"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    deck_id = db.Column(db.Integer, db.ForeignKey('decks.id', ondelete='cascade'))
+
+    card_id = db.Column(db.Integer, nullable=False)
 
 class DeckTypes(db.Model):
 
