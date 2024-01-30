@@ -25,6 +25,14 @@ class User(db.Model):
 
     bio = db.Column(db.Text)
 
+    game_data = db.relationship('GameData')
+
+    cards_owned = db.relationship('CardsOwned')
+
+    card_wishlist = db.relationship('CardWishList')
+
+    decks = db.relationship('Decks')
+
     @classmethod
     def signup(cls, username, email, password, profile_img_url):
 
@@ -47,20 +55,10 @@ class User(db.Model):
 
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
-            if is auth:
+            if is_auth:
                 return user
 
-        return False   
-
-class UserGameData(db.Model):
-
-    __tablename__ = "user_game_data"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-
-    game_id = db.relationship('GameData', backref="user_game_data")
-
-    user_id = db.relationship('User', backref="user_game_data")
+        return False
 
 class GameData(db.Model):
 
@@ -68,47 +66,39 @@ class GameData(db.Model):
 
     game_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
+
     winner_name = db.Column(db.Text)
 
     loser_name = db.Column(db.Text)
 
-    time_played = 
+    time_played = db.Column(db.Text)
 
-    player1 = db.relationship(db.Text, nullable=False)
+    player1 = db.Column(db.Text, nullable=False)
 
     player2 = db.Column(db.Text, nullable=False)
 
     date_played = db.Column(db.Date, nullable=False)
 
-class OwnedCards(db.Model):
+class CardsOwned(db.Model):
 
     __tablename__ = "cards_owned"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    user_id = db.relationship("User", backref='cards_owned', nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
 
     card_id = db.Column(db.Integer, nullable=False)
 
 class CardWishList(db.Model):
 
-    __tablename__ = "card_wishlist"
+    __tablename__ = "card_wish_list"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    user_id = db.relationship("User", backref='card_wishlist', nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
 
     card_id = db.Column(db.Integer, nullable=False)
-
-class UserDecks(db.Model):
-
-    __tablename__ = "user_decks"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-
-    deck_id = db.relationship('Decks', backref='user_decks')
-
-    user_id = db.relationship('User', backref='user_decks')
 
 class Decks(db.Model):
 
@@ -116,9 +106,11 @@ class Decks(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    cards
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
 
-    deck_type
+    cards = db.relationship("DeckCards", backref="decks")
+
+    deck_type = db.relationship("DeckTypes", backref="decks")
 
 class DeckTypes(db.Model):
 
@@ -126,7 +118,7 @@ class DeckTypes(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    deck_types  
+    deck_types = db.Column(db.Text, nullable=False)
 
 ############## CONNECT DB ##############
 

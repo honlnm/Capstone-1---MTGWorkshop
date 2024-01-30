@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
 
-from models import db, connect_db, User, Message
+from models import db, connect_db, User, UserGameData, CardsOwned, CardWishList, UserDecks, Decks, DeckTypes
 
 CURR_USER_KEY = "curr_user"
 
@@ -135,10 +135,18 @@ def delete_user():
 
 ############## GENERAL ROUTES ##############
 
+# @app.route('/cards')
+# def show_cards():
+
+
 ############## HOMEPAGE & ERROR ROUTES ##############
 
 @app.route('/')
 def home():
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/signup")
+    return redirect('/cards')
 
 @app.errorhandler(404)
 def page_not_found(e):
