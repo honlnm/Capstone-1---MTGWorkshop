@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}MTG Cards{% endblock %}
 
-{% block body_class %}onboarding{% endblock %}
+{% block body_class %}cards{% endblock %}
 
 {% block content %}
-
 <div class="row justify-content-md-center">
     <div class="col-md-7 col-lg-5">
-        <h2 class="join-message">Join MTG Workshop today!</h2>
-        <form method="POST" id="user_form">
+        <form class="form-group" method="POST" id="card_search_form">
             {{ form.hidden_tag() }}
 
             {% for field in form if field.widget.input_type != 'hidden' %}
@@ -19,9 +17,8 @@
             {{ field(placeholder=field.label.text, class="form-control") }}
             {% endfor %}
 
-            <button class="onboarding-btn btn btn-lg btn-block">Sign me up!</button>
+            <button class="search-form-btn btn btn-lg btn-block" action="/search">Search</button>
         </form>
     </div>
 </div>
-
 {% endblock %}

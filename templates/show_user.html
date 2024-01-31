@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body_class %}profile{% endblock %}
+
+{% block content %}
+
+<div class="profile-header-div">
+    <img src="{{ user.header_image_url }}" alt="Header Image for {{user.username}} Profile"
+        id="mtg-profile-background-img" class="full-width">
+</div>
+<div class="profile-img-username">
+    <img src="{{ user.profile_image_url }}" alt="Image for {{ user.username }}" id="profile-avatar">
+    <span class="profile-username">{{user.username}}</span>
+</div>
+<div class="profile-info">
+    <p class="user-location"><span class="fa fa-map-marker"></span>{{ user.location }}</p>
+    <p>{{user.bio}}</p>
+</div>
+
+{% endblock %}

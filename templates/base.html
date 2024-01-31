@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="/static/stylesheets/app.css">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/stylesheets/app.css">
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
@@ -19,22 +19,12 @@
                 </a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                {% if request.endpoint != None and request.endpoint != "signup" and request.endpoint != "login" %}
-                <li>
-                    <form class="navbar-form navbar-right" action="/cards">
-                        <input name="q" class="form-control" placeholder="Search MTG Workshop" id="search">
-                        <button class="btn btn-default">
-                            <span class="fa fa-search"></span>
-                        </button>
-                    </form>
-                </li>
-                {% endif %}
                 {% if not g.user %}
                 <li><a href="/signup">Sign up</a></li>
                 <li><a href="/login">Log in</a></li>
                 {% else %}
                 <li>
-                    <a href="/users/{{ g.user.id }}">
+                    <a href="/user/{{ g.user.id }}">
                         <img src="{{ g.user.profile_image_url }}" alt="{{ g.user.username }}">
                     </a>
                 </li>

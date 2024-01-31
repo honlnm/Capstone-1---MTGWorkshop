@@ -1,13 +1,23 @@
 /* ############## GENERAL ############## */
 
+html,
 body {
     background-color: black;
     color: white;
+    min-width: 100vw;
 }
 
 .form-control {
     margin-bottom: 20px;
 }
+
+.container {
+    min-width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+/* ############## BUTTONS ############## */
 
 .btn {
     border-radius: 50px;
@@ -17,13 +27,19 @@ body {
     cursor: pointer;
 }
 
+.onboarding-btn,
+.search-form-btn {
+    background-color: goldenrod;
+    color: black;
+}
+
 /* ############## NAVBAR ############## */
 
 .navbar {
     background-color: black;
     height: 46px;
     border-bottom: 1px solid white;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
     position: relative;
     z-index: 9999;
 }
@@ -65,41 +81,54 @@ ul.nav.navbar-nav li {
     display: flex;
 }
 
-/* ############## NAVBAR SEARCH BAR ############## */
+/* ############## SIGNUP ############## */
 
-nav form.navbar-form {
+#user_form input.form-control {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+}
+
+/* ############## USER PROFILE ############## */
+
+.profile-header-div {
     display: flex;
-    position: relative;
-}
-
-#search.form-control {
-    border-radius: 20px;
-    margin-bottom: 0;
-    width: 100%;
-    font-size: 13px;
-    padding-right: 28px;
-    box-sizing: border-box;
-}
-
-#search.form-control+.btn {
-    position: absolute;
-    right: 9px;
-    top: 2px;
-    bottom: 4px;
-    z-index: 1;
+    justify-content: center;
+    width: 100vw;
+    margin: 0;
     padding: 0;
-    color: #66757f;
+    border-bottom: 20px solid white;
 }
 
-#search.form-control+.btn:active,
-#search.form-control+.btn:focus {
-    box-shadow: none;
+#mtg-profile-background-img {
+    width: 100vw;
+    height: 28vw;
 }
 
-#search:active,
-#search:focus {
-    box-shadow: none;
-    border: 2px solid #007bff;
+#profile-avatar {
+    margin-top: -8vw;
+    margin-left: 25px;
+    height: 100px;
+    width: 100px;
+    border: 5px solid white;
+    border-radius: 100px;
 }
 
-/* ############## ONBOARDING ############## */
+.profile-username {
+    font-size: x-large;
+    font-weight: bolder;
+}
+
+.profile-info {
+    padding: 0px 25px 0px 135px;
+}
+
+.user-location {
+    color: goldenrod;
+}
+
+/* ############## EDIT ############## */
+
+
+
+/* ############## 404 ############## */
