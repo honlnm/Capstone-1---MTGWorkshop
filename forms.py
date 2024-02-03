@@ -53,18 +53,20 @@ class LoginForm(FlaskForm):
 class SearchCardsForm(FlaskForm):
     """Card search form"""
 
-    name = StringField("Name", validators=[Optional(strip_whitespace=True)])
+    name = StringField("Card Name", validators=[Optional(strip_whitespace=True)])
     set_name = StringField("Set Name", validators=[Optional(strip_whitespace=True)])
     rarity = SelectField(
         "Rarity",
-        choices=["Common", "Uncommon", "Rare", "Mythic rare"],
-        validators=[Optional()],
+        choices=["", "Common", "Uncommon", "Rare", "Mythic rare"],
+        validators=[Optional(strip_whitespace=True)],
     )
     supertypes = SelectField(
-        "Supertypes", choices=Supertype.all(), validators=[Optional()]
+        "Supertypes", choices=[""] + Supertype.all(), validators=[Optional()]
     )
-    types = SelectField("Types", choices=Type.all(), validators=[Optional()])
-    subtypes = SelectField("Subtypes", choices=Subtype.all(), validators=[Optional()])
+    types = SelectField("Types", choices=[""] + Type.all(), validators=[Optional()])
+    subtypes = SelectField(
+        "Subtypes", choices=[""] + Subtype.all(), validators=[Optional()]
+    )
     cmc = IntegerField("Total Mana Cost", validators=[Optional(strip_whitespace=True)])
     colors = RadioField(
         "Colors",

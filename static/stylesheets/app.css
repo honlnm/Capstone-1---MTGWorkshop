@@ -97,7 +97,6 @@ ul.nav.navbar-nav li {
     width: 100vw;
     margin: 0;
     padding: 0;
-    border-bottom: 20px solid white;
 }
 
 #mtg-profile-background-img {
@@ -106,7 +105,7 @@ ul.nav.navbar-nav li {
 }
 
 #profile-avatar {
-    margin-top: -8vw;
+    margin-top: -80px;
     margin-left: 25px;
     height: 100px;
     width: 100px;
@@ -114,13 +113,38 @@ ul.nav.navbar-nav li {
     border-radius: 100px;
 }
 
+.profile-img-username {
+    background-color: white;
+    color: black;
+    height: 40px;
+}
+
+.profile-header-bar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 100vw;
+}
+
 .profile-username {
+    margin-left: 150px;
+    font-size: larger;
     font-size: x-large;
     font-weight: bolder;
 }
 
+.edit-profile-btn {
+    text-decoration: none;
+    height: 34px;
+    margin: 3px;
+    border-radius: 5px;
+    background-image: linear-gradient(to bottom, #fff, transparent);
+    background-color: goldenrod;
+    border: 1px goldenrod solid;
+}
+
 .profile-info {
-    padding: 0px 25px 0px 135px;
+    padding: 25px 25px 0px 150px;
 }
 
 .user-location {
@@ -129,6 +153,21 @@ ul.nav.navbar-nav li {
 
 /* ############## EDIT ############## */
 
+/* ############## SEARCH FORM ############## */
+
+.search-field-label {
+    color: goldenrod;
+}
+
+#card_search_form {
+    width: 80%;
+}
+
+.search-form-col {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}
 
 
 /* ############## 404 ############## */

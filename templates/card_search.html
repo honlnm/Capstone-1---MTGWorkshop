@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="row justify-content-md-center">
-    <div class="col-md-7 col-lg-5">
+    <div class="search-form-col col-md-7 col-lg-5">
         <form class="form-group" method="POST" id="card_search_form">
             {{ form.hidden_tag() }}
 
@@ -14,7 +14,8 @@
             {% for error in field.errors %}
             <span class="text-danger">{{ error }}</span>
             {% endfor %}
-            {{ field(placeholder=field.label.text, class="form-control") }}
+            <label class="search-field-label" for="{{field.label.text}}">{{field.label.text}}</label>
+            {{ field(id="{{field.label.text}}", class="form-control") }}
             {% endfor %}
 
             <button class="search-form-btn btn btn-lg btn-block" action="/search">Search</button>

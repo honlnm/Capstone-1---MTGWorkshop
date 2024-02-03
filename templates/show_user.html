@@ -11,12 +11,17 @@
         id="mtg-profile-background-img" class="full-width">
 </div>
 <div class="profile-img-username">
+    <div class="profile-header-bar">
+        <span class="profile-username">{{user.username}}</span>
+        <a href="/user/edit">
+            <button type="button" class="edit-profile-btn">Edit Profile</button>
+        </a>
+    </div>
     <img src="{{ user.profile_image_url }}" alt="Image for {{ user.username }}" id="profile-avatar">
-    <span class="profile-username">{{user.username}}</span>
 </div>
 <div class="profile-info">
     <p class="user-location"><span class="fa fa-map-marker"></span>{{ user.location }}</p>
-    <p>{{user.bio}}</p>
+    <p class="user-bio">{{user.bio}}</p>
 </div>
 
 {% endblock %}
