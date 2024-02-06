@@ -1,4 +1,5 @@
 import os
+import requests
 
 from flask import (
     Flask,
@@ -46,6 +47,8 @@ connect_db(app)
 with app.app_context():
     db.create_all()
     db.session.commit()
+
+baseApiURL = "https://api.magicthegathering.io/v1/cards"
 
 ############## USER SIGNUP/LOGIN/LOGOUT ##############
 
@@ -216,20 +219,21 @@ def search_cards(num):
     colors = delimiter.join(form.colors.data)
     power = str(form.power.data)
     toughness = str(form.toughness.data)
-    card_list = (
-        Card.where(name="*" + f"{card_name}" + "*")
-        .where(set_name="*" + f"{set_name}" + "*")
-        .where(rarity=f"{rarity}")
-        .where(supertypes=f"{supertypes}")
-        .where(types=f"{types}")
-        .where(subtypes=f"{subtypes}")
-        .where(cmc=cmc)
-        .where(colors=f"{colors}")
-        .where(power=power)
-        .where(toughness=toughness)
-        .where(page=num)
-        .where(pageSize=100)
-    )
+    card_list = requests.get(baseApiURL, params={"name": "*" + f"{card_name}" + "*"})
+    # card_list = (
+    # Card.where(name="*" + f"{card_name}" + "*")
+    # .where(set_name="*" + f"{set_name}" + "*")
+    # .where(rarity=f"{rarity}")
+    # .where(supertypes=f"{supertypes}")
+    # .where(types=f"{types}")
+    # .where(subtypes=f"{subtypes}")
+    # .where(cmc=cmc)
+    # .where(colors=f"{colors}")
+    # .where(power=power)
+    # .where(toughness=toughness)
+    # .where(page=num)
+    # .where(pageSize=100)
+    # )
     return render_template("search_results.html", card_list=card_list)
 
 
