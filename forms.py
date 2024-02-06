@@ -82,19 +82,19 @@ class SearchCardsForm(FlaskForm):
     supertypes = SelectMultipleField(
         "Supertypes",
         choices=["All Supertypes"] + Supertype.all(),
-        default="All Supertypes",
+        default=["All Supertypes"],
         validators=[InputRequired()],
     )
     types = SelectMultipleField(
         "Types",
         choices=["All Types"] + Type.all(),
-        default="All Types",
+        default=["All Types"],
         validators=[InputRequired()],
     )
     subtypes = SelectMultipleField(
         "Subtypes",
         choices=["All Subtypes"] + Subtype.all(),
-        default="All Subtypes",
+        default=["All Subtypes"],
         validators=[InputRequired()],
     )
     cmc = IntegerField("Total Mana Cost", validators=[Optional(strip_whitespace=True)])

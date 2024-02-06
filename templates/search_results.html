@@ -6,5 +6,8 @@
 
 {% block content %}
 
-<p>{{card_list}}</p>
+{% for card in card_list["cards"] %}
+<p>You searched "{{name}}"</p>
+<p>{{card.name}}, {{card.rarity}}</p>
+{% endfor %}
 {% endblock %}

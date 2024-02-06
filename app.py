@@ -185,56 +185,79 @@ def search_cards_form():
     return render_template("card_search.html", form=form)
 
 
-@app.route("/card-search", methods=["POST"])
+@app.route("/card-search", methods=["GET", "POST"])
 def post_card_search_form():
-    return redirect("search/page1")
+    return redirect("card-search/page1")
 
 
-@app.route("/search/page<int:num>", methods=["GET"])
+@app.route("/card-search/page<int:num>", methods=["GET"])
 def search_cards(num):
-    """
-    as of 02/05/24
-    max converted mana cost (CMC) is 16
-    max power = "X"
-    max toughness = "X"
-    """
     delimiter = ","
     form = SearchCardsForm()
-    card_name = form.name.data
-    set_name = form.set_name.data
-    rarity = delimiter.join(form.rarity.data)
+    if form.name.data == None:
+        card_name = ""
+    else:
+        card_name = f"{form.name.data}"
+    if type(form.set_name.data) == "NoneType":
+        set_name = ""
+    else:
+        set_name = form.set_name.data
+    if len(form.rarity.data) == 4:
+        rarity = ""
+    else:
+        rarity = delimiter.join(form.rarity.data)
     if "All Supertypes" in form.supertypes.data:
-        supertypes = delimiter.join(Supertype.all())
+        supertypes = ""
     else:
         supertypes = delimiter.join(form.supertypes.data)
     if "All Types" in form.types.data:
-        types = delimiter.join(Type.all())
+        types = ""
     else:
         types = delimiter.join(form.types.data)
     if "All Subtypes" in form.subtypes.data:
-        subtypes = delimiter.join(Subtype.all())
+        subtypes = ""
     else:
         subtypes = delimiter.join(form.subtypes.data)
-    cmc = str(form.cmc.data)
+    if type(form.cmc.data) == "NoneType":
+        cmc = ""
+    else:
+        cmc = str(form.cmc.data)
     colors = delimiter.join(form.colors.data)
-    power = str(form.power.data)
-    toughness = str(form.toughness.data)
-    card_list = requests.get(baseApiURL, params={"name": "*" + f"{card_name}" + "*"})
-    # card_list = (
-    # Card.where(name="*" + f"{card_name}" + "*")
-    # .where(set_name="*" + f"{set_name}" + "*")
-    # .where(rarity=f"{rarity}")
-    # .where(supertypes=f"{supertypes}")
-    # .where(types=f"{types}")
-    # .where(subtypes=f"{subtypes}")
-    # .where(cmc=cmc)
-    # .where(colors=f"{colors}")
-    # .where(power=power)
-    # .where(toughness=toughness)
-    # .where(page=num)
-    # .where(pageSize=100)
-    # )
-    return render_template("search_results.html", card_list=card_list)
+    if type(form.power.data) == "NoneType":
+        power = ""
+    else:
+        power = str(form.power.data)
+    if type(form.toughness.data) == "NoneType":
+        toughness = ""
+    else:
+        toughness = str(form.toughness.data)
+    keys = [
+        "name",
+        # "set_name",
+        # "rarity",
+        # "supertypes",
+        # "types",
+        # "subtypes",
+        # "cmc",
+        # "colors",
+        # "power",
+        # "toughness",
+    ]
+    values = [
+        card_name,
+        # set_name,
+        # rarity,
+        # supertypes,
+        # types,
+        # subtypes,
+        # cmc,
+        # colors,
+        # power,
+        # toughness,
+    ]
+    dict = {k: v for (k, v) in zip(keys, values) if v != ""}
+    card_list = requests.get(baseApiURL, params=dict)
+    return render_template("search_results.html", card_list=card_list.json(), form=form)
 
 
 # @app.route("/card-list")
