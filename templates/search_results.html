@@ -5,9 +5,10 @@
 {% block body_class %}search_results{% endblock %}
 
 {% block content %}
-
 {% for card in card_list["cards"] %}
-<p>You searched "{{name}}"</p>
-<p>{{card.name}}, {{card.rarity}}</p>
+{% if card.multiverseid %}
+<img src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
+<p>{{card.name}}, {{card.rarity}}, {{card.manaCost}}, {{card.text}}</p>
+{% endif %}
 {% endfor %}
 {% endblock %}

@@ -1,6 +1,4 @@
 import os
-import requests
-
 from flask import (
     Flask,
     render_template,
@@ -15,7 +13,6 @@ from flask import (
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
-
 from models import (
     db,
     connect_db,
@@ -28,6 +25,7 @@ from models import (
 )
 from forms import UserAddForm, UserEditForm, LoginForm, SearchCardsForm
 from mtgsdk import Card, Set, Type, Supertype, Subtype
+import requests
 
 CURR_USER_KEY = "curr_user"
 
@@ -179,26 +177,17 @@ def delete_user():
 ############## PUBLIC ROUTES ##############
 
 
-@app.route("/card-search", methods=["GET"])
-def search_cards_form():
-    form = SearchCardsForm()
-    return render_template("card_search.html", form=form)
-
-
 @app.route("/card-search", methods=["GET", "POST"])
 def post_card_search_form():
-    return redirect("card-search/page1")
-
-
-@app.route("/card-search/page<int:num>", methods=["GET"])
-def search_cards(num):
     delimiter = ","
     form = SearchCardsForm()
+    if request.method == "GET":
+        return render_template("card_search.html", form=form)
     if form.name.data == None:
         card_name = ""
     else:
         card_name = f"{form.name.data}"
-    if type(form.set_name.data) == "NoneType":
+    if form.set_name.data == None:
         set_name = ""
     else:
         set_name = form.set_name.data
@@ -218,49 +207,49 @@ def search_cards(num):
         subtypes = ""
     else:
         subtypes = delimiter.join(form.subtypes.data)
-    if type(form.cmc.data) == "NoneType":
+    if form.cmc.data == None:
         cmc = ""
     else:
-        cmc = str(form.cmc.data)
-    colors = delimiter.join(form.colors.data)
-    if type(form.power.data) == "NoneType":
+        cmc = form.cmc.data
+    if len(form.colors.data) == 5:
+        colors = ""
+    else:
+        colors = delimiter.join(form.colors.data)
+    if form.power.data == None:
         power = ""
     else:
-        power = str(form.power.data)
-    if type(form.toughness.data) == "NoneType":
+        power = form.power.data
+    if form.toughness.data == None:
         toughness = ""
     else:
-        toughness = str(form.toughness.data)
+        toughness = form.toughness.data
     keys = [
         "name",
-        # "set_name",
-        # "rarity",
-        # "supertypes",
-        # "types",
-        # "subtypes",
-        # "cmc",
-        # "colors",
-        # "power",
-        # "toughness",
+        "set_name",
+        "rarity",
+        "supertypes",
+        "types",
+        "subtypes",
+        "cmc",
+        "colors",
+        "power",
+        "toughness",
     ]
     values = [
         card_name,
-        # set_name,
-        # rarity,
-        # supertypes,
-        # types,
-        # subtypes,
-        # cmc,
-        # colors,
-        # power,
-        # toughness,
+        set_name,
+        rarity,
+        supertypes,
+        types,
+        subtypes,
+        cmc,
+        colors,
+        power,
+        toughness,
     ]
     dict = {k: v for (k, v) in zip(keys, values) if v != ""}
     card_list = requests.get(baseApiURL, params=dict)
-    return render_template("search_results.html", card_list=card_list.json(), form=form)
-
-
-# @app.route("/card-list")
+    return render_template("search_results.html", card_list=card_list.json())
 
 
 ############## GENERAL ROUTES ##############
