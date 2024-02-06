@@ -38,7 +38,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
-app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = True
+app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 app.config["SECRET_KEY"] = os.getenv("secret_key")
 toolbar = DebugToolbarExtension(app)
 
@@ -177,12 +177,63 @@ def delete_user():
 
 
 @app.route("/card-search", methods=["GET"])
-def search_cards():
+def search_cards_form():
     form = SearchCardsForm()
     return render_template("card_search.html", form=form)
 
 
-@app.route("/search", methods=["GET"])
+@app.route("/card-search", methods=["POST"])
+def post_card_search_form():
+    return redirect("search/page1")
+
+
+@app.route("/search/page<int:num>", methods=["GET"])
+def search_cards(num):
+    """
+    as of 02/05/24
+    max converted mana cost (CMC) is 16
+    max power = "X"
+    max toughness = "X"
+    """
+    delimiter = ","
+    form = SearchCardsForm()
+    card_name = form.name.data
+    set_name = form.set_name.data
+    rarity = delimiter.join(form.rarity.data)
+    if "All Supertypes" in form.supertypes.data:
+        supertypes = delimiter.join(Supertype.all())
+    else:
+        supertypes = delimiter.join(form.supertypes.data)
+    if "All Types" in form.types.data:
+        types = delimiter.join(Type.all())
+    else:
+        types = delimiter.join(form.types.data)
+    if "All Subtypes" in form.subtypes.data:
+        subtypes = delimiter.join(Subtype.all())
+    else:
+        subtypes = delimiter.join(form.subtypes.data)
+    cmc = str(form.cmc.data)
+    colors = delimiter.join(form.colors.data)
+    power = str(form.power.data)
+    toughness = str(form.toughness.data)
+    card_list = (
+        Card.where(name="*" + f"{card_name}" + "*")
+        .where(set_name="*" + f"{set_name}" + "*")
+        .where(rarity=f"{rarity}")
+        .where(supertypes=f"{supertypes}")
+        .where(types=f"{types}")
+        .where(subtypes=f"{subtypes}")
+        .where(cmc=cmc)
+        .where(colors=f"{colors}")
+        .where(power=power)
+        .where(toughness=toughness)
+        .where(page=num)
+        .where(pageSize=100)
+    )
+    return render_template("search_results.html", card_list=card_list)
+
+
+# @app.route("/card-list")
 
 
 ############## GENERAL ROUTES ##############

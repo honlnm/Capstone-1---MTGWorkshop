@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from wtforms import widgets
 from wtforms import (
     StringField,
     PasswordField,
@@ -6,9 +7,21 @@ from wtforms import (
     IntegerField,
     RadioField,
     SelectField,
+    SelectMultipleField,
 )
-from wtforms.validators import DataRequired, Email, Length, Optional
+from wtforms.validators import (
+    DataRequired,
+    Email,
+    Length,
+    Optional,
+    InputRequired,
+)
 from mtgsdk import Card, Set, Type, Supertype, Subtype
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(html_tag="ul", prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 
 class UserAddForm(FlaskForm):
@@ -55,23 +68,41 @@ class SearchCardsForm(FlaskForm):
 
     name = StringField("Card Name", validators=[Optional(strip_whitespace=True)])
     set_name = StringField("Set Name", validators=[Optional(strip_whitespace=True)])
-    rarity = SelectField(
+    rarity = MultiCheckboxField(
         "Rarity",
-        choices=["", "Common", "Uncommon", "Rare", "Mythic rare"],
-        validators=[Optional(strip_whitespace=True)],
+        choices=[
+            "Common",
+            "Uncommon",
+            "Rare",
+            "Mythic Rare",
+        ],
+        default=["Common", "Uncommon", "Rare", "Mythic Rare"],
+        validators=[InputRequired()],
     )
-    supertypes = SelectField(
-        "Supertypes", choices=[""] + Supertype.all(), validators=[Optional()]
+    supertypes = SelectMultipleField(
+        "Supertypes",
+        choices=["All Supertypes"] + Supertype.all(),
+        default="All Supertypes",
+        validators=[InputRequired()],
     )
-    types = SelectField("Types", choices=[""] + Type.all(), validators=[Optional()])
-    subtypes = SelectField(
-        "Subtypes", choices=[""] + Subtype.all(), validators=[Optional()]
+    types = SelectMultipleField(
+        "Types",
+        choices=["All Types"] + Type.all(),
+        default="All Types",
+        validators=[InputRequired()],
+    )
+    subtypes = SelectMultipleField(
+        "Subtypes",
+        choices=["All Subtypes"] + Subtype.all(),
+        default="All Subtypes",
+        validators=[InputRequired()],
     )
     cmc = IntegerField("Total Mana Cost", validators=[Optional(strip_whitespace=True)])
-    colors = RadioField(
+    colors = MultiCheckboxField(
         "Colors",
         choices=["White", "Black", "Blue", "Green", "Red"],
-        validators=[Optional()],
+        default=["White", "Black", "Blue", "Green", "Red"],
+        validators=[InputRequired()],
     )
-    power = IntegerField("Power", validators=[Optional(strip_whitespace=True)])
-    toughness = IntegerField("Toughness", validators=[Optional(strip_whitespace=True)])
+    power = StringField("Power", validators=[Optional(strip_whitespace=True)])
+    toughness = StringField("Toughness", validators=[Optional(strip_whitespace=True)])
