@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Deck View{% endblock %}
+
+{% block body_class %}view_deck{% endblock %}
+
+{% block content %}
+<h1>{{deck.deck_name}}</h1>
+{% for card in cards %}
+<img src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
+{% endif %}
+{% endblock %}

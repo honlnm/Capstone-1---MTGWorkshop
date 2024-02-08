@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Deck{% endblock %}
+
+{% block body_class %}add_deck{% endblock %}
+
+{% block content %}
+
+<h1>Add New Deck</h1>
+<form method="POST" id="deck_form">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    {% for error in field.errors %}
+    <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+    {{ field(placeholder=field.label.text, class="form-control") }}
+    {% endfor %}
+
+    <button class="add_deck_button">Create Deck</button>
+</form>
+
+{% endblock %}

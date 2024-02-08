@@ -7,8 +7,32 @@
 {% block content %}
 {% for card in card_list["cards"] %}
 {% if card.multiverseid %}
-<img src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
-<p>{{card.name}}, {{card.rarity}}, {{card.manaCost}}, {{card.text}}</p>
+<div id="card-results-div">
+    <div id="results-card-img">
+        <img class="card-results" src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
+    </div>
+    <div id="card-icons-div">
+        <span>
+            <a href="">
+                <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
+            </a>
+            {% if g.user %}
+            <a href="">
+                <img id="card-inventory-icon" class="card-icons" src="/static/images/inventory_icon.png"
+                    alt="Add to Inventory">
+            </a>
+            <a href="">
+                <img id="card-deck-icon" class="card-icons" src="/static/images/deck_icon.png" alt="Add to Deck">
+            </a>
+            <a href="">
+                <img id="card-wishlist-icon" class="card-icons" src="/static/images/wishlist_icon.png"
+                    alt="Add to Wishlist">
+            </a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+<br>
 {% endif %}
 {% endfor %}
 {% endblock %}

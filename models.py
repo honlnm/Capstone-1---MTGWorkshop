@@ -48,6 +48,7 @@ class User(db.Model):
 class GameData(db.Model):
     __tablename__ = "game_data"
     game_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    game_title = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     winner_name = db.Column(db.Text)
     loser_name = db.Column(db.Text)
@@ -74,9 +75,9 @@ class CardWishList(db.Model):
 class Decks(db.Model):
     __tablename__ = "decks"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    deck_name = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     cards = db.relationship("DeckCards", backref="decks")
-    deck_type = db.Column(db.Integer, db.ForeignKey("deck_types.id"))
 
 
 class DeckCards(db.Model):
@@ -84,12 +85,6 @@ class DeckCards(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     deck_id = db.Column(db.Integer, db.ForeignKey("decks.id", ondelete="cascade"))
     card_id = db.Column(db.Integer, nullable=False)
-
-
-class DeckTypes(db.Model):
-    __tablename__ = "deck_types"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    deck_types = db.Column(db.Text, nullable=False)
 
 
 ############## CONNECT DB ##############

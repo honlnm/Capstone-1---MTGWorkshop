@@ -13,17 +13,8 @@ from flask import (
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
-from models import (
-    db,
-    connect_db,
-    User,
-    CardsOwned,
-    CardWishList,
-    Decks,
-    DeckCards,
-    DeckTypes,
-)
-from forms import UserAddForm, UserEditForm, LoginForm, SearchCardsForm
+from models import db, connect_db, User, CardsOwned, CardWishList, Decks, DeckCards
+from forms import UserAddForm, UserEditForm, LoginForm, SearchCardsForm, AddDeckForm
 from mtgsdk import Card, Set, Type, Supertype, Subtype
 import requests
 
@@ -133,7 +124,11 @@ def show_user(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
     user = User.query.get_or_404(user_id)
-    return render_template("show_user.html", user=user)
+    deck_list = user.decks
+    game_list = user.game_data
+    return render_template(
+        "show_user.html", user=user, decks=deck_list, games=game_list
+    )
 
 
 @app.route("/user/edit", methods=["GET", "POST"])
@@ -179,6 +174,7 @@ def delete_user():
 
 @app.route("/card-search", methods=["GET", "POST"])
 def post_card_search_form():
+    """Full Card Search"""
     delimiter = ","
     form = SearchCardsForm()
     if request.method == "GET":
@@ -186,7 +182,7 @@ def post_card_search_form():
     if form.name.data == None:
         card_name = ""
     else:
-        card_name = f"{form.name.data}"
+        card_name = form.name.data
     if form.set_name.data == None:
         set_name = ""
     else:
@@ -225,7 +221,7 @@ def post_card_search_form():
         toughness = form.toughness.data
     keys = [
         "name",
-        "set_name",
+        "setName",
         "rarity",
         "supertypes",
         "types",
@@ -252,7 +248,71 @@ def post_card_search_form():
     return render_template("search_results.html", card_list=card_list.json())
 
 
-############## GENERAL ROUTES ##############
+############## INVENTORY ##############
+
+
+@app.route("/user/<int:user_id>/inventory")
+def show_inventory(user_id):
+    """Show User Inventory"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    user = User.query.get_or_404(user_id)
+    inventory = CardsOwned.query.filter(user_id=user.id)
+    return render_template("inventory.html", user=user, inventory=inventory)
+
+
+@app.route("/user/<int:user_id>/inventory/add")
+def add_to_inventory(user_id):
+    """Add Card to Inventory"""
+
+
+@app.route("/user/<int:user_id>/inventory/remove")
+def remove_from_inventory():
+    """Remove Card from Inventory"""
+
+
+############## DECKS ##############
+
+
+@app.route("/user/<int:user_id>/deck/add", methods=["GET", "POST"])
+def add_deck(user_id):
+    """Add new deck"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    form = AddDeckForm()
+    if form.validate_on_submit():
+        new_deck = Decks(deck_name=form.deck_name.data, user_id=g.user.id)
+        db.session.add(new_deck)
+        db.session.commit()
+        flash(f"{new_deck.deck_name} has been added to your deck list!")
+        return redirect(f"/user/{g.user.id}")
+    return render_template("add_deck.html", form=form)
+
+
+@app.route("/user/<int:user_id>/deck/<int:deck_id>")
+def show_deck(user_id, deck_id):
+    """Show User Deck per deck_id"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    deck = Decks.query.get_or_404(deck_id)
+    user = User.query.get_or_404(user_id)
+    cards = DeckCards.query.filter(deck_id=deck_id)
+    card_list = []
+    for card in cards:
+        card = request.get(baseApiURL, params=card.card_id).json()
+        card_list.push(card)
+    return render_template("deck.html", deck=deck, user=user, cards=card_list)
+
+
+############## CARDS ##############
+
+
+@app.route("/card/<int:cardmultiverseid>")
+def show_card_info():
+    """Show Card Info (Public)"""
 
 
 ############## HOMEPAGE & ERROR ROUTES ##############
@@ -260,9 +320,7 @@ def post_card_search_form():
 
 @app.route("/")
 def home():
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/signup")
+    """Show home"""
     return redirect("/card-search")
 
 

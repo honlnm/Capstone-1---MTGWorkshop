@@ -22,6 +22,35 @@
 <div class="profile-info">
     <p class="user-location"><span class="fa fa-map-marker"></span>{{ user.location }}</p>
     <p class="user-bio">{{user.bio}}</p>
+    <a href="/user/{{user.id}}/inventory">
+        <p>Inventory</p>
+    </a>
+    <p>Decks:</p>
+    <a href="/user/{{user.id}}/deck/add">
+        <button type="button">Add Deck</button>
+    </a>
+    {% if decks %}
+    <ul>
+        {% for deck in decks %}
+        <a href="/user/{{user.id}}/deck/{{deck.id}}">
+            <li>{{deck.deck_name}}</li>
+        </a>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <p>Logged Games:</p>
+    <a href="">
+        <button type="button">Add Game</button>
+    </a>
+    {% if games %}
+    <ul>
+        {% for game in games %}
+        <a href="/user/{{user.id}}/game/{{game.id}}">
+            <li>{{game.game_title}}</li>
+        </a>
+        {% endfor %}
+    </ul>
+    {% endif %}
 </div>
 
 {% endblock %}
