@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Card Info{% endblock %}
+
+{% block body_class %}card_info{% endblock %}
+
+{% block content %}
+<div id="card-info-div">
+    <div id="card-info-img">
+        <img class="card-img" src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
+    </div>
+    <div id="card-icons-div">
+        <span>
+            {% if g.user %}
+            <a href="">
+                <img id="card-inventory-icon" class="card-icons" src="/static/images/inventory_icon.png"
+                    alt="Add to Inventory">
+            </a>
+            <a href="">
+                <img id="card-deck-icon" class="card-icons" src="/static/images/deck_icon.png" alt="Add to Deck">
+            </a>
+            <a href="">
+                <img id="card-wishlist-icon" class="card-icons" src="/static/images/wishlist_icon.png"
+                    alt="Add to Wishlist">
+            </a>
+            {% endif %}
+        </span>
+    </div>
+    <div id="card-info-div">
+        <p>Name: {{card.name}}</p>
+        <p>Set Name: {{card.setName}}</p>
+        <p>Mana Cost: {{card.manaCost}}</p>
+        <p>Total Mana Cost: {{card.cmc}}</p>
+        <p>Colors: {{card.colors}}</p>
+        <p>Type: {{card.type}}</p>
+        <p>Rarity: {{card.rarity}}</p>
+        <p>Card Text: {{card.text}}</p>
+        <p>Power: {{card.power}}</p>
+        <p>Toughness: {{card.toughness}}</p>
+        <p>Rulings:
+        <ul>
+            {% for ruling in card.rulings %}
+            <li>{{ruling.date}}, {{ruling.text}}</li>
+            {% endfor %}
+        </ul>
+        </p>
+
+        <p>Legalities:
+        <ul>
+            {% for format in card.legalities %}
+            <li>{{format.format}}, {{format.legality}}</li>
+            {% endfor %}
+        </ul>
+        </p>
+    </div>
+</div>
+<br>
+{% endblock %}

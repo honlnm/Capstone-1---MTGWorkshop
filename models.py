@@ -74,7 +74,11 @@ class CardWishList(db.Model):
 
 class Decks(db.Model):
     __tablename__ = "decks"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
     deck_name = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     cards = db.relationship("DeckCards", backref="decks")

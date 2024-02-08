@@ -17,6 +17,7 @@ from models import db, connect_db, User, CardsOwned, CardWishList, Decks, DeckCa
 from forms import UserAddForm, UserEditForm, LoginForm, SearchCardsForm, AddDeckForm
 from mtgsdk import Card, Set, Type, Supertype, Subtype
 import requests
+import math
 
 CURR_USER_KEY = "curr_user"
 
@@ -244,8 +245,36 @@ def post_card_search_form():
         toughness,
     ]
     dict = {k: v for (k, v) in zip(keys, values) if v != ""}
+    session["dict"] = dict
+    return redirect("/search-results/page1")
+
+
+@app.route("/search-results/page<int:num>", methods=["GET"])
+def view_search_results(num):
+    dict = session.get("dict")
+    dict["page"] = num
+    dict["pageSize"] = 100
     card_list = requests.get(baseApiURL, params=dict)
-    return render_template("search_results.html", card_list=card_list.json())
+    headers = card_list.headers
+    pages = math.ceil(int(headers["Total-Count"]) / 100)
+    return render_template(
+        "search_results.html",
+        card_list=card_list.json(),
+        pagemax=pages,
+        currentpage=num,
+        pageless=(+num - 1),
+        pagelessless=(+num - 2),
+        pageplus=(+num + 1),
+        pageplusplus=(+num + 2),
+    )
+
+
+@app.route("/card/<int:card_id>", methods=["GET"])
+def view_card_info(card_id):
+    card_url = baseApiURL + "/" + str(card_id)
+    card = requests.get(card_url)
+    card_info = card.json()
+    return render_template("card_info.html", card=card_info["card"], url=card_url)
 
 
 ############## INVENTORY ##############
@@ -299,7 +328,7 @@ def show_deck(user_id, deck_id):
         return redirect("/")
     deck = Decks.query.get_or_404(deck_id)
     user = User.query.get_or_404(user_id)
-    cards = DeckCards.query.filter(deck_id=deck_id)
+    cards = DeckCards.query.filter(deck_id=deck.id)
     card_list = []
     for card in cards:
         card = request.get(baseApiURL, params=card.card_id).json()
