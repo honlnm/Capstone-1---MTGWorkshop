@@ -6,7 +6,10 @@
 
 {% block content %}
 <h1>{{deck.deck_name}}</h1>
+<a href="/card-search">
+    <button class="add-cards-button" type="button">Add Cards</button>
+</a>
 {% for card in cards %}
 <img src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
-{% endif %}
+{% endfor %}
 {% endblock %}

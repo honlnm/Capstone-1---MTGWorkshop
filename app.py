@@ -252,6 +252,7 @@ def post_card_search_form():
 @app.route("/search-results/page<int:num>", methods=["GET"])
 def view_search_results(num):
     dict = session.get("dict")
+    session["result_page"] = num
     dict["page"] = num
     dict["pageSize"] = 100
     card_list = requests.get(baseApiURL, params=dict)
@@ -287,18 +288,26 @@ def show_inventory(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
     user = User.query.get_or_404(user_id)
-    inventory = CardsOwned.query.filter(user_id=user.id)
-    return render_template("inventory.html", user=user, inventory=inventory)
+    inventory = CardsOwned.query.filter(CardsOwned.user_id == user.id)
+    return render_template("inventory.html", user=user, cards=inventory)
 
 
-@app.route("/user/<int:user_id>/inventory/add")
-def add_to_inventory(user_id):
+@app.route("/user/<int:user_id>/inventory/<int:card_id>/add")
+def add_to_inventory(user_id, card_id):
     """Add Card to Inventory"""
-
-
-@app.route("/user/<int:user_id>/inventory/remove")
-def remove_from_inventory():
-    """Remove Card from Inventory"""
+    num = session["result_page"]
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    card = CardsOwned.query.filter(
+        CardsOwned.user_id == user_id, CardsOwned.card_id == card_id
+    )
+    card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+    card_url = card_detail["card"]["imageUrl"]
+    new_card = CardsOwned(user_id=user_id, card_id=card_id, card_img=card_url)
+    db.session.add(new_card)
+    db.session.commit()
+    return redirect(f"/search-results/page{num}")
 
 
 ############## DECKS ##############
@@ -328,11 +337,11 @@ def show_deck(user_id, deck_id):
         return redirect("/")
     deck = Decks.query.get_or_404(deck_id)
     user = User.query.get_or_404(user_id)
-    cards = DeckCards.query.filter(deck_id=deck.id)
+    cards = DeckCards.query.filter(DeckCards.deck_id == deck.id)
     card_list = []
     for card in cards:
-        card = request.get(baseApiURL, params=card.card_id).json()
-        card_list.push(card)
+        card = requests.get(baseApiURL + "/" + str(card.card_id)).json()
+        card_list.append(card)
     return render_template("deck.html", deck=deck, user=user, cards=card_list)
 
 

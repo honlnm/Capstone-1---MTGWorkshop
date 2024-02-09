@@ -63,6 +63,7 @@ class CardsOwned(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     card_id = db.Column(db.Integer, nullable=False)
+    card_img = db.Column(db.Text, nullable=False)
 
 
 class CardWishList(db.Model):
@@ -70,6 +71,7 @@ class CardWishList(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     card_id = db.Column(db.Integer, nullable=False)
+    card_img = db.Column(db.Text, nullable=False)
 
 
 class Decks(db.Model):
@@ -89,6 +91,7 @@ class DeckCards(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     deck_id = db.Column(db.Integer, db.ForeignKey("decks.id", ondelete="cascade"))
     card_id = db.Column(db.Integer, nullable=False)
+    card_img = db.Column(db.Text, nullable=False)
 
 
 ############## CONNECT DB ##############

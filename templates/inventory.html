@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory View{% endblock %}
+
+{% block body_class %}view_inventory{% endblock %}
+
+{% block content %}
+<h1>{{user.username}} Inventory</h1>
+<div>
+    <a href="/card-search">
+        <button class="add-cards-button" type="button">Add Cards</button>
+    </a>
+</div>
+<div>
+    {% for card in cards %}
+    <img src="{{card.card_img}}" alt="{{card.card_id}}">
+    {% endfor %}
+</div>
+{% endblock %}
