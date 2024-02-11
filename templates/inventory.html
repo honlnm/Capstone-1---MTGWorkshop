@@ -13,7 +13,23 @@
 </div>
 <div>
     {% for card in cards %}
-    <img src="{{card.card_img}}" alt="{{card.card_id}}">
+    <div>
+        <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+    </div>
+    <div>
+        <span>Qty {{card.card_qty}}</span>
+        <span><button>+</button></span>
+        <span><button>-</button></span>
+    </div>
+    <div>
+        <span>
+            <a href="/card/{{card.card_id}}">
+                <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
+            </a>
+        </span>
+        <span>Deck</span>
+        <span>Wishlist</span>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

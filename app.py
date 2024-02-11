@@ -299,14 +299,31 @@ def add_to_inventory(user_id, card_id):
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    card = CardsOwned.query.filter(
+    card_check = CardsOwned.query.filter(
         CardsOwned.user_id == user_id, CardsOwned.card_id == card_id
     )
-    card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
-    card_url = card_detail["card"]["imageUrl"]
-    new_card = CardsOwned(user_id=user_id, card_id=card_id, card_img=card_url)
-    db.session.add(new_card)
-    db.session.commit()
+    card_id_list = []
+    for cardX in card_check:
+        card_id_list.push(cardX.card_id)
+    if card_id in card_id_list:
+        card_check.card_qty += 1
+    else:
+        card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+        card = card_detail["card"]
+        new_card = CardsOwned(
+            user_id=user_id,
+            card_id=card_id,
+            card_qty=[1],
+            card_name=card["name"],
+            card_img=card["imageUrl"],
+            card_colors=card["colors"],
+            card_type=card["type"],
+            card_cmc=card["cmc"],
+            card_power=card["power"],
+            card_toughness=card["toughness"],
+        )
+        db.session.add(new_card)
+        db.session.commit()
     return redirect(f"/search-results/page{num}")
 
 

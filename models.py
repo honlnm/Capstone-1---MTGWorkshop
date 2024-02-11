@@ -63,7 +63,14 @@ class CardsOwned(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     card_id = db.Column(db.Integer, nullable=False)
+    card_qty = db.Column(db.Integer, nullable=False)
+    card_name = db.Column(db.Text, nullable=False)
     card_img = db.Column(db.Text, nullable=False)
+    card_colors = db.Column(db.Text, nullable=False)
+    card_type = db.Column(db.Text, nullable=False)
+    card_cmc = db.Column(db.Integer, nullable=False)
+    card_power = db.Column(db.Integer, nullable=False)
+    card_toughness = db.Column(db.Integer, nullable=False)
 
 
 class CardWishList(db.Model):
@@ -71,7 +78,14 @@ class CardWishList(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     card_id = db.Column(db.Integer, nullable=False)
+    card_qty = db.Column(db.Integer, nullable=False)
+    card_name = db.Column(db.Text, nullable=False)
     card_img = db.Column(db.Text, nullable=False)
+    card_colors = db.Column(db.Text, nullable=False)
+    card_type = db.Column(db.Text, nullable=False)
+    card_cmc = db.Column(db.Integer, nullable=False)
+    card_power = db.Column(db.Integer, nullable=False)
+    card_toughness = db.Column(db.Integer, nullable=False)
 
 
 class Decks(db.Model):
@@ -91,7 +105,14 @@ class DeckCards(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     deck_id = db.Column(db.Integer, db.ForeignKey("decks.id", ondelete="cascade"))
     card_id = db.Column(db.Integer, nullable=False)
+    card_qty = db.Column(db.Integer, nullable=False)
+    card_name = db.Column(db.Text, nullable=False)
     card_img = db.Column(db.Text, nullable=False)
+    card_colors = db.Column(db.Text, nullable=False)
+    card_type = db.Column(db.Text, nullable=False)
+    card_cmc = db.Column(db.Integer, nullable=False)
+    card_power = db.Column(db.Integer, nullable=False)
+    card_toughness = db.Column(db.Integer, nullable=False)
 
 
 ############## CONNECT DB ##############
