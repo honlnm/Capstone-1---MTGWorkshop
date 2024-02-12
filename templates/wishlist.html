@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Wish List View{% endblock %}
+
+{% block body_class %}view_wish_list{% endblock %}
+
+{% block content %}
+<h1>{{user.username}} Wish List</h1>
+<div>
+    <a href="/card-search">
+        <button class="add-cards-button" type="button">Add Cards</button>
+    </a>
+</div>
+<div>
+    {% for card in cards %}
+    <div>
+        <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+    </div>
+    <div>
+        <span>Qty {{card.card_qty}}</span>
+        <span><button>+</button></span>
+        <span><button>-</button></span>
+    </div>
+    <div>
+        <span>
+            <a href="/card/{{card.card_id}}">
+                <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
+            </a>
+        </span>
+        <span>Deck</span>
+        <span>Inventory</span>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

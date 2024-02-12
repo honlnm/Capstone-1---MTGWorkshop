@@ -258,9 +258,19 @@ def view_search_results(num):
     card_list = requests.get(baseApiURL, params=dict)
     headers = card_list.headers
     pages = math.ceil(int(headers["Total-Count"]) / 100)
+    inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
+    wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
+    card_id_inventory_list = []
+    for cardX in inventory:
+        card_id_inventory_list.append(cardX.card_id)
+    card_id_wishlist_list = []
+    for cardX in wishlist:
+        card_id_wishlist_list.append(cardX.card_id)
     return render_template(
         "search_results.html",
         card_list=card_list.json(),
+        inventory=str(card_id_inventory_list),
+        wishlist=str(card_id_wishlist_list),
         pagemax=pages,
         currentpage=num,
         pageless=(+num - 1),
@@ -304,26 +314,81 @@ def add_to_inventory(user_id, card_id):
     )
     card_id_list = []
     for cardX in card_check:
-        card_id_list.push(cardX.card_id)
+        card_id_list.append(cardX.card_id)
     if card_id in card_id_list:
-        card_check.card_qty += 1
+        card = ""
+        for cardX in card_check:
+            card = CardsOwned.query.get_or_404(cardX.id)
+        card.card_qty += 1
     else:
         card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
         card = card_detail["card"]
         new_card = CardsOwned(
             user_id=user_id,
             card_id=card_id,
-            card_qty=[1],
+            card_qty=int("1"),
             card_name=card["name"],
             card_img=card["imageUrl"],
-            card_colors=card["colors"],
+            card_colors=card.get("colors", None),
             card_type=card["type"],
-            card_cmc=card["cmc"],
-            card_power=card["power"],
-            card_toughness=card["toughness"],
+            card_cmc=card.get("cmc", None),
+            card_power=card.get("power", None),
+            card_toughness=card.get("toughness", None),
         )
         db.session.add(new_card)
-        db.session.commit()
+    db.session.commit()
+    return redirect(f"/search-results/page{num}")
+
+
+############## WISHLIST ##############
+
+
+@app.route("/user/<int:user_id>/wishlist")
+def show_wishlist(user_id):
+    """Show User Inventory"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    user = User.query.get_or_404(user_id)
+    wishlist = CardWishList.query.filter(CardWishList.user_id == user.id)
+    return render_template("wishlist.html", user=user, cards=wishlist)
+
+
+@app.route("/user/<int:user_id>/wishlist/<int:card_id>/add")
+def add_to_wishlist(user_id, card_id):
+    """Add Card to Inventory"""
+    num = session["result_page"]
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    card_check = CardWishList.query.filter(
+        CardWishList.user_id == user_id, CardWishList.card_id == card_id
+    )
+    card_id_list = []
+    for cardX in card_check:
+        card_id_list.append(cardX.card_id)
+    if card_id in card_id_list:
+        card = ""
+        for cardX in card_check:
+            card = CardWishList.query.get_or_404(cardX.id)
+        card.card_qty += 1
+    else:
+        card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+        card = card_detail["card"]
+        new_card = CardWishList(
+            user_id=user_id,
+            card_id=card_id,
+            card_qty=int("1"),
+            card_name=card["name"],
+            card_img=card["imageUrl"],
+            card_colors=card.get("colors", None),
+            card_type=card["type"],
+            card_cmc=card.get("cmc", None),
+            card_power=card.get("power", None),
+            card_toughness=card.get("toughness", None),
+        )
+        db.session.add(new_card)
+    db.session.commit()
     return redirect(f"/search-results/page{num}")
 
 

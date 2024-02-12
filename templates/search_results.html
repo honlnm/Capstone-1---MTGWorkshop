@@ -18,15 +18,26 @@
             </a>
             {% if g.user %}
             <a href="/user/{{g.user.id}}/inventory/{{card.multiverseid}}/add">
+                {% if card.multiverseid in inventory %}
+                <img id="card-inventory-icon" class="card-icons" src="/static/images/in_inventory_icon.png"
+                    alt="Add to Inventory">
+                {% else %}
                 <img id="card-inventory-icon" class="card-icons" src="/static/images/inventory_icon.png"
                     alt="Add to Inventory">
+                {% endif %}
             </a>
             <a href="">
                 <img id="card-deck-icon" class="card-icons" src="/static/images/deck_icon.png" alt="Add to Deck">
             </a>
-            <a href="">
+            </a>
+            <a href="/user/{{g.user.id}}/wishlist/{{card.multiverseid}}/add">
+                {% if card.multiverseid in wishlist %}
+                <img id="card-wishlist-icon" class="card-icons" src="/static/images/in_wishlist_icon.png"
+                    alt="Add to Wish List">
+                {% else %}
                 <img id="card-wishlist-icon" class="card-icons" src="/static/images/wishlist_icon.png"
-                    alt="Add to Wishlist">
+                    alt="Add to Wish List">
+                {% endif %}
             </a>
             {% endif %}
         </span>

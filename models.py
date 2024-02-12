@@ -66,11 +66,11 @@ class CardsOwned(db.Model):
     card_qty = db.Column(db.Integer, nullable=False)
     card_name = db.Column(db.Text, nullable=False)
     card_img = db.Column(db.Text, nullable=False)
-    card_colors = db.Column(db.Text, nullable=False)
+    card_colors = db.Column(db.Text)
     card_type = db.Column(db.Text, nullable=False)
-    card_cmc = db.Column(db.Integer, nullable=False)
-    card_power = db.Column(db.Integer, nullable=False)
-    card_toughness = db.Column(db.Integer, nullable=False)
+    card_cmc = db.Column(db.Integer)
+    card_power = db.Column(db.Integer)
+    card_toughness = db.Column(db.Integer)
 
 
 class CardWishList(db.Model):
@@ -81,11 +81,11 @@ class CardWishList(db.Model):
     card_qty = db.Column(db.Integer, nullable=False)
     card_name = db.Column(db.Text, nullable=False)
     card_img = db.Column(db.Text, nullable=False)
-    card_colors = db.Column(db.Text, nullable=False)
+    card_colors = db.Column(db.Text)
     card_type = db.Column(db.Text, nullable=False)
-    card_cmc = db.Column(db.Integer, nullable=False)
-    card_power = db.Column(db.Integer, nullable=False)
-    card_toughness = db.Column(db.Integer, nullable=False)
+    card_cmc = db.Column(db.Integer)
+    card_power = db.Column(db.Integer)
+    card_toughness = db.Column(db.Integer)
 
 
 class Decks(db.Model):
@@ -108,11 +108,11 @@ class DeckCards(db.Model):
     card_qty = db.Column(db.Integer, nullable=False)
     card_name = db.Column(db.Text, nullable=False)
     card_img = db.Column(db.Text, nullable=False)
-    card_colors = db.Column(db.Text, nullable=False)
+    card_colors = db.Column(db.Text)
     card_type = db.Column(db.Text, nullable=False)
-    card_cmc = db.Column(db.Integer, nullable=False)
-    card_power = db.Column(db.Integer, nullable=False)
-    card_toughness = db.Column(db.Integer, nullable=False)
+    card_cmc = db.Column(db.Integer)
+    card_power = db.Column(db.Integer)
+    card_toughness = db.Column(db.Integer)
 
 
 ############## CONNECT DB ##############
