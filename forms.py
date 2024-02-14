@@ -8,12 +8,7 @@ from wtforms import (
     SelectField,
     SelectMultipleField,
 )
-from wtforms.validators import (
-    InputRequired,
-    Email,
-    Length,
-    Optional,
-)
+from wtforms.validators import InputRequired, Email, Length, Optional, NumberRange
 from models import Decks
 from mtgsdk import Card, Set, Type, Supertype, Subtype
 
@@ -82,6 +77,19 @@ class DeckEditForm(FlaskForm):
     """Form for editing decks."""
 
     deck_name = StringField("Deck Name", validators=[InputRequired()])
+
+
+class CardQtyEditForm(FlaskForm):
+    card_qty = IntegerField(
+        "Card Qty",
+        validators=[
+            InputRequired(),
+            NumberRange(
+                min=0,
+                message="Minimum is 0 cards. Saving at 0 cards will remove the card.",
+            ),
+        ],
+    )
 
 
 class SearchCardsForm(FlaskForm):

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Deck List{% endblock %}
+
+{% block body_class %}view_decks{% endblock %}
+
+{% block content %}
+<h1>{{user.username}} Decks</h1>
+<a href="/user/{{user.id}}/deck/add">
+    <button type="button">Add Deck</button>
+</a>
+<div>
+    <ul>
+        {%for deck in decks %}
+        <a href="/user/{{user.id}}/deck/{{deck.id}}">
+            <li>{{deck.deck_name}}</li>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

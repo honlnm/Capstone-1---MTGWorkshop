@@ -122,6 +122,14 @@ def logout():
     return redirect("/login")
 
 
+############## CONTACT US ROUTE ##############
+
+
+@app.route("/contact-us")
+def contact_us():
+    return render_template("contact_us.html")
+
+
 ############## USER ROUTES ##############
 
 
@@ -441,6 +449,17 @@ def remove_card_from_wishlist(user_id, card_id):
 
 
 ############## DECKS ##############
+
+
+@app.route("/user/<int:user_id>/decks")
+def show_decks(user_id):
+    """Show Deck List"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    user = User.query.get_or_404(user_id)
+    decks = Decks.query.filter(Decks.user_id == user_id)
+    return render_template("decks.html", decks=decks, user=user)
 
 
 @app.route("/user/<int:user_id>/deck/add", methods=["GET", "POST"])
