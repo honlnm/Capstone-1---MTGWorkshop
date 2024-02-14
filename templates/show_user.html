@@ -20,10 +20,13 @@
     <img src="{{ user.profile_image_url }}" alt="Image for {{ user.username }}" id="profile-avatar">
 </div>
 <div class="profile-info">
-    <p class="user-location"><span class="fa fa-map-marker"></span>{{ user.location }}</p>
-    <p class="user-bio">{{user.bio}}</p>
+    <p class="user-location"><span class="fa fa-map-marker"></span>Location: {{ user.location }}</p>
+    <p class="user-bio">Bio: {{user.bio}}</p>
     <a href="/user/{{user.id}}/inventory">
         <p>Inventory</p>
+    </a>
+    <a href="/user/{{user.id}}/wishlist">
+        <p>Wishlist</p>
     </a>
     <p>Decks:</p>
     <a href="/user/{{user.id}}/deck/add">
@@ -38,19 +41,19 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <p>Logged Games:</p>
-    <a href="">
-        <button type="button">Add Game</button>
-    </a>
-    {% if games %}
-    <ul>
-        {% for game in games %}
-        <a href="/user/{{user.id}}/game/{{game.id}}">
-            <li>{{game.game_title}}</li>
-        </a>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    <!-- <p>Logged Games:</p> -->
+    <!-- <a href=""> -->
+    <!-- <button type="button">Add Game</button> -->
+    <!-- </a> -->
+    <!-- {% if games %} -->
+    <!-- <ul> -->
+    <!-- {% for game in games %} -->
+    <!-- <a href="/user/{{user.id}}/game/{{game.id}}"> -->
+    <!-- <li>{{game.game_title}}</li> -->
+    <!-- </a> -->
+    <!-- {% endfor %} -->
+    <!-- </ul> -->
+    <!-- {% endif %} -->
 </div>
 
 {% endblock %}

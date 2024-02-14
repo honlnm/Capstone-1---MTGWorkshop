@@ -5,7 +5,6 @@ from wtforms import (
     PasswordField,
     TextAreaField,
     IntegerField,
-    RadioField,
     SelectField,
     SelectMultipleField,
 )
@@ -15,6 +14,7 @@ from wtforms.validators import (
     Length,
     Optional,
 )
+from models import Decks
 from mtgsdk import Card, Set, Type, Supertype, Subtype
 
 
@@ -66,6 +66,22 @@ class AddDeckForm(FlaskForm):
     """Add Deck Form"""
 
     deck_name = StringField("Deck Name", validators=[InputRequired(), Length(max=30)])
+
+
+class SelectDeckForm(FlaskForm):
+    """Select Deck From Dropdown to add card"""
+
+    deck = SelectField("Add Card to:")
+
+    def set_deck_choices(self, user_id):
+        user_decks = Decks.query.filter_by(user_id=user_id).all()
+        self.deck.choices = [(deck.id, deck.deck_name) for deck in user_decks]
+
+
+class DeckEditForm(FlaskForm):
+    """Form for editing decks."""
+
+    deck_name = StringField("Deck Name", validators=[InputRequired()])
 
 
 class SearchCardsForm(FlaskForm):

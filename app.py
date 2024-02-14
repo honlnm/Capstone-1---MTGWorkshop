@@ -14,8 +14,15 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
 from models import db, connect_db, User, CardsOwned, CardWishList, Decks, DeckCards
-from forms import UserAddForm, UserEditForm, LoginForm, SearchCardsForm, AddDeckForm
-from mtgsdk import Card, Set, Type, Supertype, Subtype
+from forms import (
+    UserAddForm,
+    UserEditForm,
+    LoginForm,
+    SearchCardsForm,
+    AddDeckForm,
+    SelectDeckForm,
+    DeckEditForm,
+)
 import requests
 import math
 
@@ -150,10 +157,10 @@ def edit_user():
             user.header_image_url = (
                 form.header_image_url.data or "/static/images/default-header-pic.png"
             )
-            user.location = form.loction.data
+            user.location = form.location.data
             user.bio = form.bio.data
             db.session.commit()
-            return redirect(f"/users/{user.id}")
+            return redirect(f"/user/{user.id}")
         flash("Wrong password, please try again.", "danger")
     return render_template("edit_user.html", form=form, user_id=user.id)
 
@@ -258,26 +265,41 @@ def view_search_results(num):
     card_list = requests.get(baseApiURL, params=dict)
     headers = card_list.headers
     pages = math.ceil(int(headers["Total-Count"]) / 100)
-    inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
-    wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
-    card_id_inventory_list = []
-    for cardX in inventory:
-        card_id_inventory_list.append(cardX.card_id)
-    card_id_wishlist_list = []
-    for cardX in wishlist:
-        card_id_wishlist_list.append(cardX.card_id)
-    return render_template(
-        "search_results.html",
-        card_list=card_list.json(),
-        inventory=str(card_id_inventory_list),
-        wishlist=str(card_id_wishlist_list),
-        pagemax=pages,
-        currentpage=num,
-        pageless=(+num - 1),
-        pagelessless=(+num - 2),
-        pageplus=(+num + 1),
-        pageplusplus=(+num + 2),
-    )
+    if g.user:
+        inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
+        wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
+        card_id_inventory_list = []
+        for cardX in inventory:
+            card_id_inventory_list.append(cardX.card_id)
+        card_id_wishlist_list = []
+        for cardX in wishlist:
+            card_id_wishlist_list.append(cardX.card_id)
+        form = SelectDeckForm()
+        form.set_deck_choices(user_id=g.user.id)
+        return render_template(
+            "search_results.html",
+            card_list=card_list.json(),
+            inventory=str(card_id_inventory_list),
+            wishlist=str(card_id_wishlist_list),
+            pagemax=pages,
+            currentpage=num,
+            pageless=(+num - 1),
+            pagelessless=(+num - 2),
+            pageplus=(+num + 1),
+            pageplusplus=(+num + 2),
+            form=form,
+        )
+    else:
+        return render_template(
+            "search_results.html",
+            card_list=card_list.json(),
+            pagemax=pages,
+            currentpage=num,
+            pageless=(+num - 1),
+            pagelessless=(+num - 2),
+            pageplus=(+num + 1),
+            pageplusplus=(+num + 2),
+        )
 
 
 @app.route("/card/<int:card_id>", methods=["GET"])
@@ -413,18 +435,84 @@ def add_deck(user_id):
 
 @app.route("/user/<int:user_id>/deck/<int:deck_id>")
 def show_deck(user_id, deck_id):
-    """Show User Deck per deck_id"""
+    """Show Deck Cards"""
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    deck = Decks.query.get_or_404(deck_id)
     user = User.query.get_or_404(user_id)
-    cards = DeckCards.query.filter(DeckCards.deck_id == deck.id)
-    card_list = []
-    for card in cards:
-        card = requests.get(baseApiURL + "/" + str(card.card_id)).json()
-        card_list.append(card)
-    return render_template("deck.html", deck=deck, user=user, cards=card_list)
+    deck = Decks.query.get_or_404(deck_id)
+    deck_cards = DeckCards.query.filter(DeckCards.deck_id == deck.id)
+    return render_template("deck.html", user=user, cards=deck_cards, deck=deck)
+
+
+@app.route("/user/<int:user_id>/deck/<int:deck_id>/edit", methods=["GET", "POST"])
+def edit_deck(user_id, deck_id):
+    """Edit Deck"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    user = User.query.get_or_404(user_id)
+    deck = Decks.query.get_or_404(deck_id)
+    form = DeckEditForm(obj=deck)
+    if form.validate_on_submit():
+        deck.deck_name = form.deck_name.data
+        db.session.commit()
+        return redirect(f"/user/{user.id}/deck/{deck.id}")
+    return render_template("edit_deck.html", deck=deck, user=user, form=form)
+
+
+@app.route("/user/<int:user_id>/deck/<int:deck_id>/delete", methods=["GET"])
+def delete_deck(user_id, deck_id):
+    """Delete Deck"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    user = User.query.get_or_404(user_id)
+    deck = Decks.query.get_or_404(deck_id)
+    Decks.query.filter(Decks.id == int(deck_id)).delete()
+    db.session.commit()
+    return redirect(f"/user/{user.id}")
+
+
+@app.route("/user/<int:user_id>/deck/<int:card_id>/add", methods=["POST"])
+def add_card_to_deck(user_id, card_id):
+    """Add Card to Deck"""
+    num = session["result_page"]
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    form = SelectDeckForm(request.form)
+    form.set_deck_choices(user_id)
+    selected_deck_id = form.deck.data
+    card_check = DeckCards.query.filter(
+        DeckCards.deck_id == selected_deck_id, DeckCards.card_id == card_id
+    )
+    card_id_list = []
+    for cardX in card_check:
+        card_id_list.append(cardX.card_id)
+    if card_id in card_id_list:
+        card = ""
+        for cardX in card_check:
+            card = DeckCards.query.get_or_404(cardX.id)
+        card.card_qty += 1
+    else:
+        card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+        card = card_detail["card"]
+        new_card = DeckCards(
+            deck_id=selected_deck_id,
+            card_id=card_id,
+            card_qty=int("1"),
+            card_name=card["name"],
+            card_img=card["imageUrl"],
+            card_colors=card.get("colors", None),
+            card_type=card["type"],
+            card_cmc=card.get("cmc", None),
+            card_power=card.get("power", None),
+            card_toughness=card.get("toughness", None),
+        )
+        db.session.add(new_card)
+    db.session.commit()
+    return redirect(f"/search-results/page{num}")
 
 
 ############## CARDS ##############
