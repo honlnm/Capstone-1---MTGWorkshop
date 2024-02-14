@@ -362,6 +362,19 @@ def add_to_inventory(user_id, card_id):
     return redirect(f"/search-results/page{num}")
 
 
+@app.route("/user/<int:user_id>/inventory/<int:card_id>/remove")
+def remove_card_from_inventory(user_id, card_id):
+    """Remove Card from Inventory"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    CardsOwned.query.filter(
+        CardsOwned.user_id == int(user_id), CardsOwned.card_id == int(card_id)
+    ).delete()
+    db.session.commit()
+    return redirect(f"/user/{user_id}/inventory")
+
+
 ############## WISHLIST ##############
 
 
@@ -412,6 +425,19 @@ def add_to_wishlist(user_id, card_id):
         db.session.add(new_card)
     db.session.commit()
     return redirect(f"/search-results/page{num}")
+
+
+@app.route("/user/<int:user_id>/wishlist/<int:card_id>/remove")
+def remove_card_from_wishlist(user_id, card_id):
+    """Remove Card from Wish List"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    CardWishList.query.filter(
+        CardWishList.user_id == int(user_id), CardWishList.card_id == int(card_id)
+    ).delete()
+    db.session.commit()
+    return redirect(f"/user/{user_id}/wishlist")
 
 
 ############## DECKS ##############
@@ -468,7 +494,6 @@ def delete_deck(user_id, deck_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
     user = User.query.get_or_404(user_id)
-    deck = Decks.query.get_or_404(deck_id)
     Decks.query.filter(Decks.id == int(deck_id)).delete()
     db.session.commit()
     return redirect(f"/user/{user.id}")
@@ -513,6 +538,19 @@ def add_card_to_deck(user_id, card_id):
         db.session.add(new_card)
     db.session.commit()
     return redirect(f"/search-results/page{num}")
+
+
+@app.route("/user/<int:user_id>/deck/<int:deck_id>/<int:card_id>/remove")
+def remove_card_from_deck(user_id, deck_id, card_id):
+    """Remove Card from Deck"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    DeckCards.query.filter(
+        DeckCards.deck_id == int(deck_id), DeckCards.card_id == int(card_id)
+    ).delete()
+    db.session.commit()
+    return redirect(f"/user/{user_id}/deck/{deck_id}")
 
 
 ############## CARDS ##############

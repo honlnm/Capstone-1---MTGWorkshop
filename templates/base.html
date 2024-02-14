@@ -18,20 +18,25 @@
                     <span>MTG Workshop</span>
                 </a>
             </div>
-            <ul class="nav navbar-nav navbar-right">
-                {% if not g.user %}
-                <li><a href="/signup">Sign up</a></li>
-                <li><a href="/login">Log in</a></li>
-                {% else %}
-                <li>
-                    <a href="/user/{{ g.user.id }}">
-                        <img src="{{ g.user.profile_image_url }}" alt="{{ g.user.username }}">
-                    </a>
-                </li>
-                <li><a href="/logout">Log out</a></li>
-                {% endif %}
-            </ul>
-        </div>
+            <div class="nav navbar-nav navbar-right">
+                <div class="dropdown">
+                    <img src="/static/images/hamburger.png" alt="Links Dropdown">
+                    <div class="dropdown-content">
+                        {% if not g.user %}
+                        <a href="/login">Log In</a>
+                        <a href="/signup">Sign Up</a>
+                        {% else %}
+                        <a href="/user/{{g.user.id}}">Profile</a>
+                        <a href="/user/{{g.user.id}}/inventory">Inventory</a>
+                        <a href="/user/{{g.user.id}}/wishlist">Wish List</a>
+                        <a href="/user/{{g.user.id}}/decks">Decks</a>
+                        <hr>
+                        <a href="/contact-us">Contact Us</a>
+                        <a href="/logout">Log Out</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
     </nav>
     <div class="container">
         {% for category, message in get_flashed_messages(with_categories=True) %}
