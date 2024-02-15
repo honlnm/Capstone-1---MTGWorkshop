@@ -33,10 +33,13 @@
                     <div class="popup-content">
                         <span class="closePopup">&times;</span>
                         <form method="post" action="/user/{{user.id}}/inventory/{{card.card_id}}/adjust-qty">
-                            {{ form.csrf_token }}
-                            <input type="hidden" name="card_id" value="{{card.multiverseid}}">
-                            <label for="qty">Adjust Qty to:</label>
-                            <input type="number" placeholder="{{card.card_qty}}" name="qty">
+                            {{ form.hidden_tag() }}
+                            {% for field in form if field.widget.input_type != 'hidden' %}
+                            {% for error in field.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            {{ field(placeholder=field.label.text, class="form-control") }}
+                            {% endfor %}
                             <button type="submit">Save</button>
                         </form>
                     </div>

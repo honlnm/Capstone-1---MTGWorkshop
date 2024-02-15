@@ -15,21 +15,38 @@
     {% for card in cards %}
     <div>
         <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
-    </div>
-    <div>
-        <span>Qty {{card.card_qty}}</span>
-        <span><button>+</button></span>
-        <span><button>-</button></span>
-    </div>
-    <div>
-        <span>
-            <a href="/card/{{card.card_id}}">
-                <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
-            </a>
-        </span>
-        <span>Deck</span>
-        <span>Inventory</span>
-        <span><a href="/user/{{user.id}}/wishlist/{{card.card_id}}/remove"><button type="button">X</button></a></span>
+        <div>
+            <span>Qty {{card.card_qty}}</span>
+        </div>
+        <div>
+            <span>
+                <a href="/card/{{card.card_id}}">
+                    <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
+                </a>
+            </span>
+            <span>Deck</span>
+            <span>Inventory</span>
+            <span>
+                <img class="card-icons qty-icon" src="/static/images/qty_icon.png" alt="Adjust Card Qty">
+                <div class="popup">
+                    <div class="popup-content">
+                        <span class="closePopup">&times;</span>
+                        <form method="post" action="/user/{{user.id}}/wishlist/{{card.card_id}}/adjust-qty">
+                            {{ form.hidden_tag() }}
+                            {% for field in form if field.widget.input_type != 'hidden' %}
+                            {% for error in field.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            {{ field(placeholder=field.label.text, class="form-control") }}
+                            {% endfor %}
+                            <button type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </span>
+            <span><a href="/user/{{user.id}}/wishlist/{{card.card_id}}/remove"><button
+                        type="button">X</button></a></span>
+        </div>
     </div>
     {% endfor %}
 </div>
