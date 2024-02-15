@@ -22,6 +22,7 @@ from forms import (
     AddDeckForm,
     SelectDeckForm,
     DeckEditForm,
+    CardQtyEditForm,
 )
 import requests
 import math
@@ -264,6 +265,17 @@ def post_card_search_form():
     return redirect("/search-results/page1")
 
 
+@app.route("/card/<int:card_id>", methods=["GET"])
+def view_card_info(card_id):
+    card_url = baseApiURL + "/" + str(card_id)
+    card = requests.get(card_url)
+    card_info = card.json()
+    return render_template("card_info.html", card=card_info["card"], url=card_url)
+
+
+############## CARD SEARCH RESULTS ##############
+
+
 @app.route("/search-results/page<int:num>", methods=["GET"])
 def view_search_results(num):
     dict = session.get("dict")
@@ -310,14 +322,6 @@ def view_search_results(num):
         )
 
 
-@app.route("/card/<int:card_id>", methods=["GET"])
-def view_card_info(card_id):
-    card_url = baseApiURL + "/" + str(card_id)
-    card = requests.get(card_url)
-    card_info = card.json()
-    return render_template("card_info.html", card=card_info["card"], url=card_url)
-
-
 ############## INVENTORY ##############
 
 
@@ -329,7 +333,11 @@ def show_inventory(user_id):
         return redirect("/")
     user = User.query.get_or_404(user_id)
     inventory = CardsOwned.query.filter(CardsOwned.user_id == user.id)
-    return render_template("inventory.html", user=user, cards=inventory)
+    wishlist = CardWishList.query.filter(CardWishList.user_id == user_id)
+    form = CardQtyEditForm()
+    return render_template(
+        "inventory.html", user=user, cards=inventory, wishlist=wishlist, form=form
+    )
 
 
 @app.route("/user/<int:user_id>/inventory/<int:card_id>/add")
@@ -370,6 +378,27 @@ def add_to_inventory(user_id, card_id):
     return redirect(f"/search-results/page{num}")
 
 
+@app.route(
+    "/user/<int:user_id>/inventory/<int:card_id>/adjust-qty", methods=["GET", "POST"]
+)
+def inv_adj_qty(user_id, card_id):
+    """Add new deck"""
+    if user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    form = CardQtyEditForm()
+    if form.validate_on_submit():
+        print(user_id + "," + card_id)
+        card = CardsOwned.query.filter(
+            CardsOwned.user_id == int(user_id), CardsOwned.card_id == int(card_id)
+        )
+        for cardX in card:
+            cardX.card_qty = form.card_qty.data
+            db.session.commit()
+        return redirect(f"/user/{g.user.id}")
+    return redirect(f"/user/{user_id}/inventory")
+
+
 @app.route("/user/<int:user_id>/inventory/<int:card_id>/remove")
 def remove_card_from_inventory(user_id, card_id):
     """Remove Card from Inventory"""
@@ -394,7 +423,10 @@ def show_wishlist(user_id):
         return redirect("/")
     user = User.query.get_or_404(user_id)
     wishlist = CardWishList.query.filter(CardWishList.user_id == user.id)
-    return render_template("wishlist.html", user=user, cards=wishlist)
+    inventory = CardsOwned.query.filter(CardsOwned.user_id == user_id)
+    return render_template(
+        "wishlist.html", user=user, cards=wishlist, inventory=inventory
+    )
 
 
 @app.route("/user/<int:user_id>/wishlist/<int:card_id>/add")
@@ -487,7 +519,16 @@ def show_deck(user_id, deck_id):
     user = User.query.get_or_404(user_id)
     deck = Decks.query.get_or_404(deck_id)
     deck_cards = DeckCards.query.filter(DeckCards.deck_id == deck.id)
-    return render_template("deck.html", user=user, cards=deck_cards, deck=deck)
+    inventory = CardsOwned.query.filter(CardsOwned.user_id == user_id)
+    wishlist = CardWishList.query.filter(CardWishList.user_id == user_id)
+    return render_template(
+        "deck.html",
+        user=user,
+        cards=deck_cards,
+        deck=deck,
+        inventory=inventory,
+        wishlist=wishlist,
+    )
 
 
 @app.route("/user/<int:user_id>/deck/<int:deck_id>/edit", methods=["GET", "POST"])

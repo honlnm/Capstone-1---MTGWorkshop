@@ -15,21 +15,36 @@
     {% for card in cards %}
     <div>
         <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
-    </div>
-    <div>
-        <span>Qty {{card.card_qty}}</span>
-        <span><button>+</button></span>
-        <span><button>-</button></span>
-    </div>
-    <div>
-        <span>
-            <a href="/card/{{card.card_id}}">
-                <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
-            </a>
-        </span>
-        <span>Deck</span>
-        <span>Wishlist</span>
-        <span><a href="/user/{{user.id}}/inventory/{{card.card_id}}/remove"><button type="button">X</button></a></span>
+
+        <div>
+            <span>Qty {{card.card_qty}}</span>
+        </div>
+        <div>
+            <span>
+                <a href="/card/{{card.card_id}}">
+                    <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
+                </a>
+            </span>
+            <span>Deck</span>
+            <span>Wishlist</span>
+            <span>
+                <img class="card-icons qty-icon" src="/static/images/qty_icon.png" alt="Adjust Card Qty">
+                <div class="popup">
+                    <div class="popup-content">
+                        <span class="closePopup">&times;</span>
+                        <form method="post" action="/user/{{user.id}}/inventory/{{card.card_id}}/adjust-qty">
+                            {{ form.csrf_token }}
+                            <input type="hidden" name="card_id" value="{{card.multiverseid}}">
+                            <label for="qty">Adjust Qty to:</label>
+                            <input type="number" placeholder="{{card.card_qty}}" name="qty">
+                            <button type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </span>
+            <span><a href="/user/{{user.id}}/inventory/{{card.card_id}}/remove"><button
+                        type="button">X</button></a></span>
+        </div>
     </div>
     {% endfor %}
 </div>
