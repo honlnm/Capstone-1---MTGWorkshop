@@ -85,8 +85,8 @@ class CardQtyEditForm(FlaskForm):
         validators=[
             InputRequired(),
             NumberRange(
-                min=0,
-                message="Minimum is 0 cards. Saving at 0 cards will remove the card.",
+                min=1,
+                message="Minimum is 1 card. To remove, click the X icon",
             ),
         ],
     )

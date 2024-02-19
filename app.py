@@ -378,24 +378,23 @@ def add_to_inventory(user_id, card_id):
     return redirect(f"/search-results/page{num}")
 
 
-@app.route(
-    "/user/<int:user_id>/inventory/<int:card_id>/adjust-qty", methods=["GET", "POST"]
-)
+@app.route("/user/<int:user_id>/inventory/<int:card_id>/adjust-qty", methods=["POST"])
 def inv_adj_qty(user_id, card_id):
     """Add new deck"""
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    form = CardQtyEditForm()
-    if form.validate_on_submit():
+    try:
+        data = request.json.get("data")
         card = CardsOwned.query.filter(
             CardsOwned.user_id == int(user_id), CardsOwned.card_id == int(card_id)
         )
         for cardX in card:
-            cardX.card_qty = form.card_qty.data
-            db.session.commit()
-        return redirect(f"/user/{user_id}/inventory")
-    return redirect(f"/user/{user_id}/inventory")
+            cardX.card_qty = data
+        db.session.commit()
+        return jsonify({"updatedData": cardX.card_qty}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/user/<int:user_id>/inventory/<int:card_id>/remove")
@@ -467,24 +466,23 @@ def add_to_wishlist(user_id, card_id):
     return redirect(f"/search-results/page{num}")
 
 
-@app.route(
-    "/user/<int:user_id>/wishlist/<int:card_id>/adjust-qty", methods=["GET", "POST"]
-)
+@app.route("/user/<int:user_id>/wishlist/<int:card_id>/adjust-qty", methods=["POST"])
 def wishlist_adj_qty(user_id, card_id):
     """Add new deck"""
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    form = CardQtyEditForm()
-    if form.validate_on_submit():
+    try:
+        data = request.json.get("data")
         card = CardWishList.query.filter(
             CardWishList.user_id == int(user_id), CardWishList.card_id == int(card_id)
         )
         for cardX in card:
-            cardX.card_qty = form.card_qty.data
-            db.session.commit()
-        return redirect(f"/user/{user_id}/wishlist")
-    return redirect(f"/user/{user_id}/wishlist")
+            cardX.card_qty = data
+        db.session.commit()
+        return jsonify({"updatedData": cardX.card_qty}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/user/<int:user_id>/wishlist/<int:card_id>/remove")
@@ -574,23 +572,24 @@ def edit_deck(user_id, deck_id):
 
 @app.route(
     "/user/<int:user_id>/deck/<int:deck_id>/<int:card_id>/adjust-qty",
-    methods=["GET", "POST"],
+    methods=["POST"],
 )
 def deck_card_adj_qty(user_id, deck_id, card_id):
     """Add new deck"""
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    form = CardQtyEditForm()
-    if form.validate_on_submit():
+    try:
+        data = request.json.get("data")
         card = DeckCards.query.filter(
             DeckCards.deck_id == int(deck_id), DeckCards.card_id == int(card_id)
         )
         for cardX in card:
-            cardX.card_qty = form.card_qty.data
-            db.session.commit()
-        return redirect(f"/user/{user_id}/deck/{deck_id}")
-    return redirect(f"/user/{user_id}/deck/{deck_id}")
+            cardX.card_qty = data
+        db.session.commit()
+        return jsonify({"updatedData": cardX.card_qty}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/user/<int:user_id>/deck/<int:deck_id>/delete", methods=["GET"])
