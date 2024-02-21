@@ -276,7 +276,7 @@ def view_card_info(card_id):
 ############## CARD SEARCH RESULTS ##############
 
 
-@app.route("/search-results/page<int:num>", methods=["GET"])
+@app.route("/search-results/page<int:num>", methods=["GET", "POST"])
 def view_search_results(num):
     dict = session.get("dict")
     session["result_page"] = num
@@ -286,18 +286,16 @@ def view_search_results(num):
     headers = card_list.headers
     pages = math.ceil(int(headers["Total-Count"]) / 100)
     if g.user:
+        user = User.query.get_or_404(g.user.id)
         inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
         wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
-        card_id_inventory_list = []
-        for cardX in inventory:
-            card_id_inventory_list.append(cardX.card_id)
-        card_id_wishlist_list = []
-        for cardX in wishlist:
-            card_id_wishlist_list.append(cardX.card_id)
+        card_id_inventory_list = [card.card_id for card in inventory]
+        card_id_wishlist_list = [card.card_id for card in wishlist]
         form = SelectDeckForm()
         form.set_deck_choices(user_id=g.user.id)
         return render_template(
             "search_results.html",
+            user=user,
             card_list=card_list.json(),
             inventory=str(card_id_inventory_list),
             wishlist=str(card_id_wishlist_list),
@@ -332,50 +330,60 @@ def show_inventory(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
     user = User.query.get_or_404(user_id)
-    inventory = CardsOwned.query.filter(CardsOwned.user_id == user.id)
-    wishlist = CardWishList.query.filter(CardWishList.user_id == user_id)
+    inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
+    wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
+    card_id_inventory_list = [card.card_id for card in inventory]
+    card_id_wishlist_list = [card.card_id for card in wishlist]
     form = CardQtyEditForm()
     return render_template(
-        "inventory.html", user=user, cards=inventory, wishlist=wishlist, form=form
+        "inventory.html",
+        user=user,
+        cards=inventory,
+        inventory_list=card_id_inventory_list,
+        wishlist_list=card_id_wishlist_list,
+        wishlist=wishlist,
+        form=form,
     )
 
 
-@app.route("/user/<int:user_id>/inventory/<int:card_id>/add")
+@app.route("/user/<int:user_id>/inventory/<int:card_id>/add", methods=["POST"])
 def add_to_inventory(user_id, card_id):
     """Add Card to Inventory"""
-    num = session["result_page"]
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    card_check = CardsOwned.query.filter(
-        CardsOwned.user_id == user_id, CardsOwned.card_id == card_id
-    )
-    card_id_list = []
-    for cardX in card_check:
-        card_id_list.append(cardX.card_id)
-    if card_id in card_id_list:
-        card = ""
-        for cardX in card_check:
-            card = CardsOwned.query.get_or_404(cardX.id)
-        card.card_qty += 1
-    else:
-        card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
-        card = card_detail["card"]
-        new_card = CardsOwned(
-            user_id=user_id,
-            card_id=card_id,
-            card_qty=int("1"),
-            card_name=card["name"],
-            card_img=card["imageUrl"],
-            card_colors=card.get("colors", None),
-            card_type=card["type"],
-            card_cmc=card.get("cmc", None),
-            card_power=card.get("power", None),
-            card_toughness=card.get("toughness", None),
+    try:
+        card_check = CardsOwned.query.filter(
+            CardsOwned.user_id == user_id, CardsOwned.card_id == card_id
         )
-        db.session.add(new_card)
-    db.session.commit()
-    return redirect(f"/search-results/page{num}")
+        card_id_list = []
+        for cardX in card_check:
+            card_id_list.append(cardX.card_id)
+        if card_id in card_id_list:
+            card = ""
+            for cardX in card_check:
+                card = CardsOwned.query.get_or_404(cardX.id)
+            card.card_qty += 1
+        else:
+            card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+            card = card_detail["card"]
+            new_card = CardsOwned(
+                user_id=user_id,
+                card_id=card_id,
+                card_qty=int("1"),
+                card_name=card["name"],
+                card_img=card["imageUrl"],
+                card_colors=card.get("colors", None),
+                card_type=card["type"],
+                card_cmc=card.get("cmc", None),
+                card_power=card.get("power", None),
+                card_toughness=card.get("toughness", None),
+            )
+            db.session.add(new_card)
+        db.session.commit()
+        return jsonify(), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/user/<int:user_id>/inventory/<int:card_id>/adjust-qty", methods=["POST"])
@@ -387,7 +395,7 @@ def inv_adj_qty(user_id, card_id):
     try:
         data = request.json.get("data")
         card = CardsOwned.query.filter(
-            CardsOwned.user_id == int(user_id), CardsOwned.card_id == int(card_id)
+            CardsOwned.user_id == user_id, CardsOwned.card_id == card_id
         )
         for cardX in card:
             cardX.card_qty = data
@@ -397,17 +405,20 @@ def inv_adj_qty(user_id, card_id):
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/user/<int:user_id>/inventory/<int:card_id>/remove")
+@app.route("/user/<int:user_id>/inventory/<int:card_id>/remove", methods=["POST"])
 def remove_card_from_inventory(user_id, card_id):
     """Remove Card from Inventory"""
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    CardsOwned.query.filter(
-        CardsOwned.user_id == int(user_id), CardsOwned.card_id == int(card_id)
-    ).delete()
-    db.session.commit()
-    return redirect(f"/user/{user_id}/inventory")
+    try:
+        CardsOwned.query.filter(
+            CardsOwned.user_id == user_id, CardsOwned.card_id == card_id
+        ).delete()
+        db.session.commit()
+        return jsonify(), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 ############## WISHLIST ##############
@@ -420,50 +431,59 @@ def show_wishlist(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
     user = User.query.get_or_404(user_id)
-    wishlist = CardWishList.query.filter(CardWishList.user_id == user.id)
-    inventory = CardsOwned.query.filter(CardsOwned.user_id == user_id)
+    inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
+    wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
+    card_id_inventory_list = [card.card_id for card in inventory]
+    card_id_wishlist_list = [card.card_id for card in wishlist]
     form = CardQtyEditForm()
     return render_template(
-        "wishlist.html", user=user, cards=wishlist, inventory=inventory, form=form
+        "wishlist.html",
+        user=user,
+        cards=wishlist,
+        wishlist_list=card_id_wishlist_list,
+        inventory_list=card_id_inventory_list,
+        inventory=inventory,
+        form=form,
     )
 
 
-@app.route("/user/<int:user_id>/wishlist/<int:card_id>/add")
+@app.route("/user/<int:user_id>/wishlist/<int:card_id>/add", methods=["POST"])
 def add_to_wishlist(user_id, card_id):
     """Add Card to Inventory"""
     num = session["result_page"]
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    card_check = CardWishList.query.filter(
-        CardWishList.user_id == user_id, CardWishList.card_id == card_id
-    )
-    card_id_list = []
-    for cardX in card_check:
-        card_id_list.append(cardX.card_id)
-    if card_id in card_id_list:
-        card = ""
-        for cardX in card_check:
-            card = CardWishList.query.get_or_404(cardX.id)
-        card.card_qty += 1
-    else:
-        card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
-        card = card_detail["card"]
-        new_card = CardWishList(
-            user_id=user_id,
-            card_id=card_id,
-            card_qty=int("1"),
-            card_name=card["name"],
-            card_img=card["imageUrl"],
-            card_colors=card.get("colors", None),
-            card_type=card["type"],
-            card_cmc=card.get("cmc", None),
-            card_power=card.get("power", None),
-            card_toughness=card.get("toughness", None),
+    try:
+        card_check = CardWishList.query.filter(
+            CardWishList.user_id == user_id, CardWishList.card_id == card_id
         )
-        db.session.add(new_card)
-    db.session.commit()
-    return redirect(f"/search-results/page{num}")
+        card_id_list = [card.card_id for card in card_check]
+        if card_id in card_id_list:
+            card = ""
+            for cardX in card_check:
+                card = CardWishList.query.get_or_404(cardX.id)
+            card.card_qty += 1
+        else:
+            card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+            card = card_detail["card"]
+            new_card = CardWishList(
+                user_id=user_id,
+                card_id=card_id,
+                card_qty=int("1"),
+                card_name=card["name"],
+                card_img=card["imageUrl"],
+                card_colors=card.get("colors", None),
+                card_type=card["type"],
+                card_cmc=card.get("cmc", None),
+                card_power=card.get("power", None),
+                card_toughness=card.get("toughness", None),
+            )
+            db.session.add(new_card)
+        db.session.commit()
+        return jsonify(), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/user/<int:user_id>/wishlist/<int:card_id>/adjust-qty", methods=["POST"])
@@ -485,17 +505,20 @@ def wishlist_adj_qty(user_id, card_id):
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/user/<int:user_id>/wishlist/<int:card_id>/remove")
+@app.route("/user/<int:user_id>/wishlist/<int:card_id>/remove", methods=["POST"])
 def remove_card_from_wishlist(user_id, card_id):
     """Remove Card from Wish List"""
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    CardWishList.query.filter(
-        CardWishList.user_id == int(user_id), CardWishList.card_id == int(card_id)
-    ).delete()
-    db.session.commit()
-    return redirect(f"/user/{user_id}/wishlist")
+    try:
+        CardWishList.query.filter(
+            CardWishList.user_id == user_id, CardWishList.card_id == card_id
+        ).delete()
+        db.session.commit()
+        return jsonify(), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 ############## DECKS ##############
@@ -537,8 +560,10 @@ def show_deck(user_id, deck_id):
     user = User.query.get_or_404(user_id)
     deck = Decks.query.get_or_404(deck_id)
     deck_cards = DeckCards.query.filter(DeckCards.deck_id == deck.id)
-    inventory = CardsOwned.query.filter(CardsOwned.user_id == user_id)
-    wishlist = CardWishList.query.filter(CardWishList.user_id == user_id)
+    inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
+    wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
+    card_id_inventory_list = [card.card_id for card in inventory]
+    card_id_wishlist_list = [card.card_id for card in wishlist]
     form = CardQtyEditForm()
     deckForm = SelectDeckForm()
     deckForm.set_deck_choices(user_id=g.user.id)
@@ -547,7 +572,9 @@ def show_deck(user_id, deck_id):
         user=user,
         cards=deck_cards,
         deck=deck,
+        inventory_list=card_id_inventory_list,
         inventory=inventory,
+        wishlist_list=card_id_wishlist_list,
         wishlist=wishlist,
         form=form,
         deck_form=deckForm,
@@ -607,55 +634,59 @@ def delete_deck(user_id, deck_id):
 @app.route("/user/<int:user_id>/deck/<int:card_id>/add", methods=["POST"])
 def add_card_to_deck(user_id, card_id):
     """Add Card to Deck"""
-    num = session["result_page"]
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    form = SelectDeckForm(request.form)
-    form.set_deck_choices(user_id)
-    selected_deck_id = form.deck.data
-    card_check = DeckCards.query.filter(
-        DeckCards.deck_id == selected_deck_id, DeckCards.card_id == card_id
-    )
-    card_id_list = []
-    for cardX in card_check:
-        card_id_list.append(cardX.card_id)
-    if card_id in card_id_list:
-        card = ""
-        for cardX in card_check:
-            card = DeckCards.query.get_or_404(cardX.id)
-        card.card_qty += 1
-    else:
-        card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
-        card = card_detail["card"]
-        new_card = DeckCards(
-            deck_id=selected_deck_id,
-            card_id=card_id,
-            card_qty=int("1"),
-            card_name=card["name"],
-            card_img=card["imageUrl"],
-            card_colors=card.get("colors", None),
-            card_type=card["type"],
-            card_cmc=card.get("cmc", None),
-            card_power=card.get("power", None),
-            card_toughness=card.get("toughness", None),
+    try:
+        data = request.json.get("data")
+        selected_deck_id = data
+        card_check = DeckCards.query.filter(
+            DeckCards.deck_id == selected_deck_id, DeckCards.card_id == card_id
         )
-        db.session.add(new_card)
-    db.session.commit()
-    return redirect(f"/search-results/page{num}")
+        card_id_list = [card.card_id for card in card_check]
+        if card_id in card_id_list:
+            card = ""
+            for cardX in card_check:
+                card = DeckCards.query.get_or_404(cardX.id)
+            card.card_qty += 1
+        else:
+            card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+            card = card_detail["card"]
+            new_card = DeckCards(
+                deck_id=selected_deck_id,
+                card_id=card_id,
+                card_qty=int("1"),
+                card_name=card["name"],
+                card_img=card["imageUrl"],
+                card_colors=card.get("colors", None),
+                card_type=card["type"],
+                card_cmc=card.get("cmc", None),
+                card_power=card.get("power", None),
+                card_toughness=card.get("toughness", None),
+            )
+            db.session.add(new_card)
+        db.session.commit()
+        return jsonify(), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
-@app.route("/user/<int:user_id>/deck/<int:deck_id>/<int:card_id>/remove")
+@app.route(
+    "/user/<int:user_id>/deck/<int:deck_id>/<int:card_id>/remove", methods=["POST"]
+)
 def remove_card_from_deck(user_id, deck_id, card_id):
     """Remove Card from Deck"""
     if user_id != g.user.id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    DeckCards.query.filter(
-        DeckCards.deck_id == int(deck_id), DeckCards.card_id == int(card_id)
-    ).delete()
-    db.session.commit()
-    return redirect(f"/user/{user_id}/deck/{deck_id}")
+    try:
+        DeckCards.query.filter(
+            DeckCards.deck_id == int(deck_id), DeckCards.card_id == int(card_id)
+        ).delete()
+        db.session.commit()
+        return jsonify(), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 ############## CARDS ##############

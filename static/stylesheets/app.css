@@ -36,6 +36,73 @@ a:hover {
     color: goldenrod;
 }
 
+/* ############## LOADING PAGE ############## */
+
+#loading-page-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.mtg-icon {
+    width: 40px;
+}
+
+.mtg-loader {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    margin-left: -30px;
+
+    img {
+        animation-name: loading;
+        animation-timing-function: ease-in;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        height: 30px;
+        width: 30px;
+        position: absolute;
+
+        &:nth-child(1) {
+            animation-delay: 2s;
+        }
+
+        &:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        &:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        &:nth-child(4) {
+            animation-delay: 0.5s;
+        }
+
+        &:nth-child(5) {
+            animation-delay: 0;
+        }
+    }
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(360deg);
+        transform-origin: 100px;
+    }
+}
+
 /* ############## MAIN DROPDOWN ############## */
 
 .dropdown {
@@ -99,12 +166,12 @@ a:hover {
 
 /* ############## CARDS ############## */
 
-#card-results-div {
+.card-div {
     width: 100%;
 }
 
-#results-card-img,
-#card-icons-div {
+.card-img,
+.card-icons-div {
     display: flex;
     justify-content: center;
     width: 100%;

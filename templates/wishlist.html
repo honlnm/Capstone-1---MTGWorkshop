@@ -5,16 +5,27 @@
 {% block body_class %}view_wish_list{% endblock %}
 
 {% block content %}
+<div id="loading-page-container" style="display: none;">
+    <div class="mtg-loader">
+        <img src="/static/images/blue_icon.png" alt="blue mtg icon" class="mtg-icon">
+        <img src="/static/images/white_icon.png" alt="white mtg icon" class="mtg-icon">
+        <img src="/static/images/red-icon.png" alt="red mtg icon" class="mtg-icon">
+        <img src="/static/images/green-icon.png" alt="green mtg icon" class="mtg-icon">
+        <img src="/static/images/black-icon.png" alt="black mtg icon" class="mtg-icon">
+    </div>
+</div>
 <h1>{{user.username}} Wish List</h1>
 <div>
     <a href="/card-search">
         <button class="add-cards-button" type="button">Add Cards</button>
     </a>
 </div>
-<div>
+<div class="container">
     {% for card in cards %}
     <div class="card-div" data-card-id={{card.card_id}} data-user-id={{user.id}}>
-        <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+        <div class="card-img">
+            <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+        </div>
         <div class="wl-qty-div">
             <span class="wl-qty">Qty {{card.card_qty}}</span>
         </div>
@@ -23,9 +34,11 @@
                 <a href="/card/{{card.card_id}}">
                     <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
                 </a>
-            </span>
-            <span>Inventory</span>
-            <span>
+                {% if card.card_id in inventory_list %}
+                <img class="g-inv-icon card-icons" src="/static/images/in_inventory_icon.png" alt="Add to Inventory">
+                {% else %}
+                <img class="bw-inv-icon card-icons" src="/static/images/inventory_icon.png" alt="Add to Inventory">
+                {% endif %}
                 <img class="card-icons wl-qty-icon" src="/static/images/qty_icon.png" alt="Adjust Card Qty">
                 <div class="popup">
                     <div class="popup-content">
@@ -42,10 +55,8 @@
                         </form>
                     </div>
                 </div>
+                <img src="/static/images/remove_icon.png" alt="Remove Card" class="wl-rmv-icon card-icons">
             </span>
-            <span>Deck</span>
-            <span><a href="/user/{{user.id}}/wishlist/{{card.card_id}}/remove"><button
-                        type="button">X</button></a></span>
         </div>
     </div>
     {% endfor %}

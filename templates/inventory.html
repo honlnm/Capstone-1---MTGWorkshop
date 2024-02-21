@@ -5,6 +5,15 @@
 {% block body_class %}view_inventory{% endblock %}
 
 {% block content %}
+<div id="loading-page-container" style="display: none;">
+    <div class="mtg-loader">
+        <img src="/static/images/blue_icon.png" alt="blue mtg icon" class="mtg-icon">
+        <img src="/static/images/white_icon.png" alt="white mtg icon" class="mtg-icon">
+        <img src="/static/images/red-icon.png" alt="red mtg icon" class="mtg-icon">
+        <img src="/static/images/green-icon.png" alt="green mtg icon" class="mtg-icon">
+        <img src="/static/images/black-icon.png" alt="black mtg icon" class="mtg-icon">
+    </div>
+</div>
 <h1>{{user.username}} Inventory</h1>
 <div>
     <a href="/card-search">
@@ -24,10 +33,11 @@
                 <a href="/card/{{card.card_id}}">
                     <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
                 </a>
-            </span>
-            <span>Wishlist</span>
-            <span>Deck</span>
-            <span>
+                {% if card.card_id in wishlist_list %}
+                <img class="g-wl-icon card-icons" src="/static/images/in_wishlist_icon.png" alt="Add to Wish List">
+                {% else %}
+                <img class="bw-wl-icon card-icons" src="/static/images/wishlist_icon.png" alt="Add to Wish List">
+                {% endif %}
                 <img class="card-icons inv-qty-icon" src="/static/images/qty_icon.png" alt="Adjust Card Qty">
                 <div class="popup">
                     <div class="popup-content">
@@ -44,9 +54,8 @@
                         </form>
                     </div>
                 </div>
+                <img src="/static/images/remove_icon.png" alt="Remove Card" class="inv-rmv-icon card-icons">
             </span>
-            <span><a href="/user/{{user.id}}/inventory/{{card.card_id}}/remove"><button
-                        type="button">X</button></a></span>
         </div>
     </div>
     {% endfor %}

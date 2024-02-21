@@ -5,6 +5,15 @@
 {% block body_class %}view_deck{% endblock %}
 
 {% block content %}
+<div id="loading-page-container" style="display: none;">
+    <div class="mtg-loader">
+        <img src="/static/images/blue_icon.png" alt="blue mtg icon" class="mtg-icon">
+        <img src="/static/images/white_icon.png" alt="white mtg icon" class="mtg-icon">
+        <img src="/static/images/red-icon.png" alt="red mtg icon" class="mtg-icon">
+        <img src="/static/images/green-icon.png" alt="green mtg icon" class="mtg-icon">
+        <img src="/static/images/black-icon.png" alt="black mtg icon" class="mtg-icon">
+    </div>
+</div>
 <h1>{{user.username}}, {{deck.deck_name}} Deck</h1>
 <span><a href="/user/{{user.id}}/deck/{{deck.id}}/edit"><button type="button">Edit Deck</button></a></span>
 <div>
@@ -12,57 +21,47 @@
         <button class="add-cards-button" type="button">Add Cards</button>
     </a>
 </div>
-<div>
+<div class="container">
     {% for card in cards %}
     <div class="card-div" data-card-id={{card.card_id}} data-user-id={{user.id}} data-deck-id="{{deck.id}}">
-        <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
-
+        <div class="card-img">
+            <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+        </div>
         <div class="deck-qty-div">
             <span class="deck-qty">Qty {{card.card_qty}}</span>
         </div>
-        <div>
+        <div class="card-icons-div">
             <span>
                 <a href="/card/{{card.card_id}}">
                     <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
                 </a>
-            </span>
-            <span>
-                <a href="/user/{{g.user.id}}/inventory/{{card.card_id}}/add">
-                    {% if card.card_id in inventory %}
-                    <img class="card-icons" src="/static/images/in_inventory_icon.png" alt="Add to Inventory">
-                    {% else %}
-                    <img class="card-icons" src="/static/images/inventory_icon.png" alt="Add to Inventory">
-                    {% endif %}
-                </a>
-            </span>
-            <span>
-                <a href="/user/{{g.user.id}}/wishlist/{{card.card_id}}/add">
-                    {% if card.card_id in wishlist %}
-                    <img class="card-icons" src="/static/images/in_wishlist_icon.png" alt="Add to Wish List">
-                    {% else %}
-                    <img class="card-icons" src="/static/images/wishlist_icon.png" alt="Add to Wish List">
-                    {% endif %}
-                </a>
-            </span>
-            <span>
+                {% if card.card_id in inventory_list %}
+                <img class="g-inv-icon card-icons" src="/static/images/in_inventory_icon.png" alt="Add to Inventory">
+                {% else %}
+                <img class="bw-inv-icon card-icons" src="/static/images/inventory_icon.png" alt="Add to Inventory">
+                {% endif %}
+                {% if card.card_id in wishlist_list %}
+                <img class="g-wl-icon card-icons" src="/static/images/in_wishlist_icon.png" alt="Add to Wish List">
+                {% else %}
+                <img class="bw-wl-icon card-icons" src="/static/images/wishlist_icon.png" alt="Add to Wish List">
+                {% endif %}
                 <img class="card-icons deck-icon" src="/static/images/deck_icon.png" alt="Add to Deck">
                 <div class="popup">
                     <div class="popup-content">
                         <span class="closePopup">&times;</span>
-                        <form method="post" class="form-deck-qty">
-                            {{ form.hidden_tag() }}
-                            {% for field in form if field.widget.input_type != 'hidden' %}
-                            {% for error in field.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
-                            {{ field(placeholder=field.label.text, class="deck-qty-field") }}
-                            {% endfor %}
-                            <button type="submit">Save</button>
+                        <form method="post" class="form-add-card-to-deck">
+                            {{ deck_form.csrf_token }}
+                            <input type="hidden" name="card_id" value="{{ card.multiverseid }}">
+                            <label for="deck">Add Card to:</label>
+                            <select class="deck-selection" name="deck">
+                                {% for value, label in deck_form.deck.choices %}
+                                <option value="{{ value }}" class="deck-option">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="deck-icon-submit-btn" type="submit">Submit</button>
                         </form>
                     </div>
                 </div>
-            </span>
-            <span>
                 <img class="card-icons deck-qty-icon" src="/static/images/qty_icon.png" alt="Adjust Card Qty">
                 <div class="popup">
                     <div class="popup-content">
@@ -79,11 +78,7 @@
                         </form>
                     </div>
                 </div>
-            </span>
-            <span>
-                <a href="/user/{{user.id}}/deck/{{deck.id}}/{{card.card_id}}/remove">
-                    <img src="/static/images/remove_icon.png" alt="Remove Card" class="card-icons">
-                </a>
+                <img src="/static/images/remove_icon.png" alt="Remove Card" class="deck-rmv-icon card-icons">
             </span>
         </div>
     </div>
