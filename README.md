@@ -6,25 +6,25 @@ Link: TBD
 The MTG Workshop was built to give Magic the Gathering players the opportunity to build their dream decks without having purchased all the cards they want to use. The site features many search options to find the right card you are looking for and the ability to add any card to your profile's inventory, wish list, or a deck that you've set up. There are many future goals for the website that will be implimented as time goes on. Please feel free to go to the link above (the login) and click the "Demo" button to browse the site as a user.
 
 ## Future Goals:
-  - [] Add a link to log Game Data
-  - [] Have the ability to access Game History
-  - [] Show said game data statistics in the user profile
-    - [] Number of wins recorded
-    - [] Number of Losses recorded
-    - [] Time Played
-  - [] Give the user the option to make their profile publically available to view
-    - [] Would include the option to make certain decks available to view
-  - [] Make friending and following available
-  - [] Impliment a life-counter for when playing a game
-  - [] Option to select deck type and have rules for adding cards
+  - [ ] Add a link to log Game Data
+  - [ ] Have the ability to access Game History
+  - [ ] Show said game data statistics in the user profile
+    - [ ] Number of wins recorded
+    - [ ] Number of Losses recorded
+    - [ ] Time Played
+  - [ ] Give the user the option to make their profile publically available to view
+    - [ ] Would include the option to make certain decks available to view
+  - [ ] Make friending and following available
+  - [ ] Impliment a life-counter for when playing a game
+  - [ ] Option to select deck type and have rules for adding cards
     - Example: Commander, qty 1 of each card.
-  - [] Provide deck-analytics to show:
-    - [] Mana bell curve
-    - [] Number of Cards in the deck
-  - [] Use an additional API to show up to date, market prices per card
-  - [] Able to make shopping lists out of wishlists
-    - [] includes price per card
-    - [] includes expected shopping total
+  - [ ] Provide deck-analytics to show:
+    - [ ] Mana bell curve
+    - [ ] Number of Cards in the deck
+  - [ ] Use an additional API to show up to date, market prices per card
+  - [ ] Able to make shopping lists out of wishlists
+    - [ ] includes price per card
+    - [ ] includes expected shopping total
 
 ## Demo:
 Video to be provided
