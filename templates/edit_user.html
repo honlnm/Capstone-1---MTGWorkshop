@@ -30,8 +30,9 @@
             {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
 
             <div class="edit-btn-area">
-                <button class="btn btn-success">Edit this user!</button>
-                <a href="/users/{{ user_id }}" class="btn btn-outline-secondary">Cancel</a>
+                <button class="btn btn-success">Save Changes!</button>
+                <a href="/user/{{ user_id }}" class="btn btn-outline-secondary">Cancel</a>
+                <a href="/user/delete" class="btn btn-danger">Delete Account</a>
             </div>
         </form>
     </div>
