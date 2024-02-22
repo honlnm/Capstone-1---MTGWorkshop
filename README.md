@@ -36,30 +36,30 @@ https://docs.github.com/en/repositories/creating-and-managing-repositories/cloni
 https://magicthegathering.io/#
 
 ## Requirements:
-bcrypt==4.1.2
-blinker==1.7.0
-certifi==2024.2.2
-charset-normalizer==3.3.2
-click==8.1.7
-dnspython==2.5.0
-email-validator==2.1.0.post1
-Flask==2.3.3
-Flask-Bcrypt==1.0.1
-Flask-DebugToolbar @ git+https://github.com/JB0925/flask-debugtoolbar.git@76ae899247b443a1fd91b1b8c0db37f1165006f0
-Flask-SQLAlchemy==3.1.1
-Flask-WTF==1.2.1
-greenlet==3.0.1
-idna==3.6
-itsdangerous==2.1.2
-Jinja2==3.1.2
-MarkupSafe==2.1.3
-mtgsdk==1.3.1
-psycopg2-binary==2.9.9
-python-dotenv==1.0.0
-requests==2.31.0
-SQLAlchemy==2.0.23
-SQLAlchemy-Utils==0.41.1
-typing_extensions==4.8.0
-urllib3==2.2.0
-Werkzeug==2.3.7
-WTForms==3.1.1
+- bcrypt==4.1.2
+- blinker==1.7.0
+- certifi==2024.2.2
+- charset-normalizer==3.3.2
+- click==8.1.7
+- dnspython==2.5.0
+- email-validator==2.1.0.post1
+- Flask==2.3.3
+- Flask-Bcrypt==1.0.1
+- Flask-DebugToolbar @ git+https://github.com/JB0925/flask-debugtoolbar.git@76ae899247b443a1fd91b1b8c0db37f1165006f0
+- Flask-SQLAlchemy==3.1.1
+- Flask-WTF==1.2.1
+- greenlet==3.0.1
+- idna==3.6
+- itsdangerous==2.1.2
+- Jinja2==3.1.2
+- MarkupSafe==2.1.3
+- mtgsdk==1.3.1
+- psycopg2-binary==2.9.9
+- python-dotenv==1.0.0
+- requests==2.31.0
+- SQLAlchemy==2.0.23
+- SQLAlchemy-Utils==0.41.1
+- typing_extensions==4.8.0
+- urllib3==2.2.0
+- Werkzeug==2.3.7
+- WTForms==3.1.1
