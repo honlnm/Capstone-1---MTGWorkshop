@@ -335,6 +335,8 @@ def show_inventory(user_id):
     card_id_inventory_list = [card.card_id for card in inventory]
     card_id_wishlist_list = [card.card_id for card in wishlist]
     form = CardQtyEditForm()
+    deckForm = SelectDeckForm()
+    deckForm.set_deck_choices(user_id=g.user.id)
     return render_template(
         "inventory.html",
         user=user,
@@ -343,6 +345,7 @@ def show_inventory(user_id):
         wishlist_list=card_id_wishlist_list,
         wishlist=wishlist,
         form=form,
+        deck_form=deckForm,
     )
 
 
@@ -436,6 +439,8 @@ def show_wishlist(user_id):
     card_id_inventory_list = [card.card_id for card in inventory]
     card_id_wishlist_list = [card.card_id for card in wishlist]
     form = CardQtyEditForm()
+    deckForm = SelectDeckForm()
+    deckForm.set_deck_choices(user_id=g.user.id)
     return render_template(
         "wishlist.html",
         user=user,
@@ -444,6 +449,7 @@ def show_wishlist(user_id):
         inventory_list=card_id_inventory_list,
         inventory=inventory,
         form=form,
+        deck_form=deckForm,
     )
 
 

@@ -38,6 +38,23 @@
                 {% else %}
                 <img class="bw-wl-icon card-icons" src="/static/images/wishlist_icon.png" alt="Add to Wish List">
                 {% endif %}
+                <img class="card-icons deck-icon" src="/static/images/deck_icon.png" alt="Add to Deck">
+                <div class="popup">
+                    <div class="popup-content">
+                        <span class="closePopup">&times;</span>
+                        <form method="post" class="form-add-card-to-deck">
+                            {{ deck_form.csrf_token }}
+                            <input type="hidden" name="card_id" value="{{ card.card_id }}">
+                            <label for="deck">Add Card to:</label>
+                            <select class="deck-selection" name="deck">
+                                {% for value, label in deck_form.deck.choices %}
+                                <option value="{{ value }}" class="deck-option">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="deck-icon-submit-btn" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
                 <img class="card-icons inv-qty-icon" src="/static/images/qty_icon.png" alt="Adjust Card Qty">
                 <div class="popup">
                     <div class="popup-content">

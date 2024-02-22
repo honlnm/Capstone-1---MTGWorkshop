@@ -20,7 +20,9 @@ document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) 
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
-        const inputData = evt.target.querySelector(".deck-option").value
+        const selectElement = evt.target.querySelector(".deck-selection")
+        const inputData = selectElement.options[selectElement.selectedIndex].value
+        console.log(inputData)
         try {
             const response = await fetch("/user/" + userId.toString() + "/deck/" + cardId.toString() + "/add", {
                 method: "POST",
