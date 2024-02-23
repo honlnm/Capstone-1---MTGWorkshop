@@ -7,6 +7,7 @@ Link: TBD
 The MTG Workshop was built to give Magic the Gathering players the opportunity to build their dream decks without having purchased all the cards they want to use. The site features many search options to find the right card you are looking for and the ability to add any card to your profile's inventory, wish list, or a deck that you've set up. There are many future goals for the website that will be implimented as time goes on. Please feel free to go to the link above (the login) and click the "Demo" button to browse the site as a user.
 
 ## Future Goals:
+  - [ ] Add a Demo Login button for review by my peers.
   - [ ] Add a link to log Game Data
   - [ ] Have the ability to access Game History
   - [ ] Show said game data statistics in the user profile
