@@ -15,9 +15,9 @@
     </div>
 </div>
 <h1>{{user.username}}, {{deck.deck_name}} Deck</h1>
-<span><a href="/user/{{user.id}}/deck/{{deck.id}}/edit"><button type="button">Edit Deck</button></a></span>
+<span><a href="/deck/user/{{user.id}}/deck/{{deck.id}}/edit"><button type="button">Edit Deck</button></a></span>
 <div>
-    <a href="/card-search">
+    <a href="/cs/card-search">
         <button class="add-cards-button" type="button">Add Cards</button>
     </a>
 </div>
@@ -32,7 +32,7 @@
         </div>
         <div class="card-icons-div">
             <span>
-                <a href="/card/{{card.card_id}}">
+                <a href="/cs/card/{{card.card_id}}">
                     <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
                 </a>
                 {% if card.card_id in inventory_list %}

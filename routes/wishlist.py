@@ -8,6 +8,7 @@ from flask import (
     session,
     g,
 )
+
 from models import db, User, CardsOwned, CardWishList
 from apiClient import API
 import requests
@@ -17,7 +18,7 @@ from forms import (
     CardQtyEditForm,
 )
 
-wl_bp = Blueprint("wish_list", __name__)
+wl_bp = Blueprint("wish_list", __name__, url_prefix="/wl")
 
 
 @wl_bp.route("/user/<int:user_id>/wishlist")
@@ -58,9 +59,7 @@ def add_to_wishlist(user_id, card_id):
         )
         card_id_list = [card.card_id for card in card_check]
         if card_id in card_id_list:
-            card = ""
-            for cardX in card_check:
-                card = CardWishList.query.get_or_404(cardX.id)
+            card = [CardWishList.query.get_or_404(cardX.id) for cardX in card_check]
             card.card_qty += 1
         else:
             card_detail = API.get_card_info(card_id).json()

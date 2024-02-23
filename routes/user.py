@@ -1,10 +1,12 @@
 from flask import (
+    Blueprint,
     render_template,
     flash,
     redirect,
     session,
     g,
 )
+
 from sqlalchemy.exc import IntegrityError
 from models import db, User
 from forms import (
@@ -13,20 +15,9 @@ from forms import (
     LoginForm,
 )
 
-from flask import Blueprint
-
-user_bp = Blueprint("user", __name__)
+user_bp = Blueprint("user", __name__, url_prefix="/acct")
 
 CURR_USER_KEY = "curr_user"
-
-
-@user_bp.before_request
-def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
-    if CURR_USER_KEY in session:
-        g.user = User.query.get(session[CURR_USER_KEY])
-    else:
-        g.user = None
 
 
 def do_login(user):
@@ -89,7 +80,7 @@ def logout():
     """Handle logout of user."""
     do_logout()
     flash("You have successfully logged out.", "success")
-    return redirect("/login")
+    return redirect("/acct/login")
 
 
 @user_bp.route("/user/<int:user_id>")
@@ -123,7 +114,7 @@ def edit_user():
             user.location = form.location.data
             user.bio = form.bio.data
             db.session.commit()
-            return redirect(f"/user/{user.id}")
+            return redirect(f"/acct/user/{user.id}")
         flash("Wrong password, please try again.", "danger")
     return render_template("edit_user.html", form=form, user_id=user.id)
 
@@ -137,4 +128,4 @@ def delete_user():
     do_logout()
     db.session.delete(g.user)
     db.session.commit()
-    return redirect("/signup")
+    return redirect("/acct/signup")

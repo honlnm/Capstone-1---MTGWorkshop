@@ -19,10 +19,10 @@
             {% endfor %}
             <div class="edit-btn-area">
                 <button class="btn btn-success">Edit this deck!</button>
-                <a href="/user/{{user.id}}/deck/{{deck.id}}" class="btn btn-outline-secondary">Cancel</a>
+                <a href="/deck/user/{{user.id}}/deck/{{deck.id}}" class="btn btn-outline-secondary">Cancel</a>
             </div>
             <div>
-                <a href="/user/{{user.id}}/deck/{{deck.id}}/delete">
+                <a href="/deck/user/{{user.id}}/deck/{{deck.id}}/delete">
                     <button type="button">Delete {{deck.name}} Deck</button>
                 </a>
             </div>

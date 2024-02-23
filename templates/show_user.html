@@ -13,7 +13,7 @@
 <div class="profile-img-username">
     <div class="profile-header-bar">
         <span class="profile-username">{{user.username}}</span>
-        <a href="/user/edit">
+        <a href="/acct/user/edit">
             <button type="button" class="edit-profile-btn">Edit Profile</button>
         </a>
     </div>
@@ -22,19 +22,6 @@
 <div class="profile-info">
     <p class="user-location"><span class="fa fa-map-marker"></span>Location: {{ user.location }}</p>
     <p class="user-bio">Bio: {{user.bio}}</p>
-    <!-- <p>Logged Games:</p> -->
-    <!-- <a href=""> -->
-    <!-- <button type="button">Add Game</button> -->
-    <!-- </a> -->
-    <!-- {% if games %} -->
-    <!-- <ul> -->
-    <!-- {% for game in games %} -->
-    <!-- <a href="/user/{{user.id}}/game/{{game.id}}"> -->
-    <!-- <li>{{game.game_title}}</li> -->
-    <!-- </a> -->
-    <!-- {% endfor %} -->
-    <!-- </ul> -->
-    <!-- {% endif %} -->
 </div>
 
 {% endblock %}

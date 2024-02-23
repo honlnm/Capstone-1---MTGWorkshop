@@ -23,19 +23,19 @@
                     <img src="/static/images/hamburger.png" alt="Links Dropdown">
                     <div class="dropdown-content">
                         {% if not g.user %}
-                        <a href="/card-search">Card Search</a>
+                        <a href="/cs/card-search">Card Search</a>
                         <hr>
-                        <a href="/login">Log In</a>
-                        <a href="/signup">Sign Up</a>
+                        <a href="/acct/login">Log In</a>
+                        <a href="/acct/signup">Sign Up</a>
                         {% else %}
-                        <a href="/user/{{g.user.id}}">Profile</a>
-                        <a href="/card-search">Card Search</a>
-                        <a href="/user/{{g.user.id}}/inventory">Inventory</a>
-                        <a href="/user/{{g.user.id}}/wishlist">Wish List</a>
-                        <a href="/user/{{g.user.id}}/decks">Decks</a>
+                        <a href="/acct/user/{{g.user.id}}">Profile</a>
+                        <a href="/cs/card-search">Card Search</a>
+                        <a href="/inv/user/{{g.user.id}}/inventory">Inventory</a>
+                        <a href="/wl/user/{{g.user.id}}/wishlist">Wish List</a>
+                        <a href="/deck/user/{{g.user.id}}/decks">Decks</a>
                         <hr>
-                        <a href="/contact-us">Contact Us</a>
-                        <a href="/logout">Log Out</a>
+                        <a href="/about/contact-us">Contact Us</a>
+                        <a href="/acct/logout">Log Out</a>
                         {% endif %}
                     </div>
                 </div>

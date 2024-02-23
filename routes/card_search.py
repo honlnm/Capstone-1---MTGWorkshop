@@ -10,8 +10,9 @@ from flask import (
 import requests
 import math
 from models import db, User, CardsOwned, CardWishList
+from apiClient import API
 
-card_search_bp = Blueprint("card_search", __name__)
+card_search_bp = Blueprint("card_search", __name__, url_prefix="/cs")
 
 from forms import (
     SearchCardsForm,
@@ -21,80 +22,48 @@ from forms import (
 baseApiURL = "https://api.magicthegathering.io/v1/cards"
 
 
-@card_search_bp.route("/card-search", methods=["GET", "POST"])
-def post_card_search_form():
-    """Full Card Search"""
+def process_form_data(form):
     delimiter = ","
-    form = SearchCardsForm()
+    orDelimiter = "|"
+    search_params = {
+        "name": form.name.data or "",
+        "setName": form.set_name.data or "",
+        "rarity": (
+            delimiter.join(form.rarity.data) if len(form.rarity.data) != 4 else ""
+        ),
+        "supertypes": (
+            delimiter.join(form.supertypes.data)
+            if "All Supertypes" not in form.supertypes.data
+            else ""
+        ),
+        "types": (
+            delimiter.join(form.types.data)
+            if "All Types" not in form.types.data
+            else ""
+        ),
+        "subtypes": (
+            delimiter.join(form.subtypes.data)
+            if "All Subtypes" not in form.subtypes.data
+            else ""
+        ),
+        "cmc": form.cmc.data or "",
+        "colors": (
+            orDelimiter.join(form.colors.data) if len(form.colors.data) != 5 else ""
+        ),
+        "power": form.power.data or "",
+        "toughness": form.toughness.data or "",
+    }
+    return {key: value for key, value in search_params.items() if value}
+
+
+@card_search_bp.route("/card-search", methods=["GET", "POST"])
+def card_search_function():
+    form = SearchCardsForm(request.form)
     if request.method == "GET":
         return render_template("card_search.html", form=form)
-    if form.name.data == None:
-        card_name = ""
-    else:
-        card_name = form.name.data
-    if form.set_name.data == None:
-        set_name = ""
-    else:
-        set_name = form.set_name.data
-    if len(form.rarity.data) == 4:
-        rarity = ""
-    else:
-        rarity = delimiter.join(form.rarity.data)
-    if "All Supertypes" in form.supertypes.data:
-        supertypes = ""
-    else:
-        supertypes = delimiter.join(form.supertypes.data)
-    if "All Types" in form.types.data:
-        types = ""
-    else:
-        types = delimiter.join(form.types.data)
-    if "All Subtypes" in form.subtypes.data:
-        subtypes = ""
-    else:
-        subtypes = delimiter.join(form.subtypes.data)
-    if form.cmc.data == None:
-        cmc = ""
-    else:
-        cmc = form.cmc.data
-    if len(form.colors.data) == 5:
-        colors = ""
-    else:
-        colors = delimiter.join(form.colors.data)
-    if form.power.data == None:
-        power = ""
-    else:
-        power = form.power.data
-    if form.toughness.data == None:
-        toughness = ""
-    else:
-        toughness = form.toughness.data
-    keys = [
-        "name",
-        "setName",
-        "rarity",
-        "supertypes",
-        "types",
-        "subtypes",
-        "cmc",
-        "colors",
-        "power",
-        "toughness",
-    ]
-    values = [
-        card_name,
-        set_name,
-        rarity,
-        supertypes,
-        types,
-        subtypes,
-        cmc,
-        colors,
-        power,
-        toughness,
-    ]
-    dict = {k: v for (k, v) in zip(keys, values) if v != ""}
-    session["dict"] = dict
-    return redirect("/search-results/page1")
+    search_params = process_form_data(form)
+    session["dict"] = search_params
+    return redirect("/cs/search-results/page1")
 
 
 @card_search_bp.route("/search-results/page<int:num>", methods=["GET", "POST"])
@@ -139,3 +108,10 @@ def view_search_results(num):
             pageplus=(+num + 1),
             pageplusplus=(+num + 2),
         )
+
+
+@card_search_bp.route("/card/<int:card_id>", methods=["GET"])
+def view_card_info(card_id):
+    card = API.get_card_info(card_id)
+    card_info = card.json()
+    return render_template("card_info.html", card=card_info["card"])

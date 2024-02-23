@@ -6,13 +6,13 @@
 
 {% block content %}
 <h1>{{user.username}} Decks</h1>
-<a href="/user/{{user.id}}/deck/add">
+<a href="/deck/user/{{user.id}}/deck/add">
     <button type="button">Add Deck</button>
 </a>
 <div>
     <ul>
         {%for deck in decks %}
-        <a href="/user/{{user.id}}/deck/{{deck.id}}">
+        <a href="/deck/user/{{user.id}}/deck/{{deck.id}}">
             <li>{{deck.deck_name}}</li>
         </a>
         {% endfor %}

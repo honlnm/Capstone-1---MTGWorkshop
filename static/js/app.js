@@ -24,7 +24,7 @@ document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) 
         const inputData = selectElement.options[selectElement.selectedIndex].value
         console.log(inputData)
         try {
-            const response = await fetch("/user/" + userId.toString() + "/deck/" + cardId.toString() + "/add", {
+            const response = await fetch("/deck/user/" + userId.toString() + "/deck/" + cardId.toString() + "/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -56,7 +56,7 @@ document.querySelectorAll(".g-inv-icon").forEach(function (invIcon) {
         const cardClass = evt.target.getAttribute("class")
         try {
             if (cardClass == "bw-inv-icon card-icons") {
-                const response = await fetch("/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/add", {
+                const response = await fetch("/inv/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/add", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -66,7 +66,7 @@ document.querySelectorAll(".g-inv-icon").forEach(function (invIcon) {
                 evt.target.setAttribute("src", "/static/images/in_inventory_icon.png")
                 evt.target.setAttribute("class", "g-inv-icon card-icons")
             } else {
-                const response = await fetch("/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/remove", {
+                const response = await fetch("/inv/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/remove", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -92,7 +92,7 @@ document.querySelectorAll(".bw-inv-icon").forEach(function (invIcon) {
         const cardClass = evt.target.getAttribute("class")
         try {
             if (cardClass == "bw-inv-icon card-icons") {
-                const response = await fetch("/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/add", {
+                const response = await fetch("/inv/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/add", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -102,7 +102,7 @@ document.querySelectorAll(".bw-inv-icon").forEach(function (invIcon) {
                 evt.target.setAttribute("src", "/static/images/in_inventory_icon.png")
                 evt.target.setAttribute("class", "g-inv-icon card-icons")
             } else {
-                const response = await fetch("/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/remove", {
+                const response = await fetch("/inv/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/remove", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -130,7 +130,7 @@ document.querySelectorAll(".g-wl-icon").forEach(function (wlIcon) {
         const cardClass = evt.target.getAttribute("class")
         try {
             if (cardClass == "bw-wl-icon card-icons") {
-                const response = await fetch("/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/add", {
+                const response = await fetch("/wl/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/add", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -140,7 +140,7 @@ document.querySelectorAll(".g-wl-icon").forEach(function (wlIcon) {
                 evt.target.setAttribute("src", "/static/images/in_wishlist_icon.png")
                 evt.target.setAttribute("class", "g-wl-icon card-icons")
             } else {
-                const response = await fetch("/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/remove", {
+                const response = await fetch("/wl/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/remove", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -166,7 +166,7 @@ document.querySelectorAll(".bw-wl-icon").forEach(function (wlIcon) {
         const cardClass = evt.target.getAttribute("class")
         try {
             if (cardClass == "bw-wl-icon card-icons") {
-                const response = await fetch("/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/add", {
+                const response = await fetch("/wl/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/add", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -176,7 +176,7 @@ document.querySelectorAll(".bw-wl-icon").forEach(function (wlIcon) {
                 evt.target.setAttribute("src", "/static/images/in_wishlist_icon.png")
                 evt.target.setAttribute("class", "g-wl-icon card-icons")
             } else {
-                const response = await fetch("/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/remove", {
+                const response = await fetch("/wl/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/remove", {
                     method: "POST"
                 });
                 if (!response.ok) {
@@ -203,7 +203,7 @@ document.querySelectorAll(".deck-rmv-icon").forEach(function (rmvIcon) {
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
         const deckId = evt.target.closest(".card-div").getAttribute("data-deck-id");
         try {
-            const response = await fetch("/user/" + userId.toString() + "/deck/" + deckId.toString() + "/" + cardId.toString() + "/remove", {
+            const response = await fetch("/deck/user/" + userId.toString() + "/deck/" + deckId.toString() + "/" + cardId.toString() + "/remove", {
                 method: "POST"
             });
             if (!response.ok) {
@@ -227,7 +227,7 @@ document.querySelectorAll(".wl-rmv-icon").forEach(function (rmvIcon) {
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
         try {
-            const response = await fetch("/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/remove", {
+            const response = await fetch("/wl/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/remove", {
                 method: "POST"
             });
             if (!response.ok) {
@@ -251,7 +251,7 @@ document.querySelectorAll(".inv-rmv-icon").forEach(function (rmvIcon) {
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
         try {
-            const response = await fetch("/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/remove", {
+            const response = await fetch("/inv/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/remove", {
                 method: "POST"
             });
             if (!response.ok) {
@@ -287,7 +287,7 @@ document.querySelectorAll(".form-inv-qty").forEach(function (invQtyForm) {
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
         const inputData = evt.target.querySelector(".inv-qty-field").value
         try {
-            const response = await fetch("/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/adjust-qty", {
+            const response = await fetch("/inv/user/" + userId.toString() + "/inventory/" + cardId.toString() + "/adjust-qty", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -329,7 +329,7 @@ document.querySelectorAll(".form-wl-qty").forEach(function (wlQtyForm) {
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
         const inputData = evt.target.querySelector(".wl-qty-field").value
         try {
-            const response = await fetch("/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/adjust-qty", {
+            const response = await fetch("/wl/user/" + userId.toString() + "/wishlist/" + cardId.toString() + "/adjust-qty", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -373,7 +373,7 @@ document.querySelectorAll(".form-deck-qty").forEach(function (deckQtyForm) {
         const deckId = evt.target.closest(".card-div").getAttribute("data-deck-id");
         const inputData = evt.target.querySelector(".deck-qty-field").value
         try {
-            const response = await fetch("/user/" + userId.toString() + "/deck/" + deckId.toString() + "/" + cardId.toString() + "/adjust-qty", {
+            const response = await fetch("/deck/user/" + userId.toString() + "/deck/" + deckId.toString() + "/" + cardId.toString() + "/adjust-qty", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

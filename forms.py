@@ -18,6 +18,15 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 
+class MultiCheckboxField2(SelectMultipleField):
+    widget = widgets.ListWidget(html_tag="ul", prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+    def __init__(self, label=None, validators=None, choices=None, **kwargs):
+        super().__init__(label, validators, **kwargs)
+        self.choices = choices or []
+
+
 class UserAddForm(FlaskForm):
     """Form for adding users."""
 
@@ -123,10 +132,22 @@ class SearchCardsForm(FlaskForm):
         default=["All Subtypes"],
     )
     cmc = IntegerField("Total Mana Cost", validators=[Optional(strip_whitespace=True)])
-    colors = MultiCheckboxField(
+    colors = MultiCheckboxField2(
         "Colors",
-        choices=["White", "Black", "Blue", "Green", "Red"],
-        default=["White", "Black", "Blue", "Green", "Red"],
+        choices=[
+            ("W", "White"),
+            ("B", "Black"),
+            ("U", "Blue"),
+            ("G", "Green"),
+            ("R", "Red"),
+        ],
+        default=[
+            ("W", "White"),
+            ("B", "Black"),
+            ("U", "Blue"),
+            ("G", "Green"),
+            ("R", "Red"),
+        ],
     )
     power = StringField("Power", validators=[Optional(strip_whitespace=True)])
     toughness = StringField("Toughness", validators=[Optional(strip_whitespace=True)])

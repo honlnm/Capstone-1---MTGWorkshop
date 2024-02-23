@@ -3,18 +3,16 @@ from flask import (
     Flask,
     render_template,
     redirect,
+    session,
+    g,
 )
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db
-from routes.user import (
-    user_bp,
-    contact_bp,
-    card_search_bp,
-    decks_bp,
-    inv_bp,
-    wl_bp,
-    card_info_bp,
-)
+from models import db, connect_db, User
+from routes.user import user_bp
+from routes.card_search import card_search_bp
+from routes.decks import decks_bp
+from routes.inventory import inv_bp
+from routes.wishlist import wl_bp
 
 app = Flask(__name__)
 
@@ -29,17 +27,26 @@ app.config["SECRET_KEY"] = os.getenv("secret_key")
 toolbar = DebugToolbarExtension(app)
 
 app.register_blueprint(user_bp)
-app.register_blueprint(contact_bp)
 app.register_blueprint(card_search_bp)
 app.register_blueprint(decks_bp)
 app.register_blueprint(inv_bp)
 app.register_blueprint(wl_bp)
-app.register_blueprint(card_info_bp)
 
 connect_db(app)
 with app.app_context():
     db.create_all()
     db.session.commit()
+
+CURR_USER_KEY = "curr_user"
+
+
+@app.before_request
+def add_user_to_g():
+    """If we're logged in, add curr user to Flask global."""
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+    else:
+        g.user = None
 
 
 ############## HOMEPAGE & ERROR ROUTES ##############
@@ -48,7 +55,12 @@ with app.app_context():
 @app.route("/")
 def home():
     """Show home"""
-    return redirect("/card-search")
+    return redirect("/cs/card-search")
+
+
+@app.route("/contact-us")
+def contact_us():
+    return render_template("contact_us.html")
 
 
 @app.errorhandler(404)

@@ -19,7 +19,7 @@ from forms import (
 
 import requests
 
-decks_bp = Blueprint("decks", __name__)
+decks_bp = Blueprint("decks", __name__, url_prefix="/deck")
 
 baseApiURL = "https://api.magicthegathering.io/v1/cards"
 
@@ -47,7 +47,7 @@ def add_deck(user_id):
         db.session.add(new_deck)
         db.session.commit()
         flash(f"{new_deck.deck_name} has been added to your deck list!")
-        return redirect(f"/user/{g.user.id}")
+        return redirect(f"/acct/user/{g.user.id}")
     return render_template("add_deck.html", form=form)
 
 
@@ -93,7 +93,7 @@ def edit_deck(user_id, deck_id):
     if form.validate_on_submit():
         deck.deck_name = form.deck_name.data
         db.session.commit()
-        return redirect(f"/user/{user.id}/deck/{deck.id}")
+        return redirect(f"/deck/user/{user.id}/deck/{deck.id}")
     return render_template("edit_deck.html", deck=deck, user=user, form=form)
 
 
@@ -128,7 +128,7 @@ def delete_deck(user_id, deck_id):
     user = User.query.get_or_404(user_id)
     Decks.query.filter(Decks.id == int(deck_id)).delete()
     db.session.commit()
-    return redirect(f"/user/{user.id}")
+    return redirect(f"/acct/user/{user.id}")
 
 
 @decks_bp.route("/user/<int:user_id>/deck/<int:card_id>/add", methods=["POST"])

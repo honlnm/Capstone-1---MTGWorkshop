@@ -17,7 +17,7 @@ from forms import (
     CardQtyEditForm,
 )
 
-inv_bp = Blueprint("inventory", __name__)
+inv_bp = Blueprint("inventory", __name__, url_prefix="/inv")
 
 baseApiURL = "https://api.magicthegathering.io/v1/cards"
 

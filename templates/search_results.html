@@ -22,7 +22,7 @@
     </div>
     <div class="card-icons-div">
         <span>
-            <a href="/card/{{card.multiverseid}}">
+            <a href="/cs/card/{{card.multiverseid}}">
                 <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
             </a>
             {% if g.user %}
@@ -64,7 +64,7 @@
 
 {% block footer %}
 <span id="search-results-page-numbers">
-    <a href="/search-results/page1">
+    <a href="/cs/search-results/page1">
         <<< </a>
             <span> ... </span>
             {% if currentpage >= 3 %}
@@ -80,6 +80,6 @@
     {% if pageplusplus <= pagemax %} <a href="page{{pageplusplus}}">{{pageplusplus}}</a>
         {% endif %}
         <span> ... </span>
-        <a href="/search-results/page{{pagemax}}">>>></a>
+        <a href="/cs/search-results/page{{pagemax}}">>>></a>
 </span>
 {% endblock %}
