@@ -46,7 +46,7 @@ https://magicthegathering.io/#
 - email-validator==2.1.0.post1
 - Flask==2.3.3
 - Flask-Bcrypt==1.0.1
-- Flask-DebugToolbar @ git+https://github.com/JB0925/flask-debugtoolbar.git@76ae899247b443a1fd91b1b8c0db37f1165006f0
+- Flask-DebugToolbar==0.14.1
 - Flask-SQLAlchemy==3.1.1
 - Flask-WTF==1.2.1
 - greenlet==3.0.1
