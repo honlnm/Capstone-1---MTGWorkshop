@@ -62,7 +62,8 @@ def add_to_inventory(user_id, card_id):
             card = [CardWishList.query.get_or_404(cardX.id) for cardX in card_check]
             card.card_qty += 1
         else:
-            card_detail = API.get_card_info(card_id).json()
+            api = API()
+            card_detail = api.get_card_info(card_id).json()
             card = card_detail["card"]
             new_card = CardsOwned(
                 user_id=user_id,

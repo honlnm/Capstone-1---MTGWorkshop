@@ -108,6 +108,7 @@ def view_search_results(num):
 
 @card_search_bp.route("/card/<int:card_id>", methods=["GET"])
 def view_card_info(card_id):
-    card = API.get_card_info(card_id)
+    api = API()
+    card = api.get_card_info(card_id)
     card_info = card.json()
     return render_template("card_info.html", card=card_info["card"])
