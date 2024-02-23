@@ -5,12 +5,13 @@ from flask import (
     request,
     flash,
     redirect,
-    session,
     g,
 )
 from models import db, User, CardsOwned, CardWishList
 
 import requests
+
+from apiClient import API
 
 from forms import (
     SelectDeckForm,
@@ -62,12 +63,10 @@ def add_to_inventory(user_id, card_id):
         for cardX in card_check:
             card_id_list.append(cardX.card_id)
         if card_id in card_id_list:
-            card = ""
-            for cardX in card_check:
-                card = CardsOwned.query.get_or_404(cardX.id)
+            card = [CardWishList.query.get_or_404(cardX.id) for cardX in card_check]
             card.card_qty += 1
         else:
-            card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+            card_detail = API.get_card_info(card_id).json()
             card = card_detail["card"]
             new_card = CardsOwned(
                 user_id=user_id,

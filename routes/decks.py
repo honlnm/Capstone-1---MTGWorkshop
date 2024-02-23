@@ -5,7 +5,6 @@ from flask import (
     request,
     flash,
     redirect,
-    session,
     g,
 )
 from models import db, User, CardsOwned, CardWishList, Decks, DeckCards
@@ -17,11 +16,11 @@ from forms import (
     CardQtyEditForm,
 )
 
+from apiClient import API
+
 import requests
 
 decks_bp = Blueprint("decks", __name__, url_prefix="/deck")
-
-baseApiURL = "https://api.magicthegathering.io/v1/cards"
 
 
 @decks_bp.route("/user/<int:user_id>/decks")
@@ -145,12 +144,10 @@ def add_card_to_deck(user_id, card_id):
         )
         card_id_list = [card.card_id for card in card_check]
         if card_id in card_id_list:
-            card = ""
-            for cardX in card_check:
-                card = DeckCards.query.get_or_404(cardX.id)
+            card = [CardWishList.query.get_or_404(cardX.id) for cardX in card_check]
             card.card_qty += 1
         else:
-            card_detail = requests.get(baseApiURL + "/" + str(card_id)).json()
+            card_detail = API.get_card_info(card_id).json()
             card = card_detail["card"]
             new_card = DeckCards(
                 deck_id=selected_deck_id,

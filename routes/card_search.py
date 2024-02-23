@@ -61,17 +61,13 @@ def card_search_function():
     form = SearchCardsForm(request.form)
     if request.method == "GET":
         return render_template("card_search.html", form=form)
-    search_params = process_form_data(form)
-    session["dict"] = search_params
+    session["dict"] = process_form_data(form)
     return redirect("/cs/search-results/page1")
 
 
 @card_search_bp.route("/search-results/page<int:num>", methods=["GET", "POST"])
 def view_search_results(num):
     dict = session.get("dict")
-    session["result_page"] = num
-    dict["page"] = num
-    dict["pageSize"] = 100
     card_list = requests.get(baseApiURL, params=dict)
     headers = card_list.headers
     pages = math.ceil(int(headers["Total-Count"]) / 100)
