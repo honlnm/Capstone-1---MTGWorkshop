@@ -9,8 +9,8 @@ db = SQLAlchemy(session_options={"expire_on_commit": False})
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.Text, nullable=False)
-    email = db.Column(db.Text, nullable=False)
+    username = db.Column(db.Text, nullable=False, unique=True)
+    email = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     header_image_url = db.Column(
         db.Text, default="/static/images/default-header-pic.png"

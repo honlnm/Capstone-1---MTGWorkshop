@@ -10,7 +10,6 @@ from flask import (
 
 from models import db, User, CardsOwned, CardWishList
 from apiClient import API
-import requests
 
 from forms import (
     SelectDeckForm,

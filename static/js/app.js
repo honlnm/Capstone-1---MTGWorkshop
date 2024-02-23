@@ -12,6 +12,23 @@ document.querySelectorAll(".deck-icon").forEach(function (deckIcon) {
     })
 })
 
+document.addEventListener('mousemove', function (event) {
+    fetch('/update-last-activity', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update last activity');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
 // --------------DECK ICON-------------
 
 document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) {

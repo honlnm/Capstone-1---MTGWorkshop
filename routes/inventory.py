@@ -9,8 +9,6 @@ from flask import (
 )
 from models import db, User, CardsOwned, CardWishList
 
-import requests
-
 from apiClient import API
 
 from forms import (
@@ -19,8 +17,6 @@ from forms import (
 )
 
 inv_bp = Blueprint("inventory", __name__, url_prefix="/inv")
-
-baseApiURL = "https://api.magicthegathering.io/v1/cards"
 
 
 @inv_bp.route("/user/<int:user_id>/inventory")

@@ -18,8 +18,6 @@ from forms import (
 
 from apiClient import API
 
-import requests
-
 decks_bp = Blueprint("decks", __name__, url_prefix="/deck")
 
 
