@@ -76,7 +76,6 @@ def check_idle_timeout():
 def update_last_activity():
     """Update session last_activity"""
     session["last_activity"] = datetime.now(timezone.utc)
-    check_idle_timeout()
     return "", 200
 
 

@@ -41,10 +41,26 @@
                 </div>
             </div>
     </nav>
+
     <div class="container">
         {% for category, message in get_flashed_messages(with_categories=True) %}
         <div class="alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
+        <div id="loading-page-container">
+            <div class=" mtg-loader">
+                <img src="/static/images/blue_icon.png" alt="blue mtg icon" class="mtg-icon">
+                <img src="/static/images/white_icon.png" alt="white mtg icon" class="mtg-icon">
+                <img src="/static/images/red-icon.png" alt="red mtg icon" class="mtg-icon">
+                <img src="/static/images/green-icon.png" alt="green mtg icon" class="mtg-icon">
+                <img src="/static/images/black-icon.png" alt="black mtg icon" class="mtg-icon">
+            </div>
+        </div>
+        <header>
+            <p class="page-numbering">
+                {% block header %}
+                {% endblock %}
+            </p>
+        </header>
         {% block content %}
         {% endblock %}
         <footer>

@@ -5,15 +5,6 @@
 {% block body_class %}view_wish_list{% endblock %}
 
 {% block content %}
-<div id="loading-page-container" style="display: none;">
-    <div class="mtg-loader">
-        <img src="/static/images/blue_icon.png" alt="blue mtg icon" class="mtg-icon">
-        <img src="/static/images/white_icon.png" alt="white mtg icon" class="mtg-icon">
-        <img src="/static/images/red-icon.png" alt="red mtg icon" class="mtg-icon">
-        <img src="/static/images/green-icon.png" alt="green mtg icon" class="mtg-icon">
-        <img src="/static/images/black-icon.png" alt="black mtg icon" class="mtg-icon">
-    </div>
-</div>
 <h1>{{user.username}} Wish List</h1>
 <div>
     <a href="/cs/card-search">

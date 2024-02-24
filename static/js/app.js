@@ -12,6 +12,11 @@ document.querySelectorAll(".deck-icon").forEach(function (deckIcon) {
     })
 })
 
+window.addEventListener('load', function () {
+    var loader = document.getElementById('loading-page-container');
+    loader.style.display = 'none';
+});
+
 document.addEventListener('mousemove', function (event) {
     fetch('/update-last-activity', {
         method: 'POST',
@@ -29,11 +34,23 @@ document.addEventListener('mousemove', function (event) {
         });
 });
 
+function checkIdleTimeout() {
+    fetch('/check-idle-timeout')
+        .then(response => {
+            if (response.status === 401) {
+                window.location.href = '/acct/logout';
+            }
+        });
+}
+
+setInterval(checkIdleTimeout, 60000);
+
 // --------------DECK ICON-------------
 
 document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) {
     deckForm.addEventListener("submit", async function (evt) {
         evt.preventDefault();
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -67,6 +84,7 @@ document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) 
 document.querySelectorAll(".g-inv-icon").forEach(function (invIcon) {
     invIcon.addEventListener("click", async function (evt) {
         evt.preventDefault()
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -103,6 +121,7 @@ document.querySelectorAll(".g-inv-icon").forEach(function (invIcon) {
 document.querySelectorAll(".bw-inv-icon").forEach(function (invIcon) {
     invIcon.addEventListener("click", async function (evt) {
         evt.preventDefault()
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -141,6 +160,7 @@ document.querySelectorAll(".bw-inv-icon").forEach(function (invIcon) {
 document.querySelectorAll(".g-wl-icon").forEach(function (wlIcon) {
     wlIcon.addEventListener("click", async function (evt) {
         evt.preventDefault()
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -177,6 +197,7 @@ document.querySelectorAll(".g-wl-icon").forEach(function (wlIcon) {
 document.querySelectorAll(".bw-wl-icon").forEach(function (wlIcon) {
     wlIcon.addEventListener("click", async function (evt) {
         evt.preventDefault()
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -215,6 +236,7 @@ document.querySelectorAll(".bw-wl-icon").forEach(function (wlIcon) {
 document.querySelectorAll(".deck-rmv-icon").forEach(function (rmvIcon) {
     rmvIcon.addEventListener("click", async function (evt) {
         evt.preventDefault()
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -240,6 +262,7 @@ document.querySelectorAll(".deck-rmv-icon").forEach(function (rmvIcon) {
 document.querySelectorAll(".wl-rmv-icon").forEach(function (rmvIcon) {
     rmvIcon.addEventListener("click", async function (evt) {
         evt.preventDefault()
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -264,6 +287,7 @@ document.querySelectorAll(".wl-rmv-icon").forEach(function (rmvIcon) {
 document.querySelectorAll(".inv-rmv-icon").forEach(function (rmvIcon) {
     rmvIcon.addEventListener("click", async function (evt) {
         evt.preventDefault()
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -288,6 +312,7 @@ document.querySelectorAll(".inv-rmv-icon").forEach(function (rmvIcon) {
 
 document.querySelectorAll(".inv-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
+        fetch('/update-last-activity', { method: 'POST' });
         const popup = qtyIcon.parentElement.querySelector(".popup");
         popup.style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
@@ -299,6 +324,7 @@ document.querySelectorAll(".inv-qty-icon").forEach(function (qtyIcon) {
 document.querySelectorAll(".form-inv-qty").forEach(function (invQtyForm) {
     invQtyForm.addEventListener("submit", async function (evt) {
         evt.preventDefault();
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -330,6 +356,7 @@ document.querySelectorAll(".form-inv-qty").forEach(function (invQtyForm) {
 
 document.querySelectorAll(".wl-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
+        fetch('/update-last-activity', { method: 'POST' });
         const popup = qtyIcon.parentElement.querySelector(".popup");
         popup.style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
@@ -341,6 +368,7 @@ document.querySelectorAll(".wl-qty-icon").forEach(function (qtyIcon) {
 document.querySelectorAll(".form-wl-qty").forEach(function (wlQtyForm) {
     wlQtyForm.addEventListener("submit", async function (evt) {
         evt.preventDefault();
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -372,6 +400,7 @@ document.querySelectorAll(".form-wl-qty").forEach(function (wlQtyForm) {
 
 document.querySelectorAll(".deck-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
+        fetch('/update-last-activity', { method: 'POST' });
         const popup = qtyIcon.parentElement.querySelector(".popup");
         popup.style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
@@ -384,6 +413,7 @@ document.querySelectorAll(".deck-qty-icon").forEach(function (qtyIcon) {
 document.querySelectorAll(".form-deck-qty").forEach(function (deckQtyForm) {
     deckQtyForm.addEventListener("submit", async function (evt) {
         evt.preventDefault();
+        fetch('/update-last-activity', { method: 'POST' });
         document.getElementById("loading-page-container").style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");

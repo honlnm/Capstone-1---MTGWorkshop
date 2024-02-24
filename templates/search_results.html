@@ -2,21 +2,34 @@
 
 {% block title %}Card List{% endblock %}
 
+{% block header %}
+<span id="search-results-page-numbers">
+    <a href="/cs/search-results/page1">
+        <<< </a>
+            <span> ... </span>
+            {% if currentpage >= 3 %}
+            <a href="page{{pagelessless}}">{{pagelessless}}</a>
+            {% endif %}
+            {% if currentpage >= 2 %}
+            <a href="page{{pageless}}">{{pageless}}</a>
+            {% endif %}
+            <a href="page{{currentpage}}">{{currentpage}}</a>
+            {% if pageplus <= pagemax %} <a href="page{{pageplus}}">{{pageplus}}
+    </a>
+    {% endif %}
+    {% if pageplusplus <= pagemax %} <a href="page{{pageplusplus}}">{{pageplusplus}}</a>
+        {% endif %}
+        <span> ... </span>
+        <a href="/cs/search-results/page{{pagemax}}">>>></a>
+</span>
+{% endblock %}
+
 {% block body_class %}search_results{% endblock %}
 
 {% block content %}
-<div id="loading-page-container" style="display: none;">
-    <div class="mtg-loader">
-        <img src="/static/images/blue_icon.png" alt="blue mtg icon" class="mtg-icon">
-        <img src="/static/images/white_icon.png" alt="white mtg icon" class="mtg-icon">
-        <img src="/static/images/red-icon.png" alt="red mtg icon" class="mtg-icon">
-        <img src="/static/images/green-icon.png" alt="green mtg icon" class="mtg-icon">
-        <img src="/static/images/black-icon.png" alt="black mtg icon" class="mtg-icon">
-    </div>
-</div>
 {% for card in card_list["cards"] %}
 {% if card.multiverseid %}
-<div class="card-div" data-card-id={{card.multiverseid}} data-user-id={{user.id}}>
+<div class="card-div" {% if g.user %} data-card-id={{card.multiverseid}} data-user-id={{user.id}} {% endif %}>
     <div class="card-img">
         <img class="card-results" src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
     </div>

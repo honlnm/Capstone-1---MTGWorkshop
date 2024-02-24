@@ -111,4 +111,20 @@ def view_card_info(card_id):
     api = API()
     card = api.get_card_info(card_id)
     card_info = card.json()
+    if g.user:
+        user = User.query.get_or_404(g.user.id)
+        inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
+        wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
+        card_id_inventory_list = [card.card_id for card in inventory]
+        card_id_wishlist_list = [card.card_id for card in wishlist]
+        form = SelectDeckForm()
+        form.set_deck_choices(user_id=g.user.id)
+        return render_template(
+            "card_info.html",
+            card=card_info["card"],
+            user=user,
+            inventory=str(card_id_inventory_list),
+            wishlist=str(card_id_wishlist_list),
+            form=form,
+        )
     return render_template("card_info.html", card=card_info["card"])

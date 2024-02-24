@@ -373,7 +373,8 @@ ul.nav.navbar-nav li {
 
 /* ############## FOOTER ############## */
 
-footer {
+footer,
+header {
     margin: 0;
     width: 100%;
     background-color: black;
@@ -384,11 +385,19 @@ footer {
 .page-numbering,
 .footnote {
     margin: 0;
-    padding: 10px;
+    padding: 0;
+    height: 30px;
+    line-height: 30px;
+
 }
 
 #search-results-page-numbers {
     margin: 25px;
+}
+
+.page-numbering {
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
 }
 
 .footnote {
