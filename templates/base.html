@@ -20,8 +20,8 @@
             </div>
             <div class="nav navbar-nav navbar-right">
                 <div class="dropdown">
-                    <img src="/static/images/hamburger.png" alt="Links Dropdown">
-                    <div class="dropdown-content">
+                    <img src="/static/images/hamburger.png" id="hamburger-icon" alt="Links Dropdown">
+                    <div class="dropdown-content" id="dropdown">
                         {% if not g.user %}
                         <a href="/cs/card-search">Card Search</a>
                         <hr>
@@ -55,19 +55,9 @@
                 <img src="/static/images/black-icon.png" alt="black mtg icon" class="mtg-icon">
             </div>
         </div>
-        <header>
-            <p class="page-numbering">
-                {% block header %}
-                {% endblock %}
-            </p>
-        </header>
         {% block content %}
         {% endblock %}
         <footer>
-            <p class="page-numbering">
-                {% block footer %}
-                {% endblock %}
-            </p>
             <p class="footnote">THIS WEBSITE IS NOT PRODUCED, ENDORSED, SUPPORTED, OR AFFILIATED WITH WIZARDS OF THE
                 COAST.</p>
         </footer>

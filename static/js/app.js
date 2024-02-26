@@ -1,3 +1,5 @@
+// ############## GENERAL #################
+
 document.querySelectorAll(".closePopup").forEach(function (closeButton) {
     closeButton.addEventListener("click", function () {
         const popup = closeButton.closest(".popup");
@@ -12,10 +14,25 @@ document.querySelectorAll(".deck-icon").forEach(function (deckIcon) {
     })
 })
 
+// ############## NAVBAR DROPDOWN #################
+
+document.querySelector("#hamburger-icon").addEventListener("click", function () {
+    const dropdown = document.getElementById("dropdown")
+    if (dropdown.style.display === "none") {
+        dropdown.style.display = "block"
+    } else {
+        dropdown.style.display = "none"
+    }
+})
+
+// ############## LOADING ANIMATION #################
+
 window.addEventListener('load', function () {
     var loader = document.getElementById('loading-page-container');
     loader.style.display = 'none';
 });
+
+// ############## IDLE TIMER / LOG OUT #################
 
 document.addEventListener('mousemove', function (event) {
     fetch('/update-last-activity', {
@@ -45,7 +62,7 @@ function checkIdleTimeout() {
 
 setInterval(checkIdleTimeout, 60000);
 
-// --------------DECK ICON-------------
+// ############## DECK ICON #################
 
 document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) {
     deckForm.addEventListener("submit", async function (evt) {
@@ -78,7 +95,7 @@ document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) 
 });
 
 
-// --------------INVENTORY ICON-------------
+// ############## INVENTORY ICON #################
 
 
 document.querySelectorAll(".g-inv-icon").forEach(function (invIcon) {
@@ -155,7 +172,7 @@ document.querySelectorAll(".bw-inv-icon").forEach(function (invIcon) {
     })
 });
 
-// --------------WISH LIST ICON-------------
+// ############## WISH LIST ICON #################
 
 document.querySelectorAll(".g-wl-icon").forEach(function (wlIcon) {
     wlIcon.addEventListener("click", async function (evt) {
@@ -231,7 +248,7 @@ document.querySelectorAll(".bw-wl-icon").forEach(function (wlIcon) {
     })
 });
 
-// --------------DECK REMOVE ICON-------------
+// ############## DECK REMOVE ICON #################
 
 document.querySelectorAll(".deck-rmv-icon").forEach(function (rmvIcon) {
     rmvIcon.addEventListener("click", async function (evt) {
@@ -257,7 +274,7 @@ document.querySelectorAll(".deck-rmv-icon").forEach(function (rmvIcon) {
     })
 });
 
-// --------------WISH LIST REMOVE ICON-------------
+// ############## WISH LIST REMOVE ICON #################
 
 document.querySelectorAll(".wl-rmv-icon").forEach(function (rmvIcon) {
     rmvIcon.addEventListener("click", async function (evt) {
@@ -282,7 +299,7 @@ document.querySelectorAll(".wl-rmv-icon").forEach(function (rmvIcon) {
     })
 });
 
-// --------------INVENTORY REMOVE ICON-------------
+// ############## INVENTORY REMOVE ICON #################
 
 document.querySelectorAll(".inv-rmv-icon").forEach(function (rmvIcon) {
     rmvIcon.addEventListener("click", async function (evt) {
@@ -308,7 +325,7 @@ document.querySelectorAll(".inv-rmv-icon").forEach(function (rmvIcon) {
 });
 
 
-// --------------INVENTORY CARD QTY-------------
+// ############## INVENTORY CARD QTY #################
 
 document.querySelectorAll(".inv-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
@@ -352,7 +369,7 @@ document.querySelectorAll(".form-inv-qty").forEach(function (invQtyForm) {
     })
 });
 
-// --------------WISHLIST CARD QTY-------------
+// ############## WISH LIST CARD QTY #################
 
 document.querySelectorAll(".wl-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
@@ -396,7 +413,7 @@ document.querySelectorAll(".form-wl-qty").forEach(function (wlQtyForm) {
     })
 });
 
-// --------------DECK CARD QTY-------------
+// ############## DECK CARD QTY #################
 
 document.querySelectorAll(".deck-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {

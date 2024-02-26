@@ -53,7 +53,8 @@ def process_form_data(form):
         "power": form.power.data or "",
         "toughness": form.toughness.data or "",
     }
-    return {key: value for key, value in search_params.items() if value}
+    params = {key: value for key, value in search_params.items() if value != ""}
+    return params
 
 
 @card_search_bp.route("/card-search", methods=["GET", "POST"])
@@ -67,8 +68,9 @@ def card_search_function():
 
 @card_search_bp.route("/search-results/page<int:num>", methods=["GET", "POST"])
 def view_search_results(num):
-    dict = session.get("dict")
-    card_list = requests.get(baseApiURL, params=dict)
+    params = session.get("dict")
+    api = API()
+    card_list = api.get_search_results(params, num)
     headers = card_list.headers
     pages = math.ceil(int(headers["Total-Count"]) / 100)
     if g.user:

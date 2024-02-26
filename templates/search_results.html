@@ -2,31 +2,32 @@
 
 {% block title %}Card List{% endblock %}
 
-{% block header %}
-<span id="search-results-page-numbers">
-    <a href="/cs/search-results/page1">
-        <<< </a>
-            <span> ... </span>
-            {% if currentpage >= 3 %}
-            <a href="page{{pagelessless}}">{{pagelessless}}</a>
-            {% endif %}
-            {% if currentpage >= 2 %}
-            <a href="page{{pageless}}">{{pageless}}</a>
-            {% endif %}
-            <a href="page{{currentpage}}">{{currentpage}}</a>
-            {% if pageplus <= pagemax %} <a href="page{{pageplus}}">{{pageplus}}
-    </a>
-    {% endif %}
-    {% if pageplusplus <= pagemax %} <a href="page{{pageplusplus}}">{{pageplusplus}}</a>
-        {% endif %}
-        <span> ... </span>
-        <a href="/cs/search-results/page{{pagemax}}">>>></a>
-</span>
-{% endblock %}
-
 {% block body_class %}search_results{% endblock %}
 
 {% block content %}
+<header>
+    <p class="page-numbering">
+        <span id="search-results-page-numbers">
+            <a href="/cs/search-results/page1">
+                <<< </a>
+                    <span> ... </span>
+                    {% if currentpage >= 3 %}
+                    <a href="/cs/search-results/page{{pagelessless}}">{{pagelessless}}</a>
+                    {% endif %}
+                    {% if currentpage >= 2 %}
+                    <a href="/cs/search-results/page{{pageless}}">{{pageless}}</a>
+                    {% endif %}
+                    <a href="/cs/search-results/page{{currentpage}}">{{currentpage}}</a>
+                    {% if pageplus <= pagemax %} <a href="/cs/search-results/page{{pageplus}}">{{pageplus}}
+            </a>
+            {% endif %}
+            {% if pageplusplus <= pagemax %} <a href="/cs/search-results/page{{pageplusplus}}">{{pageplusplus}}</a>
+                {% endif %}
+                <span> ... </span>
+                <a href="/cs/search-results/page{{pagemax}}">>>></a>
+        </span>
+    </p>
+</header>
 {% for card in card_list["cards"] %}
 {% if card.multiverseid %}
 <div class="card-div" {% if g.user %} data-card-id={{card.multiverseid}} data-user-id={{user.id}} {% endif %}>
@@ -73,26 +74,27 @@
 <br>
 {% endif %}
 {% endfor %}
-{% endblock %}
-
-{% block footer %}
-<span id="search-results-page-numbers">
-    <a href="/cs/search-results/page1">
-        <<< </a>
-            <span> ... </span>
-            {% if currentpage >= 3 %}
-            <a href="page{{pagelessless}}">{{pagelessless}}</a>
+<footer>
+    <p class="page-numbering">
+        <span id="search-results-page-numbers">
+            <a href="/cs/search-results/page1">
+                <<< </a>
+                    <span> ... </span>
+                    {% if currentpage >= 3 %}
+                    <a href="/cs/search-results/page{{pagelessless}}">{{pagelessless}}</a>
+                    {% endif %}
+                    {% if currentpage >= 2 %}
+                    <a href="/cs/search-results/page{{pageless}}">{{pageless}}</a>
+                    {% endif %}
+                    <a href="/cs/search-results/page{{currentpage}}">{{currentpage}}</a>
+                    {% if pageplus <= pagemax %} <a href="/cs/search-results/page{{pageplus}}">{{pageplus}}
+            </a>
             {% endif %}
-            {% if currentpage >= 2 %}
-            <a href="page{{pageless}}">{{pageless}}</a>
-            {% endif %}
-            <a href="page{{currentpage}}">{{currentpage}}</a>
-            {% if pageplus <= pagemax %} <a href="page{{pageplus}}">{{pageplus}}
-    </a>
-    {% endif %}
-    {% if pageplusplus <= pagemax %} <a href="page{{pageplusplus}}">{{pageplusplus}}</a>
-        {% endif %}
-        <span> ... </span>
-        <a href="/cs/search-results/page{{pagemax}}">>>></a>
-</span>
+            {% if pageplusplus <= pagemax %} <a href="/cs/search-results/page{{pageplusplus}}">{{pageplusplus}}</a>
+                {% endif %}
+                <span> ... </span>
+                <a href="/cs/search-results/page{{pagemax}}">>>></a>
+        </span>
+    </p>
+</footer>
 {% endblock %}

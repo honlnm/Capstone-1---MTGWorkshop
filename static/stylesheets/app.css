@@ -166,10 +166,6 @@ a:hover {
 
 /* ############## CARDS ############## */
 
-.card-div {
-    width: 100%;
-}
-
 .card-img,
 .card-icons-div {
     display: flex;
@@ -177,12 +173,29 @@ a:hover {
     width: 100%;
 }
 
+.card-div,
 .card-results {
     border-radius: 10px;
+    margin: auto;
+    height: auto;
+}
+
+.card-img {
     width: 250px;
     height: auto;
-    margin: 10px;
-    box-shadow: -8px 9px 16px -3px #000;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    touch-action: none;
+    border-radius: 10px;
+    transition: transform 0.5s ease, box-shadow 0.2s ease;
+    will-change: transform, filter;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    transform-origin: center center;
+
 }
 
 .card-icons {
@@ -191,44 +204,39 @@ a:hover {
     border-radius: 40px;
     margin-right: 5px;
     margin-left: 5px;
-    box-shadow: -8px 9px 16px -3px #000;
 }
 
-.card-results:before,
-.card-results:after {
+.card-img:before,
+.card-img:after {
     content: "";
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 15px;
+    right: 15px;
     bottom: 0;
     top: 0;
-    background-repeat: no-repeat;
     opacity: .5;
+    border-radius: 10px;
     mix-blend-mode: color-dodge;
     transition: all .33s ease;
 }
 
-.card-results:before {
+.card-img:before {
     background-position: 50% 50%;
     background-size: 300% 300%;
     background-image: linear-gradient(115deg,
             transparent 0%,
-            #9F7928 25%,
+            rgb(121, 121, 121) 25%,
             transparent 47%,
             transparent 53%,
-            #D1B464 75%,
+            rgb(180, 180, 180) 75%,
             transparent 100%);
     opacity: .5;
     filter: brightness(.5) contrast(1);
     z-index: 1;
 }
 
-.card-results:hover {
+.card-img:hover {
     animation: none;
-    transition: box-shadow 0.1s ease-out;
-}
-
-.card-results:hover {
     transition: none;
     animation: Card 12s ease 0s 1;
 
@@ -251,7 +259,7 @@ a:hover {
     9% {
         background-position: 100% 100%;
         opacity: 1;
-        filter: brightness(.75) contrast(1.25);
+        filter: brightness(.3) contrast(.75);
     }
 
     13%,
@@ -270,7 +278,7 @@ a:hover {
     55% {
         background-position: 0% 0%;
         opacity: 1;
-        filter: brightness(.75) contrast(1.25);
+        filter: brightness(.3) contrast(.75);
     }
 }
 
@@ -380,6 +388,14 @@ header {
     background-color: black;
     color: white;
     text-align: center;
+}
+
+header {
+    margin-bottom: 25px;
+}
+
+footer {
+    margin-top: 25px;
 }
 
 .page-numbering,

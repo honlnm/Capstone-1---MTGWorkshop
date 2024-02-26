@@ -51,6 +51,9 @@ def add_user_to_g():
         g.user = None
 
 
+############## IDLE TIMEOUT ##############
+
+
 @app.before_request
 def update_session_timeout():
     session.permanent = True
