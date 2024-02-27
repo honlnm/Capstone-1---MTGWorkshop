@@ -43,32 +43,78 @@
         </span>
     </div>
 </div>
-<div id="card-info-div">
-    <p>Name: {{card.name}}</p>
-    <p>Set Name: {{card.setName}}</p>
-    <p>Mana Cost: {{card.manaCost}}</p>
-    <p>Total Mana Cost: {{card.cmc}}</p>
-    <p>Colors: {{card.colors}}</p>
-    <p>Type: {{card.type}}</p>
-    <p>Rarity: {{card.rarity}}</p>
-    <p>Card Text: {{card.text}}</p>
-    <p>Power: {{card.power}}</p>
-    <p>Toughness: {{card.toughness}}</p>
-    <p>Rulings:
-    <ul>
+<div id="card-info-table-div">
+    <table class="card-info-table">
+        <tr class="card-info-table-headers">
+            <th>Card Info Type</th>
+            <th>Card Info Details</th>
+        </tr>
+        <tr>
+            <td><b>Name</b></td>
+            <td>{{card.name}}</td>
+        </tr>
+        <tr>
+            <td><b>Set Name</b></td>
+            <td>{{card.setName}}</td>
+        </tr>
+        <tr>
+            <td><b>Mana Cost</b></td>
+            <td>{{card.manaCost}}</td>
+        </tr>
+        <tr>
+            <td><b>Total Mana Cost</b></td>
+            <td>{{card.cmc}}</td>
+        </tr>
+        <tr>
+            <td><b>Colors</b></td>
+            <td>{{card.colors}}</td>
+        </tr>
+        <tr>
+            <td><b>Type</b></td>
+            <td>{{card.type}}</td>
+        </tr>
+        <tr>
+            <td><b>Rarity</b></td>
+            <td>{{card.rarity}}</td>
+        </tr>
+        <tr>
+            <td><b>Card Text</b></td>
+            <td>{{card.text}}</td>
+        </tr>
+        <tr>
+            <td><b>Power</b></td>
+            <td>{{card.power}}</td>
+        </tr>
+        <tr>
+            <td><b>Toughness</b></td>
+            <td>{{card.toughness}}</td>
+        </tr>
+    </table>
+    <br>
+    <table class="card-info-table">
+        <tr class="card-info-table-headers">
+            <th>Rulings</th>
+            <th>Ruling Details</th>
+        </tr>
         {% for ruling in card.rulings %}
-        <li>{{ruling.date}}, {{ruling.text}}</li>
+        <tr>
+            <td>{{ruling.data}}</td>
+            <td>{{ruling.text}}</td>
+        </tr>
         {% endfor %}
-    </ul>
-    </p>
-
-    <p>Legalities:
-    <ul>
+    </table>
+    <br>
+    <table class="card-info-table">
+        <tr class="card-info-table-headers">
+            <th>Format</th>
+            <th>Legality</th>
+        </tr>
         {% for format in card.legalities %}
-        <li>{{format.format}}, {{format.legality}}</li>
+        <tr>
+            <td>{{format.format}}</td>
+            <td>{{format.legality}}</td>
+        </tr>
         {% endfor %}
-    </ul>
-    </p>
+    </table>
 </div>
-<br>
 {% endblock %}

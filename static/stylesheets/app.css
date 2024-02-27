@@ -212,6 +212,17 @@ a:hover {
     margin-bottom: 50px;
 }
 
+#button-span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.span-button {
+    margin: 10px;
+    text-align: center;
+}
+
 /* ############## NAVBAR ############## */
 
 .navbar {
@@ -307,7 +318,9 @@ header {
 #about-header,
 #contact-header,
 #inv-header,
-#wl-header {
+#wl-header,
+#deck-header,
+#join-message {
     text-align: center;
     margin: 20px;
     color: black;
@@ -324,6 +337,11 @@ header {
     margin: 0 auto;
 }
 
+.save-btn {
+    background-color: goldenrod;
+    color: black;
+}
+
 #deck-content {
     display: flex-block;
     width: 100%;
@@ -331,7 +349,8 @@ header {
 
 #decks-add-btn,
 #create-deck-button,
-.add-cards-button {
+.add-cards-button,
+#edit-deck-button {
     background-color: goldenrod;
     border-radius: 10px;
     height: 30px;
@@ -343,18 +362,22 @@ header {
 }
 
 #decks-button-div,
-.add-cards-button-div {
+.add-cards-button-div,
+#edit-deck-button-div {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
 }
 
-#decks-table-div {
+#decks-table-div,
+#card-info-table-div {
     display: grid;
-    grid-template-columns: 1fr 50% 1fr;
+    grid-template-columns: 1fr 80% 1fr;
+    grid-template-rows: auto auto auto;
 }
 
-#decks-table {
+#decks-table,
+.card-info-table {
     border-collapse: collapse;
     grid-column: 2;
     margin-top: 20px;
@@ -373,7 +396,7 @@ th {
 
 /* ############## SIGNUP ############## */
 
-#user_form input.form-control {
+#user-form input.form-control {
     font-size: 18px;
     font-weight: bold;
     padding: 12px;
@@ -387,6 +410,12 @@ th {
     width: 100%;
     margin: 0;
     padding: 0;
+}
+
+#user-form-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 #mtg-profile-background-img {
@@ -517,7 +546,8 @@ th {
     color: goldenrod;
 }
 
-#card_search_form {
+#card_search_form,
+#user-form {
     width: 80%;
 }
 
@@ -589,11 +619,11 @@ th {
 }
 
 .card-icons {
-    height: 40px;
-    width: 40px;
-    border-radius: 40px;
-    margin-right: 5px;
-    margin-left: 5px;
+    height: 35px;
+    width: 35px;
+    border-radius: 35px;
+    margin-right: 2px;
+    margin-left: 2px;
 }
 
 .card-img:before,

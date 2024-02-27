@@ -5,10 +5,12 @@
 {% block body_class %}edit-profile{% endblock %}
 
 {% block content %}
-<div class="row justify-content-md-center">
-    <div class="col-md-4">
-        <h2 class="join-message">Edit Your Profile.</h2>
-        <form method="POST" id="user_form">
+<div>
+    <div>
+        <h2 id="join-message">Edit Your Profile</h2>
+    </div>
+    <div id="user-form-div">
+        <form method="POST" id="user-form">
             {{ form.hidden_tag() }}
 
             {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
@@ -29,9 +31,9 @@
             {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
 
             <div class="edit-btn-area">
-                <button class="btn btn-success">Save Changes!</button>
+                <button class="btn save-btn">Save Changes!</button>
                 <a href="/acct/user/{{ user_id }}" class="btn btn-outline-secondary">Cancel</a>
-                <a href="/acct/user/delete" class="btn btn-danger">Delete Account</a>
+                <a href="/acct/user/delete" class="btn btn-danger float-end">Delete Account</a>
             </div>
         </form>
     </div>
