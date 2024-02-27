@@ -15,12 +15,12 @@
     {% for card in cards %}
     <div class="card-div" data-card-id={{card.card_id}} data-user-id={{user.id}}>
         <div class="card-img">
-            <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+            <img class="card-img" src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
         </div>
         <div class="wl-qty-div qty-div">
             <span class="wl-qty">Qty {{card.card_qty}}</span>
         </div>
-        <div>
+        <div class="card-icons-div">
             <span>
                 <a href="/cs/card/{{card.card_id}}">
                     <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">

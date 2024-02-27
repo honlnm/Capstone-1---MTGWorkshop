@@ -20,7 +20,7 @@
     {% for card in cards %}
     <div class="card-div" data-card-id={{card.card_id}} data-user-id={{user.id}} data-deck-id="{{deck.id}}">
         <div class="card-img">
-            <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+            <img class="card-img" src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
         </div>
         <div class="deck-qty-div qty-div">
             <span class="deck-qty">Qty {{card.card_qty}}</span>

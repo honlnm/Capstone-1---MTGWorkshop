@@ -15,7 +15,7 @@
     {% for card in cards %}
     <div class="card-div" data-card-id={{card.card_id}} data-user-id={{user.id}}>
         <div class="card-img">
-            <img class="card-results" src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+            <img class="card-img" src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
         </div>
         <div class="inv-qty-div qty-div">
             <span class="inv-qty">Qty {{card.card_qty}}</span>

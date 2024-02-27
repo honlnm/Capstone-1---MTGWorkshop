@@ -564,9 +564,12 @@ th {
 
 .card-img,
 .card-icons-div {
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .card-div,
@@ -630,12 +633,12 @@ th {
 .card-img:after {
     content: "";
     position: absolute;
+    border-radius: 10px;
     left: 15px;
     right: 15px;
     bottom: 0;
     top: 0;
     opacity: .5;
-    border-radius: 10px;
     mix-blend-mode: color-dodge;
     transition: all .33s ease;
 }
