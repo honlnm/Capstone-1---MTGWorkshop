@@ -63,6 +63,8 @@ document.addEventListener('mousemove', function (event) {
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to update last activity');
+            } else {
+                checkIdleTimeout()
             }
         })
         .catch(error => {
@@ -73,8 +75,8 @@ document.addEventListener('mousemove', function (event) {
 function checkIdleTimeout() {
     fetch('/check-idle-timeout')
         .then(response => {
-            if (response.status === 401) {
-                window.location.href = '/acct/logout';
+            if (response.status === 401 || response.status === 500) {
+                window.location.href = '/acct/login';
             }
         });
 }

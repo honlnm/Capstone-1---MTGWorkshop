@@ -68,17 +68,24 @@ def check_idle_timeout():
         last_activity = last_activity.replace(tzinfo=timezone.utc)
         current_time = datetime.now(timezone.utc)
         if current_time - last_activity > IDLE_TIMEOUT:
-            if g.user and g.user.email == "demo@example.com":
+            if g.user and (g.user.email == "demo@example.com"):
                 db.session.delete(g.user)
                 db.session.commit()
-            session.clear()
-            return redirect("/acct/login")
+                session.clear()
+                return redirect("/acct/login")
 
 
 @app.route("/update-last-activity", methods=["POST"])
 def update_last_activity():
     """Update session last_activity"""
     session["last_activity"] = datetime.now(timezone.utc)
+    return "", 200
+
+
+@app.route("/check-idle-timeout")
+def check_idle_timeout_route():
+    """Check idle timeout"""
+    check_idle_timeout()
     return "", 200
 
 
