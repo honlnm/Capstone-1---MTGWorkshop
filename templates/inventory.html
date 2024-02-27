@@ -5,8 +5,8 @@
 {% block body_class %}view_inventory{% endblock %}
 
 {% block content %}
-<h1>{{user.username}} Inventory</h1>
-<div>
+<h1 id="inv-header">{{user.username}} Inventory</h1>
+<div class="add-cards-button-div">
     <a href="/cs/card-search">
         <button class="add-cards-button" type="button">Add Cards</button>
     </a>

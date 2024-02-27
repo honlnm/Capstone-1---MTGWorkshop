@@ -349,7 +349,7 @@ document.querySelectorAll(".inv-rmv-icon").forEach(function (rmvIcon) {
 document.querySelectorAll(".inv-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
         fetch('/update-last-activity', { method: 'POST' });
-        const popup = qtyIcon.parentElement.querySelector(".popup");
+        const popup = qtyIcon.nextElementSibling;
         popup.style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -393,7 +393,7 @@ document.querySelectorAll(".form-inv-qty").forEach(function (invQtyForm) {
 document.querySelectorAll(".wl-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
         fetch('/update-last-activity', { method: 'POST' });
-        const popup = qtyIcon.parentElement.querySelector(".popup");
+        const popup = qtyIcon.nextElementSibling;
         popup.style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");
@@ -437,7 +437,7 @@ document.querySelectorAll(".form-wl-qty").forEach(function (wlQtyForm) {
 document.querySelectorAll(".deck-qty-icon").forEach(function (qtyIcon) {
     qtyIcon.addEventListener("click", function (evt) {
         fetch('/update-last-activity', { method: 'POST' });
-        const popup = qtyIcon.parentElement.querySelector(".popup");
+        const popup = qtyIcon.nextElementSibling;
         popup.style.display = "block";
         const userId = evt.target.closest(".card-div").getAttribute("data-user-id");
         const cardId = evt.target.closest(".card-div").getAttribute("data-card-id");

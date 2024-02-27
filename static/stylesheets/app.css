@@ -305,7 +305,9 @@ header {
 #decks-title,
 #new-deck-title,
 #about-header,
-#contact-header {
+#contact-header,
+#inv-header,
+#wl-header {
     text-align: center;
     margin: 20px;
     color: black;
@@ -328,7 +330,8 @@ header {
 }
 
 #decks-add-btn,
-#create-deck-button {
+#create-deck-button,
+.add-cards-button {
     background-color: goldenrod;
     border-radius: 10px;
     height: 30px;
@@ -339,9 +342,11 @@ header {
     border: 2px solid black;
 }
 
-#decks-button-div {
+#decks-button-div,
+.add-cards-button-div {
     display: flex;
     justify-content: center;
+    margin-bottom: 10px;
 }
 
 #decks-table-div {

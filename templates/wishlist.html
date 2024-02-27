@@ -5,19 +5,19 @@
 {% block body_class %}view_wish_list{% endblock %}
 
 {% block content %}
-<h1>{{user.username}} Wish List</h1>
-<div>
+<h1 id="wl-header">{{user.username}} Wish List</h1>
+<div class="add-cards-button-div">
     <a href="/cs/card-search">
         <button class="add-cards-button" type="button">Add Cards</button>
     </a>
 </div>
-<div class="container">
+<div id="card-divs-container">
     {% for card in cards %}
     <div class="card-div" data-card-id={{card.card_id}} data-user-id={{user.id}}>
         <div class="card-img">
             <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
         </div>
-        <div class="wl-qty-div">
+        <div class="wl-qty-div qty-div">
             <span class="wl-qty">Qty {{card.card_qty}}</span>
         </div>
         <div>
