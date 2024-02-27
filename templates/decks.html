@@ -5,17 +5,25 @@
 {% block body_class %}view_decks{% endblock %}
 
 {% block content %}
-<h1>{{user.username}} Decks</h1>
-<a href="/deck/user/{{user.id}}/deck/add">
-    <button type="button">Add Deck</button>
-</a>
-<div>
-    <ul>
-        {%for deck in decks %}
-        <a href="/deck/user/{{user.id}}/deck/{{deck.id}}">
-            <li>{{deck.deck_name}}</li>
+<h1 id="decks-title">{{user.username}} Decks</h1>
+<div id="deck-content">
+    <div id="decks-button-div">
+        <a href="/deck/user/{{user.id}}/deck/add">
+            <button id="decks-add-btn" type="button">Add Deck</button>
         </a>
-        {% endfor %}
-    </ul>
+    </div>
+    <div id="decks-table-div">
+        <table id="decks-table">
+            <tr id="decks-table-headers">
+                <th>Your Decks</th>
+            </tr>
+            {%for deck in decks %}
+            <tr id="decks-table-rows">
+                <td class="decks-table-cells"><a href="/deck/user/{{user.id}}/deck/{{deck.id}}">{{deck.deck_name}}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 {% endblock %}

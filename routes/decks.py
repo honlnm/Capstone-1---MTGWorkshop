@@ -43,8 +43,7 @@ def add_deck(user_id):
         new_deck = Decks(deck_name=form.deck_name.data, user_id=g.user.id)
         db.session.add(new_deck)
         db.session.commit()
-        flash(f"{new_deck.deck_name} has been added to your deck list!")
-        return redirect(f"/acct/user/{g.user.id}")
+        return redirect(f"/deck/user/{g.user.id}/decks")
     return render_template("add_deck.html", form=form)
 
 

@@ -30,7 +30,7 @@ def show_inventory(user_id):
     wishlist = CardWishList.query.filter(CardWishList.user_id == g.user.id)
     card_id_inventory_list = [card.card_id for card in inventory]
     card_id_wishlist_list = [card.card_id for card in wishlist]
-    form = CardQtyEditForm()
+    qtyForm = CardQtyEditForm()
     deckForm = SelectDeckForm()
     deckForm.set_deck_choices(user_id=g.user.id)
     return render_template(
@@ -40,8 +40,8 @@ def show_inventory(user_id):
         inventory_list=card_id_inventory_list,
         wishlist_list=card_id_wishlist_list,
         wishlist=wishlist,
-        form=form,
-        deck_form=deckForm,
+        qtyForm=qtyForm,
+        deckForm=deckForm,
     )
 
 

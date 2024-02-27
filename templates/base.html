@@ -34,7 +34,7 @@
                         <a href="/wl/user/{{g.user.id}}/wishlist">Wish List</a>
                         <a href="/deck/user/{{g.user.id}}/decks">Decks</a>
                         <hr>
-                        <a href="/about/contact-us">Contact Us</a>
+                        <a href="/contact-us">Contact Us</a>
                         <a href="/acct/logout">Log Out</a>
                         {% endif %}
                     </div>
@@ -57,7 +57,10 @@
         </div>
         {% block content %}
         {% endblock %}
+        <div id="spacer"></div>
         <footer>
+            {% block footer %}
+            {% endblock %}
             <p class="footnote">THIS WEBSITE IS NOT PRODUCED, ENDORSED, SUPPORTED, OR AFFILIATED WITH WIZARDS OF THE
                 COAST.</p>
         </footer>

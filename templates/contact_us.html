@@ -5,15 +5,33 @@
 {% block body_class %}contact_us{% endblock %}
 
 {% block content %}
-<img src="/static/images/MTGWorkshopLogo.png" alt="MTG Workshop Logo">
-<h1>About MTG Workshop</h1>
-<p>MTG Workshop was built by Nicole Honl using the <a href="https://magicthegathering.io/">magicthegathering.io</a> API
-    and Python SDK. As someone who has played magic with her husband for many years, Nicole thought a website where one
-    could build their dream deck and pick out the cards they wished to buy would be helpful. In the future, Nicole would
-    like to add functionality to this website for a Life Counter, recording Game Data, and card market prices. For any
-    questions, concerns, or additional ideas, don't hesitate to reach out to the email below.</p>
-<p>As a final note, this website is not produced, endorsed, supported, or affiliated with Wizards of the Coast.</p>
-<h1>Contact Us</h1>
-<p>Email: nicole.m.honl@gmail.com</p>
-<p>Please use the subject "MTG Workshop"</p>
+<img id="about-contact-logo-icon" src="/static/images/MTGWorkshopLogo.png" alt="MTG Workshop Logo">
+<div id="about-contact-container">
+    <h1 id="about-header">About MTG Workshop</h1>
+    <div id="about-div">
+        <p id="about-text">MTG Workshop was built by Nicole Honl using the <a
+                href="https://magicthegathering.io/">magicthegathering.io</a>
+            API
+            and Python SDK. As someone who has played magic with her husband for many years, Nicole thought a website
+            where
+            one
+            could build their dream deck and pick out the cards they wished to buy would be helpful. In the future,
+            Nicole
+            would
+            like to add functionality to this website for a Life Counter, recording Game Data, and card market prices.
+            For
+            any
+            questions, concerns, or additional ideas, don't hesitate to reach out to the email below.</p>
+        <p id="note-text">As a final note, this website is not produced, endorsed, supported, or affiliated with Wizards
+            of the Coast.
+        </p>
+    </div>
+    <h1 id="contact-header">Contact Us</h1>
+    <div id="contact-div">
+        <h2 class="contact-subheaders">Email:</h2>
+        <p id="contact-email">nicole.m.honl@gmail.com</p>
+        <h2 class="contact-subheaders">Subject:</h2>
+        <p id="contact-subject">MTG Workshop</p>
+    </div>
+</div>
 {% endblock %}

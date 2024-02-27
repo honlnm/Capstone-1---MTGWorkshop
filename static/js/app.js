@@ -1,3 +1,22 @@
+function vwToPx(value) {
+    var vw = document.documentElement.clientWidth;
+    return (value * vw) / 100;
+}
+
+function updateDropdownWidth() {
+    var dropdownContent = document.querySelector(".dropdown-content");
+    var vwWidth = 100;
+    var pxWidth = vwToPx(vwWidth);
+    if (pxWidth <= 600) {
+        dropdownContent.style.marginLeft = (-pxWidth + 54) + "px";
+        dropdownContent.style.width = 100 + 'vw';
+    }
+}
+
+window.addEventListener("resize", updateDropdownWidth);
+
+updateDropdownWidth();
+
 // ############## GENERAL #################
 
 document.querySelectorAll(".closePopup").forEach(function (closeButton) {

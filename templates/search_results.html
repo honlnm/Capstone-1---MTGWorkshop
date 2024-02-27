@@ -5,96 +5,75 @@
 {% block body_class %}search_results{% endblock %}
 
 {% block content %}
-<header>
-    <p class="page-numbering">
-        <span id="search-results-page-numbers">
-            <a href="/cs/search-results/page1">
-                <<< </a>
-                    <span> ... </span>
-                    {% if currentpage >= 3 %}
-                    <a href="/cs/search-results/page{{pagelessless}}">{{pagelessless}}</a>
-                    {% endif %}
-                    {% if currentpage >= 2 %}
-                    <a href="/cs/search-results/page{{pageless}}">{{pageless}}</a>
-                    {% endif %}
-                    <a href="/cs/search-results/page{{currentpage}}">{{currentpage}}</a>
-                    {% if pageplus <= pagemax %} <a href="/cs/search-results/page{{pageplus}}">{{pageplus}}
-            </a>
-            {% endif %}
-            {% if pageplusplus <= pagemax %} <a href="/cs/search-results/page{{pageplusplus}}">{{pageplusplus}}</a>
+<div id="card-divs-container">
+    {% for card in card_list["cards"] %}
+    {% if card.multiverseid %}
+    <div class="card-div" {% if g.user %} data-card-id={{card.multiverseid}} data-user-id={{user.id}} {% endif %}>
+        <div class="card-img">
+            <img class="card-results" src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
+        </div>
+        <div class="card-icons-div">
+            <span>
+                <a href="/cs/card/{{card.multiverseid}}">
+                    <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
+                </a>
+                {% if g.user %}
+                {% if card.multiverseid in inventory %}
+                <img class="g-inv-icon card-icons" src="/static/images/in_inventory_icon.png" alt="Add to Inventory">
+                {% else %}
+                <img class="bw-inv-icon card-icons" src="/static/images/inventory_icon.png" alt="Add to Inventory">
                 {% endif %}
-                <span> ... </span>
-                <a href="/cs/search-results/page{{pagemax}}">>>></a>
-        </span>
-    </p>
-</header>
-{% for card in card_list["cards"] %}
-{% if card.multiverseid %}
-<div class="card-div" {% if g.user %} data-card-id={{card.multiverseid}} data-user-id={{user.id}} {% endif %}>
-    <div class="card-img">
-        <img class="card-results" src="{{card.imageUrl}}" alt="{{card.name}}-{{card.multiverseid}}">
-    </div>
-    <div class="card-icons-div">
-        <span>
-            <a href="/cs/card/{{card.multiverseid}}">
-                <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
-            </a>
-            {% if g.user %}
-            {% if card.multiverseid in inventory %}
-            <img class="g-inv-icon card-icons" src="/static/images/in_inventory_icon.png" alt="Add to Inventory">
-            {% else %}
-            <img class="bw-inv-icon card-icons" src="/static/images/inventory_icon.png" alt="Add to Inventory">
-            {% endif %}
-            <img class="card-icons deck-icon" src="/static/images/deck_icon.png" alt="Add to Deck">
-            <div class="popup">
-                <div class="popup-content">
-                    <span class="closePopup">&times;</span>
-                    <form method="post" class="form-add-card-to-deck">
-                        {{ form.csrf_token }}
-                        <input type="hidden" name="card_id" value="{{ card.multiverseid }}">
-                        <label for="deck">Add Card to:</label>
-                        <select class="deck-selection" name="deck">
-                            {% for value, label in form.deck.choices %}
-                            <option value="{{ value }}" class="deck-option">{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                        <button class="deck-icon-submit-btn" type="submit">Submit</button>
-                    </form>
+                <img class="card-icons deck-icon" src="/static/images/deck_icon.png" alt="Add to Deck">
+                <div class="popup">
+                    <div class="popup-content">
+                        <span class="closePopup">&times;</span>
+                        <form method="post" class="form-add-card-to-deck">
+                            {{ form.csrf_token }}
+                            <input type="hidden" name="card_id" value="{{ card.multiverseid }}">
+                            <label for="deck">Add Card to:</label>
+                            <select class="deck-selection" name="deck">
+                                {% for value, label in form.deck.choices %}
+                                <option value="{{ value }}" class="deck-option">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="deck-icon-submit-btn" type="submit">Submit</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            {% if card.multiverseid in wishlist %}
-            <img class="g-wl-icon card-icons" src="/static/images/in_wishlist_icon.png" alt="Add to Wish List">
-            {% else %}
-            <img class="bw-wl-icon card-icons" src="/static/images/wishlist_icon.png" alt="Add to Wish List">
-            {% endif %}
-            {% endif %}
-        </span>
-    </div>
-</div>
-<br>
-{% endif %}
-{% endfor %}
-<footer>
-    <p class="page-numbering">
-        <span id="search-results-page-numbers">
-            <a href="/cs/search-results/page1">
-                <<< </a>
-                    <span> ... </span>
-                    {% if currentpage >= 3 %}
-                    <a href="/cs/search-results/page{{pagelessless}}">{{pagelessless}}</a>
-                    {% endif %}
-                    {% if currentpage >= 2 %}
-                    <a href="/cs/search-results/page{{pageless}}">{{pageless}}</a>
-                    {% endif %}
-                    <a href="/cs/search-results/page{{currentpage}}">{{currentpage}}</a>
-                    {% if pageplus <= pagemax %} <a href="/cs/search-results/page{{pageplus}}">{{pageplus}}
-            </a>
-            {% endif %}
-            {% if pageplusplus <= pagemax %} <a href="/cs/search-results/page{{pageplusplus}}">{{pageplusplus}}</a>
+                {% if card.multiverseid in wishlist %}
+                <img class="g-wl-icon card-icons" src="/static/images/in_wishlist_icon.png" alt="Add to Wish List">
+                {% else %}
+                <img class="bw-wl-icon card-icons" src="/static/images/wishlist_icon.png" alt="Add to Wish List">
                 {% endif %}
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}
+{% block footer %}
+<p class="page-numbering">
+    <span id="search-results-page-numbers">
+        <a href="/cs/search-results/page1">
+            <<< </a>
                 <span> ... </span>
-                <a href="/cs/search-results/page{{pagemax}}">>>></a>
-        </span>
-    </p>
-</footer>
+                {% if currentpage >= 3 %}
+                <a href="/cs/search-results/page{{pagelessless}}">{{pagelessless}}</a>
+                {% endif %}
+                {% if currentpage >= 2 %}
+                <a href="/cs/search-results/page{{pageless}}">{{pageless}}</a>
+                {% endif %}
+                <a href="/cs/search-results/page{{currentpage}}">{{currentpage}}</a>
+                {% if pageplus <= pagemax %} <a href="/cs/search-results/page{{pageplus}}">{{pageplus}}
+        </a>
+        {% endif %}
+        {% if pageplusplus <= pagemax %} <a href="/cs/search-results/page{{pageplusplus}}">{{pageplusplus}}</a>
+            {% endif %}
+            <span> ... </span>
+            <a href="/cs/search-results/page{{pagemax}}">>>></a>
+    </span>
+</p>
 {% endblock %}

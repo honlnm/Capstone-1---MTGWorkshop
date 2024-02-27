@@ -5,10 +5,13 @@ body {
     background-color: rgb(82, 81, 81);
     color: white;
     max-width: 100vw;
+    min-height: 100vh;
+    margin: 0;
 }
 
 .row {
     padding: 25px;
+    margin: 0;
 }
 
 .form-control {
@@ -48,11 +51,13 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    z-index: 9997;
 }
 
 .mtg-icon {
     width: 40px;
+    margin: 0;
+    padding: 0;
 }
 
 .mtg-loader {
@@ -114,12 +119,14 @@ a:hover {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: black;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    top: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(6, 6, 6);
     z-index: 1;
-    margin-left: -110px;
-    margin-top: 5px;
+    width: 205px;
+    margin-left: -150px;
 }
 
 .dropdown-content a {
@@ -131,10 +138,6 @@ a:hover {
 
 .dropdown-content a:hover {
     color: goldenrod;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
 }
 
 
@@ -151,6 +154,7 @@ a:hover {
     width: 250px;
     max-width: 80%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
 }
 
 .popup-content {
@@ -163,6 +167,363 @@ a:hover {
     right: 10px;
     cursor: pointer;
 }
+
+/* ############## BUTTONS ############## */
+
+.btn {
+    border-radius: 50px;
+}
+
+.btn:hover {
+    cursor: pointer;
+}
+
+.onboarding-btn,
+.search-form-btn {
+    background-color: goldenrod;
+    color: black;
+}
+
+.onboarding-btn:hover {
+    background-color: goldenrod;
+    color: black;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+}
+
+.demo-btn {
+    background-color: rgb(27, 156, 27);
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.demo-btn:hover {
+    background-color: rgb(27, 156, 27);
+    color: black;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+
+}
+
+#card-search-button {
+    margin-bottom: 50px;
+}
+
+/* ############## NAVBAR ############## */
+
+.navbar {
+    background-color: black;
+    height: 46px;
+    max-width: 100vw;
+    border-bottom: 1px solid white;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 9998;
+}
+
+.navbar a {
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    color: #daa520;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand>img,
+.navbar-right>div>img {
+    display: inline-block;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 35px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 0;
+}
+
+.container-fluid {
+    min-width: 100%;
+    padding: 0;
+}
+
+/* ############## FOOTER ############## */
+
+#spacer {
+    height: 60px;
+}
+
+footer {
+    margin: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    flex-shrink: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+header {
+    margin-bottom: 25px;
+}
+
+.page-numbering,
+.footnote {
+    margin: 0;
+    padding: 0;
+    height: auto;
+}
+
+#search-results-page-numbers {
+    margin: 25px;
+}
+
+.page-numbering {
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.footnote {
+    font-size: x-small;
+    font-style: italic;
+    word-wrap: break-word;
+}
+
+/* ############## DECK SELECTION ############## */
+
+#decks-title,
+#new-deck-title,
+#about-header,
+#contact-header {
+    text-align: center;
+    margin: 20px;
+    color: black;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+#deck-form {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+#deck-content {
+    display: flex-block;
+    width: 100%;
+}
+
+#decks-add-btn,
+#create-deck-button {
+    background-color: goldenrod;
+    border-radius: 10px;
+    height: 30px;
+    border-color: goldenrod;
+}
+
+#decks-add-btn:hover {
+    border: 2px solid black;
+}
+
+#decks-button-div {
+    display: flex;
+    justify-content: center;
+}
+
+#decks-table-div {
+    display: grid;
+    grid-template-columns: 1fr 50% 1fr;
+}
+
+#decks-table {
+    border-collapse: collapse;
+    grid-column: 2;
+    margin-top: 20px;
+    text-align: center;
+}
+
+td,
+th {
+    border: 2px solid black;
+}
+
+th {
+    background-color: goldenrod;
+    color: black
+}
+
+/* ############## SIGNUP ############## */
+
+#user_form input.form-control {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+}
+
+/* ############## USER PROFILE ############## */
+
+.profile-header-div {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#mtg-profile-background-img {
+    width: 100%;
+    height: 28vw;
+    background-color: #000;
+}
+
+#profile-avatar {
+    margin-top: -80px;
+    margin-left: 25px;
+    height: 100px;
+    width: 100px;
+    border: 5px solid white;
+    border-radius: 100px;
+}
+
+.profile-img-username {
+    background-color: white;
+    color: black;
+    height: 40px;
+    width: 100%;
+}
+
+.profile-header-bar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 100%;
+}
+
+.profile-username {
+    margin-left: 150px;
+    font-size: larger;
+    font-size: x-large;
+    font-weight: bolder;
+}
+
+.edit-profile-btn {
+    text-decoration: none;
+    height: 34px;
+    margin: 3px;
+    border-radius: 5px;
+    background-image: linear-gradient(to bottom, #fff, transparent);
+    background-color: goldenrod;
+    border: 1px goldenrod solid;
+}
+
+.profile-info {
+    padding: 25px 25px 0px 150px;
+}
+
+.user-location {
+    color: goldenrod;
+}
+
+/* ############## lOGIN PAGE ############## */
+
+#demo-user-note-box {
+    border: 5px solid black;
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#demo-user-note-header {
+    font-size: large;
+    color: black;
+}
+
+#demo-user-note {
+    font-size: medium;
+    color: black;
+}
+
+/* ############## INVENTORY ############## */
+
+.qty-div {
+    text-align: center;
+    margin-bottom: 10px;
+    color: black;
+    font-size: large;
+    font-weight: bold;
+}
+
+
+/* ############## ABOUT/CONTACT US ############## */
+
+#about-contact-logo-icon {
+    width: 50vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#about-contact-container {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+/* headers up in decks section */
+
+#about-text,
+#note-text {
+    text-align: justify;
+    margin: 20px;
+}
+
+
+.contact-subheaders,
+#contact-email,
+#contact-subject {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.contact-subheaders {
+    font-size: medium;
+    font-weight: bold;
+    text-decoration: underline;
+    padding-bottom: 0px;
+}
+
+
+/* ############## SEARCH FORM ############## */
+
+.search-field-label {
+    color: goldenrod;
+}
+
+#card_search_form {
+    width: 80%;
+}
+
+.search-form-col {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}
+
+
+/* ############## 404 ############## */
 
 /* ############## CARDS ############## */
 
@@ -180,10 +541,34 @@ a:hover {
     height: auto;
 }
 
+.card-div {
+    grid-column: span 1;
+    margin: 10px;
+}
+
+#card-divs-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+
+    @media (min-width: 601px) {
+        grid-template-columns: 300px 300px;
+    }
+
+    @media (min-width: 901px) {
+        grid-template-columns: 300px 300px 300px;
+    }
+}
+
 .card-img {
     width: 250px;
     height: auto;
     margin: auto;
+    margin-bottom: 10px;
     position: relative;
     overflow: hidden;
     z-index: 10;
@@ -308,208 +693,3 @@ a:hover {
         transform: rotateZ(-3deg) rotateX(-12deg) rotateY(-27deg);
     }
 }
-
-/* ############## BUTTONS ############## */
-
-.btn {
-    border-radius: 50px;
-}
-
-.btn:hover {
-    cursor: pointer;
-}
-
-.onboarding-btn,
-.search-form-btn {
-    background-color: goldenrod;
-    color: black;
-}
-
-#card-search-button {
-    margin-bottom: 50px;
-}
-
-/* ############## NAVBAR ############## */
-
-.navbar {
-    background-color: black;
-    height: 46px;
-    max-width: 100vw;
-    border-bottom: 1px solid white;
-    margin-bottom: 0;
-    position: relative;
-    z-index: 9999;
-}
-
-.navbar a {
-    color: white;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.navbar a:hover {
-    color: #daa520;
-}
-
-.navbar-brand {
-    display: flex;
-    align-items: center;
-}
-
-.navbar-brand>img,
-.navbar-right>div>img {
-    display: inline-block;
-    margin-bottom: 2px;
-    margin-right: 5px;
-    width: 35px;
-    border-radius: 2px;
-}
-
-.nav>li>a>img {
-    width: 32px;
-    border-radius: 32px;
-}
-
-ul.nav.navbar-nav {
-    align-items: center;
-}
-
-ul.nav.navbar-nav li {
-    margin: 0 0.5rem;
-    display: flex;
-}
-
-/* ############## FOOTER ############## */
-
-footer,
-header {
-    margin: 0;
-    width: 100%;
-    background-color: black;
-    color: white;
-    text-align: center;
-}
-
-header {
-    margin-bottom: 25px;
-}
-
-footer {
-    margin-top: 25px;
-}
-
-.page-numbering,
-.footnote {
-    margin: 0;
-    padding: 0;
-    height: 30px;
-    line-height: 30px;
-
-}
-
-#search-results-page-numbers {
-    margin: 25px;
-}
-
-.page-numbering {
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
-}
-
-.footnote {
-    font-size: x-small;
-    font-style: italic;
-}
-
-/* ############## SIGNUP ############## */
-
-#user_form input.form-control {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 12px;
-}
-
-/* ############## USER PROFILE ############## */
-
-.profile-header-div {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-#mtg-profile-background-img {
-    width: 100%;
-    height: 28vw;
-    background-color: #000;
-}
-
-#profile-avatar {
-    margin-top: -80px;
-    margin-left: 25px;
-    height: 100px;
-    width: 100px;
-    border: 5px solid white;
-    border-radius: 100px;
-}
-
-.profile-img-username {
-    background-color: white;
-    color: black;
-    height: 40px;
-    width: 100%;
-}
-
-.profile-header-bar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 100%;
-}
-
-.profile-username {
-    margin-left: 150px;
-    font-size: larger;
-    font-size: x-large;
-    font-weight: bolder;
-}
-
-.edit-profile-btn {
-    text-decoration: none;
-    height: 34px;
-    margin: 3px;
-    border-radius: 5px;
-    background-image: linear-gradient(to bottom, #fff, transparent);
-    background-color: goldenrod;
-    border: 1px goldenrod solid;
-}
-
-.profile-info {
-    padding: 25px 25px 0px 150px;
-}
-
-.user-location {
-    color: goldenrod;
-}
-
-/* ############## EDIT ############## */
-
-/* ############## SEARCH FORM ############## */
-
-.search-field-label {
-    color: goldenrod;
-}
-
-#card_search_form {
-    width: 80%;
-}
-
-.search-form-col {
-    display: flex;
-    justify-content: center;
-    padding-top: 25px;
-}
-
-
-/* ############## 404 ############## */

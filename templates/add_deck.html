@@ -6,8 +6,8 @@
 
 {% block content %}
 
-<h1>Add New Deck</h1>
-<form method="POST" id="deck_form">
+<h1 id="new-deck-title">Add New Deck</h1>
+<form method="POST" id="deck-form">
     {{ form.hidden_tag() }}
 
     {% for field in form if field.widget.input_type != 'hidden' %}
@@ -17,7 +17,7 @@
     {{ field(placeholder=field.label.text, class="form-control") }}
     {% endfor %}
 
-    <button class="add_deck_button">Create Deck</button>
+    <button id="create-deck-button">Create Deck</button>
 </form>
 
 {% endblock %}

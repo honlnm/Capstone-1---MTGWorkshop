@@ -11,15 +11,16 @@
         <button class="add-cards-button" type="button">Add Cards</button>
     </a>
 </div>
-<div>
+<div id="card-divs-container">
     {% for card in cards %}
     <div class="card-div" data-card-id={{card.card_id}} data-user-id={{user.id}}>
-        <img src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
-
-        <div class="inv-qty-div">
+        <div class="card-img">
+            <img class="card-results" src="{{card.card_img}}" alt="{{card.card_name}}, {{card.card_id}}">
+        </div>
+        <div class="inv-qty-div qty-div">
             <span class="inv-qty">Qty {{card.card_qty}}</span>
         </div>
-        <div>
+        <div class="card-icons-div">
             <span>
                 <a href="/cs/card/{{card.card_id}}">
                     <img id="card-info-icon" class="card-icons" src="/static/images/info_icon.png" alt="Card Info">
@@ -34,11 +35,11 @@
                     <div class="popup-content">
                         <span class="closePopup">&times;</span>
                         <form method="post" class="form-add-card-to-deck">
-                            {{ deck_form.csrf_token }}
+                            {{ deckForm.csrf_token }}
                             <input type="hidden" name="card_id" value="{{ card.card_id }}">
                             <label for="deck">Add Card to:</label>
                             <select class="deck-selection" name="deck">
-                                {% for value, label in deck_form.deck.choices %}
+                                {% for value, label in deckForm.deck.choices %}
                                 <option value="{{ value }}" class="deck-option">{{ label }}</option>
                                 {% endfor %}
                             </select>
@@ -51,8 +52,8 @@
                     <div class="popup-content">
                         <span class="closePopup">&times;</span>
                         <form method="post" class="form-inv-qty">
-                            {{ form.hidden_tag() }}
-                            {% for field in form if field.widget.input_type != 'hidden' %}
+                            {{ qtyForm.hidden_tag() }}
+                            {% for field in qtyForm if field.widget.input_type != 'hidden' %}
                             {% for error in field.errors %}
                             <span class="text-danger">{{ error }}</span>
                             {% endfor %}
