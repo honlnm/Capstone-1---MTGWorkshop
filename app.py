@@ -16,6 +16,7 @@ from routes.wishlist import wl_bp
 from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
     "DATABASE_URL", "postgresql:///mtg_workshop"
@@ -49,44 +50,6 @@ def add_user_to_g():
         g.user = User.query.get(session[CURR_USER_KEY])
     else:
         g.user = None
-
-
-############## IDLE TIMEOUT ##############
-
-
-@app.before_request
-def update_session_timeout():
-    session.permanent = True
-    app.permanent_session_lifetime = IDLE_TIMEOUT
-    session.modified = True
-
-
-@app.before_request
-def check_idle_timeout():
-    last_activity = session.get("last_activity")
-    if last_activity is not None:
-        last_activity = last_activity.replace(tzinfo=timezone.utc)
-        current_time = datetime.now(timezone.utc)
-        if current_time - last_activity > IDLE_TIMEOUT:
-            if g.user and (g.user.email == "demo@example.com"):
-                db.session.delete(g.user)
-                db.session.commit()
-                session.clear()
-                return redirect("/acct/login")
-
-
-@app.route("/update-last-activity", methods=["POST"])
-def update_last_activity():
-    """Update session last_activity"""
-    session["last_activity"] = datetime.now(timezone.utc)
-    return "", 200
-
-
-@app.route("/check-idle-timeout")
-def check_idle_timeout_route():
-    """Check idle timeout"""
-    check_idle_timeout()
-    return "", 200
 
 
 ############## HOMEPAGE & ERROR ROUTES ##############

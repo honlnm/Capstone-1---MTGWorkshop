@@ -51,38 +51,6 @@ window.addEventListener('load', function () {
     loader.style.display = 'none';
 });
 
-// ############## IDLE TIMER / LOG OUT #################
-
-document.addEventListener('mousemove', function (event) {
-    fetch('/update-last-activity', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to update last activity');
-            } else {
-                checkIdleTimeout()
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
-
-function checkIdleTimeout() {
-    fetch('/check-idle-timeout')
-        .then(response => {
-            if (response.status === 401 || response.status === 500) {
-                window.location.href = '/acct/login';
-            }
-        });
-}
-
-setInterval(checkIdleTimeout, 60000);
-
 // ############## DECK ICON #################
 
 document.querySelectorAll(".form-add-card-to-deck").forEach(function (deckForm) {
