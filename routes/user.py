@@ -23,6 +23,7 @@ CURR_USER_KEY = "curr_user"
 def do_login(user):
     """Log in user."""
     session[CURR_USER_KEY] = user.id
+    session.permanent = True
 
 
 def do_logout():
