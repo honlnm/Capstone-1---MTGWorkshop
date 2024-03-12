@@ -62,7 +62,9 @@ class CardsOwned(db.Model):
     __tablename__ = "cards_owned"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
-    cards_info = db.relationship("Cards")
+    card_info = db.relationship(
+        "Cards", secondary="CardConnection", backref="deck_cards"
+    )
     card_qty = db.Column(db.Integer, nullable=False)
 
 
@@ -70,7 +72,9 @@ class CardWishList(db.Model):
     __tablename__ = "card_wish_list"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
-    cards_info = db.relationship("Cards")
+    card_info = db.relationship(
+        "Cards", secondary="CardConnection", backref="deck_cards"
+    )
     card_qty = db.Column(db.Integer, nullable=False)
 
 
@@ -90,67 +94,45 @@ class DeckCards(db.Model):
     __tablename__ = "deck_cards"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     deck_id = db.Column(db.Integer, db.ForeignKey("decks.id", ondelete="cascade"))
-    cards_info = db.relationship("Cards")
     card_qty = db.Column(db.Integer, nullable=False)
+    card_info = db.relationship(
+        "Cards", secondary="CardConnection", backref="deck_cards"
+    )
 
 
 class CardConnection(db.Model):
     __tablename__ = "card_connection"
-    card_multiverse_id = db.Column(
-        db.Integer, db.ForeignKey("card_info.card_multiverse_id"), primary_key=True
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True,
     )
-    cards_owned = db.Column(
-        db.Integer, db.ForeignKey("cards_owned.id"), primary_key=True
-    )
-    wish_list = db.Column(
-        db.Integer, db.ForeignKey("card_wish_list.id"), primary_key=True
-    )
-    deck_cards = db.Column(db.Integer, db.ForeignKey("deck_cards.id"), primary_key=True)
+    cards_owned = db.Column(db.Integer, db.ForeignKey("cards_owned.id"))
+    wish_list = db.Column(db.Integer, db.ForeignKey("card_wish_list.id"))
+    deck_cards = db.Column(db.Integer, db.ForeignKey("deck_cards.id"))
+    card_info = db.Column(db.Integer, db.ForeignKey("card_info.card_multiverse_id"))
 
 
 class Cards(db.Model):
     __tablename__ = "card_info"
     card_multiverse_id = db.Column(db.Integer, primary_key=True)
-    card_name = db.column(
-        db.Text, db.relationship("CardConnection", backref="card_info"), nullable=False
-    )
-    card_img_url = db.column(
-        db.Text, db.relationship("CardConnection", backref="card_info"), nullable=False
-    )
-    card_colors = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info")
-    )
-    card_type = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info"), nullable=False
-    )
-    card_cmc = db.Column(
-        db.Integer, db.relationship("CardConnection", backref="card_info")
-    )
-    card_power = db.Column(
-        db.Integer, db.relationship("CardConnection", backref="card_info")
-    )
-    card_toughness = db.Column(
-        db.Integer, db.relationship("CardConnection", backref="card_info")
-    )
-    card_rarity = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info")
-    )
-    card_set_name = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info")
-    )
-    card_text = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info")
-    )
-    card_legalities = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info")
-    )
-    card_layout = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info")
-    )
-    card_rulings = db.Column(
-        db.Text, db.relationship("CardConnection", backref="card_info")
-    )
-    card_id = db.Column(db.Text, db.relationship("CardConnection", backref="card_info"))
+    card_name = db.Column(db.Text, nullable=False)
+    card_img_url = db.Column(db.Text)
+    card_colors = db.Column(db.Text)
+    card_type = db.Column(db.Text)
+    card_cmc = db.Column(db.Integer)
+    card_power = db.Column(db.Integer)
+    card_toughness = db.Column(db.Integer)
+    card_rarity = db.Column(db.Text)
+    card_set_name = db.Column(db.Text)
+    card_text = db.Column(db.Text)
+    card_legalities = db.Column(db.Text)
+    card_layout = db.Column(db.Text)
+    card_rulings = db.Column(db.Text)
+    card_id = db.Column(db.Text)
+    deck_cards = db.relationship("DeckCards", secondary="CardConnection")
+    card_wish_list = db.relationship("CardwishList", secondary="CardConnection")
+    cards_owned = db.relationship("CardsOwned", secondary="CardConnection")
 
 
 ############## CONNECT DB ##############
