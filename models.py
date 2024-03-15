@@ -63,7 +63,7 @@ class CardsOwned(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     card_info = db.relationship(
-        "Cards", secondary="CardConnection", backref="deck_cards"
+        "Cards", secondary="card_connection", backref="cards_owned"
     )
     card_qty = db.Column(db.Integer, nullable=False)
 
@@ -73,7 +73,7 @@ class CardWishList(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"))
     card_info = db.relationship(
-        "Cards", secondary="CardConnection", backref="deck_cards"
+        "Cards", secondary="card_connection", backref="card_wish_list"
     )
     card_qty = db.Column(db.Integer, nullable=False)
 
@@ -96,7 +96,7 @@ class DeckCards(db.Model):
     deck_id = db.Column(db.Integer, db.ForeignKey("decks.id", ondelete="cascade"))
     card_qty = db.Column(db.Integer, nullable=False)
     card_info = db.relationship(
-        "Cards", secondary="CardConnection", backref="deck_cards"
+        "Cards", secondary="card_connection", backref="deck_cards"
     )
 
 
@@ -120,19 +120,19 @@ class Cards(db.Model):
     card_img_url = db.Column(db.Text)
     card_colors = db.Column(db.Text)
     card_type = db.Column(db.Text)
-    card_cmc = db.Column(db.Integer)
-    card_power = db.Column(db.Integer)
-    card_toughness = db.Column(db.Integer)
+    card_cmc = db.Column(db.Text)
+    card_power = db.Column(db.Text)
+    card_toughness = db.Column(db.Text)
     card_rarity = db.Column(db.Text)
     card_set_name = db.Column(db.Text)
     card_text = db.Column(db.Text)
-    card_legalities = db.Column(db.Text)
+    card_legalities = db.Column(db.JSON)
     card_layout = db.Column(db.Text)
-    card_rulings = db.Column(db.Text)
+    card_rulings = db.Column(db.JSON)
     card_id = db.Column(db.Text)
-    deck_cards = db.relationship("DeckCards", secondary="CardConnection")
-    card_wish_list = db.relationship("CardwishList", secondary="CardConnection")
-    cards_owned = db.relationship("CardsOwned", secondary="CardConnection")
+    deck_cards_data = db.relationship("DeckCards", secondary="card_connection")
+    card_wish_list_data = db.relationship("CardWishList", secondary="card_connection")
+    cards_owned_data = db.relationship("CardsOwned", secondary="card_connection")
 
 
 ############## CONNECT DB ##############

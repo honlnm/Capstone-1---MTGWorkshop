@@ -6,6 +6,7 @@ from flask import (
     session,
     g,
 )
+from flask_apscheduler import APScheduler
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 from routes.user import user_bp
@@ -14,6 +15,7 @@ from routes.decks import decks_bp
 from routes.inventory import inv_bp
 from routes.wishlist import wl_bp
 from datetime import datetime, timedelta, timezone
+from apiClient import API
 
 app = Flask(__name__)
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
@@ -24,6 +26,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
+app.config["SCHEDULER_API_ENABLED"] = True
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 app.config["SECRET_KEY"] = os.getenv("secret_key")
 toolbar = DebugToolbarExtension(app)
@@ -40,7 +43,37 @@ with app.app_context():
     db.session.commit()
 
 CURR_USER_KEY = "curr_user"
-IDLE_TIMEOUT = timedelta(minutes=20)
+IDLE_TIMEOUT = timedelta(minutes=15)
+scheduler = APScheduler()
+
+############## SCHEDULER ##############
+
+
+def scheduled_job():
+    with app.app_context():
+        api = API()
+        api.job()
+
+
+def setup_scheduler():
+    scheduler.add_job(
+        id="scheduled_job",
+        func=scheduled_job,
+        trigger="interval",
+        seconds=86400,
+        next_run_time=datetime.now(),
+    )
+    scheduler.start()
+
+
+with app.app_context():
+    setup_scheduler()
+
+
+scheduler.init_app(app)
+scheduler.start()
+
+############## BEFORE RQST ##############
 
 
 @app.before_request
