@@ -1,4 +1,6 @@
+import asyncio
 import os
+from threading import Thread
 from flask import (
     Flask,
     render_template,
@@ -50,9 +52,17 @@ scheduler = APScheduler()
 
 
 def scheduled_job():
-    with app.app_context():
-        api = API()
-        api.job()
+    def start_async_loop():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        with app.app_context():
+            api = API()
+            loop.run_until_complete(api.run_job())
+            loop.close()
+
+    thread = Thread(target=start_async_loop)
+    thread.start()
 
 
 def setup_scheduler():
@@ -63,12 +73,11 @@ def setup_scheduler():
         seconds=86400,
         next_run_time=datetime.now(),
     )
-    scheduler.start()
 
 
 with app.app_context():
     setup_scheduler()
-
+    scheduled_job()
 
 scheduler.init_app(app)
 scheduler.start()
