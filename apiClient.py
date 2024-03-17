@@ -71,7 +71,7 @@ class API:
         count_start = 0
         page_ranges = []
         for i in range(pages):
-            if i % 10_000 == 0 and i != 0:
+            if i % 1_000 == 0 and i != 0:
                 page_ranges.append((count_start, i))
                 count_start = i + 1
         
