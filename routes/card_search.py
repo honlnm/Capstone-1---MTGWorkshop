@@ -6,10 +6,8 @@ from flask import (
     session,
     g,
 )
-
-import requests
 import math
-from models import db, User, CardsOwned, CardWishList
+from models import User, CardsOwned, CardWishList
 from apiClient import API
 
 card_search_bp = Blueprint("card_search", __name__, url_prefix="/cs")
@@ -19,51 +17,21 @@ from forms import (
     SelectDeckForm,
 )
 
-baseApiURL = "https://api.magicthegathering.io/v1/cards"
-
-
-def process_form_data(form):
-    delimiter = ","
-    orDelimiter = "|"
-    search_params = {
-        "name": form.name.data or "",
-        "setName": form.set_name.data or "",
-        "rarity": (
-            delimiter.join(form.rarity.data) if len(form.rarity.data) != 4 else ""
-        ),
-        "supertypes": (
-            delimiter.join(form.supertypes.data)
-            if "All Supertypes" not in form.supertypes.data
-            else ""
-        ),
-        "types": (
-            delimiter.join(form.types.data)
-            if "All Types" not in form.types.data
-            else ""
-        ),
-        "subtypes": (
-            delimiter.join(form.subtypes.data)
-            if "All Subtypes" not in form.subtypes.data
-            else ""
-        ),
-        "cmc": form.cmc.data or "",
-        "colors": (
-            orDelimiter.join(form.colors.data) if len(form.colors.data) != 5 else ""
-        ),
-        "power": form.power.data or "",
-        "toughness": form.toughness.data or "",
-    }
-    params = {key: value for key, value in search_params.items() if value != ""}
-    return params
-
 
 @card_search_bp.route("/card-search", methods=["GET", "POST"])
 def card_search_function():
     form = SearchCardsForm(request.form)
     if request.method == "GET":
         return render_template("card_search.html", form=form)
-    session["dict"] = process_form_data(form)
+    api = API()
+    session["dict"] = api.process_form_data(form)
     return redirect("/cs/search-results/page1")
+
+
+def pages_of_100(results):
+    headers = results.headers
+    pages = math.ceil(int(headers["Total-Count"]) / 100)
+    return pages
 
 
 @card_search_bp.route("/search-results/page<int:num>", methods=["GET", "POST"])
@@ -71,8 +39,7 @@ def view_search_results(num):
     params = session.get("dict")
     api = API()
     card_list = api.get_search_results(params, num)
-    headers = card_list.headers
-    pages = math.ceil(int(headers["Total-Count"]) / 100)
+    pages = pages_of_100(card_list)
     if g.user:
         user = User.query.get_or_404(g.user.id)
         inventory = CardsOwned.query.filter(CardsOwned.user_id == g.user.id)
