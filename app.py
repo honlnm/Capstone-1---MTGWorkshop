@@ -19,7 +19,8 @@ app = Flask(__name__)
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-    "DATABASE_URL", "postgresql:///mtg_workshop"
+    "DATABASE_URL",
+    "postgresql://zmjjhyfw:4CJMwZnY0tC6TYkrbO7dWEXELvs3aZsj@bubble.db.elephantsql.com/zmjjhyfw",
 )
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
