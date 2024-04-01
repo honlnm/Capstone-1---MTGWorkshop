@@ -55,7 +55,7 @@ def scheduled_job():
     def start_async_loop():
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        
+
         with app.app_context():
             api = API()
             loop.run_until_complete(api.run_job())
@@ -70,7 +70,7 @@ def setup_scheduler():
         id="scheduled_job",
         func=scheduled_job,
         trigger="interval",
-        seconds=86400,
+        weeks=1,
         next_run_time=datetime.now(),
     )
 

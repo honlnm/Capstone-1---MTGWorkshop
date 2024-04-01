@@ -74,7 +74,7 @@ class API:
             if i % 1_000 == 0 and i != 0:
                 page_ranges.append((count_start, i))
                 count_start = i + 1
-        
+
         final_page_range = page_ranges[-1][1] + 1, pages + 1
         page_ranges.append(final_page_range)
         return page_ranges
@@ -131,11 +131,13 @@ class API:
                                 print("card added to Cards db table")
                             except IntegrityError:
                                 db.session.rollback()
-                                print("Record skipped - already a part of the Cards db table")
-            
+                                print(
+                                    "Record skipped - already a part of the Cards db table"
+                                )
+
             end = time.time()
             print(f"Time taken: {end - start}")
 
     async def run_job(self):
         pages = self.scheduled_job_pages()
-        await asyncio.gather(*(self.job(page_range) for page_range in pages)) 
+        await asyncio.gather(*(self.job(page_range) for page_range in pages))
