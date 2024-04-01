@@ -40,7 +40,34 @@ with app.app_context():
     db.session.commit()
 
 CURR_USER_KEY = "curr_user"
-IDLE_TIMEOUT = timedelta(minutes=20)
+IDLE_TIMEOUT = timedelta(minutes=15)
+
+############## IDLE TIMEOUT ##############
+
+
+@app.before_request
+def update_session_timeout():
+    session.permanent = True
+    app.permanent_session_lifetime = IDLE_TIMEOUT
+    session.modified = True
+
+
+@app.before_request
+def check_idle_timeout():
+    last_activity = session.get("last_activity")
+    if last_activity is not None:
+        current_time = datetime.now(timezone.utc)
+        if current_time - last_activity > IDLE_TIMEOUT:
+            if g.user and (g.user.email == "demo@example.com"):
+                db.session.delete(g.user)
+                db.session.commit()
+                session.clear()
+                return redirect("/acct/login")
+        session["last_activity"] = last_activity.replace(tzinfo=timezone.utc)
+    session["last_activity"] = datetime.now(timezone.utc)
+
+
+############## GLOBAL USER ##############
 
 
 @app.before_request
