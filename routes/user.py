@@ -76,32 +76,10 @@ def login():
     return render_template("login.html", form=form)
 
 
-@user_bp.route("/add-demo-user")
-def add_demo_user():
-    """create demo user"""
-    form = UserAddForm()
-    try:
-        demo_user = User.signup(
-            username="DemoUser",
-            password="demopassword",
-            email="demo@example.com",
-            profile_image_url=User.profile_image_url.default.arg,
-        )
-        db.session.commit()
-    except IntegrityError as e:
-        flash("Demo User In Use", "danger")
-        return render_template("signup.html", form=form)
-    do_login(demo_user)
-    return redirect("/")
-
-
 @user_bp.route("/logout")
 def logout():
     """Handle logout of user."""
     do_logout()
-    if g.user.email == "demo@example.com":
-        db.session.delete(g.user)
-        db.session.commit()
     flash("You have successfully logged out.", "success")
     return redirect("/acct/login")
 
