@@ -7,6 +7,7 @@ from flask import (
     g,
 )
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_apscheduler import APScheduler
 from models import db, connect_db, User
 from routes.user import user_bp
 from routes.card_search import card_search_bp
@@ -15,14 +16,15 @@ from routes.inventory import inv_bp
 from routes.wishlist import wl_bp
 from datetime import datetime, timedelta, timezone
 
+
 app = Flask(__name__)
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=20)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
     "DATABASE_URL",
-    "postgresql://zmjjhyfw:4CJMwZnY0tC6TYkrbO7dWEXELvs3aZsj@bubble.db.elephantsql.com/zmjjhyfw",
+    "postgres://zmjjhyfw:4CJMwZnY0tC6TYkrbO7dWEXELvs3aZsj@bubble.db.elephantsql.com/zmjjhyfw",
 )
-
+app.config["SCHEDULER_API_ENABLED"] = True
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
@@ -41,7 +43,11 @@ with app.app_context():
     db.session.commit()
 
 CURR_USER_KEY = "curr_user"
-IDLE_TIMEOUT = timedelta(minutes=15)
+IDLE_TIMEOUT = timedelta(minutes=20)
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 ############## IDLE TIMEOUT ##############
 
@@ -55,18 +61,23 @@ def update_session_timeout():
 
 @app.before_request
 def check_idle_timeout():
-    last_activity = session.get("last_activity")
-    if last_activity is not None:
-        current_time = datetime.now(timezone.utc)
-        if current_time - last_activity > IDLE_TIMEOUT:
-            if g.user and (g.user.email == "demo@example.com"):
-                db.session.delete(g.user)
-                db.session.commit()
-                session.clear()
-                return redirect("/acct/login")
-        session["last_activity"] = last_activity.replace(tzinfo=timezone.utc)
-    session["last_activity"] = datetime.now(timezone.utc)
+    with app.app_context():
+        last_activity = session.get("last_activity")
+        if last_activity is not None:
+            current_time = datetime.now(timezone.utc)
+            if (current_time - last_activity) > IDLE_TIMEOUT:
+                if g.user and (g.user.email == "demo@example.com"):
+                    db.session.delete(g.user)
+                    db.session.commit()
+                    session.clear()
+                    return redirect("/acct/login")
+            session["last_activity"] = last_activity.replace(tzinfo=timezone.utc)
+        session["last_activity"] = datetime.now(timezone.utc)
 
+
+scheduler.add_job(
+    id="check_idle_timeout", func=check_idle_timeout, trigger="interval", minutes=1
+)
 
 ############## GLOBAL USER ##############
 
