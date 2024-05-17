@@ -4,6 +4,7 @@ from flask import (
     request,
     redirect,
     session,
+    url_for,
     g,
 )
 
@@ -72,6 +73,10 @@ def view_search_results(num):
     api = API()
     card_list = api.get_search_results(params, num)
     headers = card_list.headers
+    total_count = headers.get("Total-Count")
+    if not total_count:
+        return redirect(url_for("home"))
+
     pages = math.ceil(int(headers["Total-Count"]) / 100)
     if g.user:
         user = User.query.get_or_404(g.user.id)
